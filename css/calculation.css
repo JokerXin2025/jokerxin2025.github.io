@@ -1,6 +1,5 @@
 .calculation-block {
     border-collapse: collapse;
-    align-self: flex-start;
     align-self: center;
 }
 .calculation-block td {
