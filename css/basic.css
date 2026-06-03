@@ -5,10 +5,14 @@
     --border-color-light: #e7e7e7;
     --current-step-color: #3b82f6;
     --current-step-color-background: #eff6ff;
+    --proof-mark-pass-color-light: #007acc;
+    --proof-mark-pass-color-dark: #3794ff;
+    --proof-mark-warning-color-light: #bf8803;
+    --proof-mark-warning-color-dark: #cca700;
+    --proof-mark-error-color-light: #e51400;
+    --proof-mark-error-color-dark: #f14c4c;
     --tag-color: #475569;
     --tag-color-background: #e2e8f0;
-    --lemma-color: #4f46e5;
-    --lemma-color-background: #e0e7ff;
     --cases-color: #6b7280;
     --cases-color-light: #d1d5db;
     --induction-color: #2b6a4a;
@@ -18,6 +22,10 @@
     --contradiction-color-light: #e6b9bc;
     --contradiction-color-background: #fdf6f6;
     --ref-color: #2563eb;
+}
+
+html {
+    overflow-y: scroll;
 }
 
 body {
@@ -31,17 +39,23 @@ body {
 }
 
 h2 {
+    position: relative;
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 8px;
 }
 
+h2 sup {
+    position: absolute;
+    right: 100%;
+    margin-right: 4px;
+}
 .statement-box {
     border: 0.5px solid var(--border-color);
     padding: 28px 32px;
     border-radius: 10px;
     margin: 40px 0;
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
+    transition: 0.25s;
 }
 .statement-box:hover {
     transform: translateY(-5px);
@@ -53,6 +67,13 @@ h2 {
     margin-bottom: 12px;
 }
 
+.proof-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .tag {
     display: inline-flex;
     align-items: center;
@@ -61,15 +82,12 @@ h2 {
     font-weight: 600;
     padding: 8px 10px;
     border-radius: 6px;
-    margin: 0 12px 0px 6px;
+    margin-left: 8px;
+    margin-right: 16px;
     font-family: system-ui, -apple-system, sans-serif;
     letter-spacing: 0.27px;
 }
 .tag.default {
     background: var(--tag-color-background);
     color: var(--tag-color);
-}
-.tag.lemma {
-    color: var(--lemma-color);
-    background: var(--lemma-color-background);
 }
