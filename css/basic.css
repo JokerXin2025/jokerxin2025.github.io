@@ -30,12 +30,12 @@ html {
 
 body {
     font-family: serif, "Microsoft YaHei";
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.5;
     color: var(--text-color);
-    max-width: 900px;
+    width: 900px;
+    max-width: calc(100% - 60px);
     margin: 0 auto;
-    padding: 48px 32px;
 }
 
 h2 {
@@ -51,9 +51,9 @@ h2 sup {
 }
 .statement-box {
     border: 0.5px solid var(--border-color);
-    padding: 28px 32px;
-    border-radius: 10px;
     margin: 40px 0;
+    border-radius: 10px;
+    padding: 28px 32px;
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
     transition: 0.25s;
 }
@@ -62,7 +62,7 @@ h2 sup {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 .statement-title {
-    font-size: 18.4px;
+    font-size: 18px;
     font-weight: 750;
     margin-bottom: 12px;
 }
@@ -77,14 +77,14 @@ h2 sup {
 .tag {
     display: inline-flex;
     align-items: center;
-    font-size: 13.6px;
     line-height: 1;
+    font-size: 12px;
+    font-family: system-ui, -apple-system, sans-serif;
     font-weight: 600;
-    padding: 8px 10px;
-    border-radius: 6px;
     margin-left: 8px;
     margin-right: 16px;
-    font-family: system-ui, -apple-system, sans-serif;
+    border-radius: 6px;
+    padding: 8px 10px;
     letter-spacing: 0.27px;
 }
 .tag.default {
