@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/sundry.css">
     <link rel="stylesheet" href="css/animation.css">
     <link rel="stylesheet" href="css/codicon.css">
+    <link rel="stylesheet" href="css/screen_warning.css">
     <link rel="stylesheet" href="css/diagram.css">
 
     <script defer src="js/katex.js"></script>
@@ -158,6 +159,14 @@
 </head>
 
 <body>
+
+<div id="device-warning">
+    <div class="warning-content">
+        <div class="warning-icon"><i class="codicon codicon-move"></i></div>
+        <h2 class="warning-title">请使用平板或电脑访问</h2>
+        <p class="warning-desc">为了保证最佳阅读体验<br>本页面暂不支持窄屏浏览</p>
+    </div>
+</div>
 
 <div id="main-content" class="proof-container" style="padding-bottom:25vh;">
 
@@ -622,51 +631,64 @@
                         </summary>
                         <div class="goal-content with-line">
 
+                            <div class="step-block">
+                                <span class="step-tag">定义</span>
+                                <span class="step-content">令 $\tilde{f}_{\text{raw}} : (M \times M) \to N$ 为 $\tilde{f}_{\text{raw}}(p) := f(p_1) - f(p_2)$。</span>
+                            </div>
+
+                            <!-- 验证良定义 -->
                             <details class="goal-block" open>
                                 <summary>
                                     <i class="fa-solid fa-play toggle-icon"></i>
                                     <span class="tag default">良定义性</span>
-                                    <span>$\tilde{f}_{\text{raw}}$ 在 $\sim$ 下是良定义的</span>
+                                    <span>若 $p \sim q$，则 $\tilde{f}_{\text{raw}}(p) = \tilde{f}_{\text{raw}}(q)$</span>
                                 </summary>
                                 <div class="goal-content with-line">
                                     <div class="step-block">
-                                        <span class="step-tag">提取</span>
-                                        <span class="step-content">设 $p=(p_1, p_2)$ 且 $q=(q_1, q_2)$，且 $p \sim q$。由等价关系，存在 $k \in M$ 使得 $p_1 + q_2 + k = p_2 + q_1 + k$。</span>
+                                        <span class="step-tag">前提</span>
+                                        <span class="step-content">由 $p \sim q$，存在 $k \in M$ 使得 $$p_1 + q_2 + k = p_2 + q_1 + k$$</span>
                                     </div>
                                     <div class="step-block">
                                         <span class="step-tag">推导</span>
-                                        <span class="step-content">等式两边应用同态 $f$（利用 $f$ 保持加法的性质展开）：<br>$f(p_1) + f(q_2) + f(k) = f(p_2) + f(q_1) + f(k)$</span>
+                                        <span class="step-content">等式两边同时作用 $f$，并由 $f$ 保持加法的性质展开，得$$f(p_1) + f(q_2) + f(k) = f(p_2) + f(q_1) + f(k)$$</span>
                                     </div>
                                     <div class="step-block">
-                                        <span class="step-tag">推导</span>
-                                        <span class="step-content">在目标交换群 $N$ 中消去等式右侧的 $f(k)$，得到核心等式：<br>$f(p_1) + f(q_2) = f(p_2) + f(q_1)$</span>
+                                        <span class="step-tag">消去律</span>
+                                        <span class="step-content">在目标交换群 $N$ 中消去右侧的 $f(k)$，得到$$f(p_1) + f(q_2) = f(p_2) + f(q_1)$$</span>
                                     </div>
-                                    
-                                    <div class="step-block">
-                                        <span class="step-tag">引理</span>
-                                        <span class="step-content">通过验证 $(f(p_1) - f(p_2)) - (f(q_1) - f(q_2)) = 0$，证明两者相等：</span>
-                                    </div>
-                                    <!-- 对应 Lean 中的 h_result calc 块 -->
-                                    <div><div class="step-block calc">
-                                        <span class="step-tag calc">计算</span>
-                                        <span class="step-lhs"> $(f(p_1) - f(p_2)) - (f(q_1) - f(q_2))$ </span>
-                                        <span class="step-rel">$=$</span>
-                                        <span class="step-rhs"> $(f(p_1) + f(q_2)) - (f(p_2) + f(q_1))$ </span>
-                                        <span class="step-cal-end"></span>
-                                    </div>
-                                    <div class="step-block calc">
-                                        <span class="step-tag calc"></span>
-                                        <span class="step-lhs"></span>
-                                        <span class="step-rel">$=$</span>
-                                        <span class="step-rhs"> $0$ </span>
-                                        <span class="step-cal-end"></span>
-                                    </div></div>
 
-                                    <div class="step-block">
-                                        <span class="step-tag">推导</span>
-                                        <span class="step-content">由相减为 $0$ 可知 $f(p_1) - f(p_2) = f(q_1) - f(q_2)$。将其代入定义：</span>
-                                    </div>
-                                    <!-- 对应 Lean 中最终的 ftilde_raw 链式计算 -->
+                                    <details class="goal-block" open>
+                                        <summary>
+                                            <i class="fa-solid fa-play toggle-icon"></i>
+                                            <span class="tag default">引理</span>
+                                            <span>$f(p_1) - f(p_2) = f(q_1) - f(q_2)$</span>
+                                        </summary>
+                                        <div class="goal-content with-line">
+                                            <div class="step-block">
+                                                <span class="step-tag">证明</span>
+                                                <span class="step-content">我们考察两式之差：</span>
+                                            </div>
+                                            <div><div class="step-block calc">
+                                                <span class="step-tag calc">计算</span>
+                                                <span class="step-lhs"> $(f(p_1) - f(p_2)) - (f(q_1) - f(q_2))$ </span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $(f(p_1) + f(q_2)) - (f(p_2) + f(q_1))$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $0$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div></div>
+                                            <div class="step-block">
+                                                <span class="step-tag">结论</span>
+                                                <span class="step-content">稍作变形即得该结论</span>
+                                            </div>
+                                        </div>
+                                    </details>
+
                                     <div><div class="step-block calc">
                                         <span class="step-tag calc">计算</span>
                                         <span class="step-lhs"> $\tilde{f}_{\text{raw}}(p)$ </span>
@@ -991,7 +1013,7 @@
                                     <details class="goal-block" open>
                                         <summary>
                                             <i class="fa-solid fa-play toggle-icon"></i>
-                                            <span class="tag default">注意到</span>
+                                            <span class="tag default">我们有</span>
                                             <span>$g(x) \neq \tilde{f}(x)$ 对某个 $x\in G(M)$ 成立</span>
                                         </summary>
                                         <div class="goal-content with-line">
@@ -1027,7 +1049,7 @@
                                     <details class="goal-block" open>
                                         <summary>
                                             <i class="fa-solid fa-play toggle-icon"></i>
-                                            <span class="tag default">注意到</span>
+                                            <span class="tag default">我们有</span>
                                             <span>$x$ 可写为 $i(a) + (-i(b))$ 的形式</span>
                                         </summary>
                                         <div class="goal-content with-line">
@@ -1037,7 +1059,7 @@
                                             </div>
                                             <div class="step-block">
                                                 <span class="step-tag">重写</span>
-                                                <span class="step-content">$[(a,b)] = [(a+0,\\;0+b)] = i(a) + (-i(b))$</span>
+                                                <span class="step-content">$[(a,b)] = [(a+0,0+b)] = i(a) + (-i(b))$</span>
                                             </div>
                                         </div>
                                     </details>

@@ -19,9 +19,9 @@ html, body {
 }
 
 /* ---------- Header ---------- */
-.slide-header { margin-bottom: 2.5vh; }
-.slide-header h1 { font-size: 2.6vw; font-weight: 700; color: #111827; }
-.slide-header .tag { display: inline-block; margin-top: 0.8vh; font-size: 0.85vw; color: #6b7280; }
+.slide-header { margin-bottom: 3.5vh; }
+.slide-header h1 { font-size: 2.75vw; font-weight: 700; color: #111827; }
+.slide-header .tag { display: inline-block; margin-top: 0.8vh; font-size: 1vw; color: #6b7280; }
 
 /* ---------- Layout Helpers ---------- */
 .body { display: flex; gap: 3vw; flex: 1; min-height: 0; margin-top: 2vh;}
@@ -47,7 +47,6 @@ html, body {
 .card h2 { font-size: 1.15vw; font-weight: 600; color: #1f2937; margin-bottom: 0.5vh; }
 .card h3 { font-size: 0.95vw; font-weight: 600; color: #374151; margin-bottom: 0.4vh; }
 .card p  { font-size: 0.82vw; line-height: 1.5; color: #6b7280; }
-.card code { color: #2563eb; font-size: 0.8vw; }
 
 /* Card — 左侧色条变体 */
 .card-ft {
@@ -56,13 +55,12 @@ html, body {
     padding: 1.2vh 1.3vw;
 }
 .card-ft h3 {
-    color: #1f2937; font-size: 0.9vw;
+    color: #1f2937; font-size: 1.2vw;
     margin-bottom: 0.4vh;
     padding-bottom: 0.3vh;
 }
-.card-ft p { font-size: 0.78vw; line-height: 1.45; color: #6b7280; }
+.card-ft p { font-size: 1vw; line-height: 1.45; color: #6b7280; }
 .card-ft:hover { border-left-color: #2563eb; }
-.card-ft code { color: #2563eb; font-size: 0.76vw; }
 
 /* Card — 琥珀色变体（定制策略页用） */
 .card-amber {

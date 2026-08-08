@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./common.css">
+    <script defer src="../js/katex.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <style>
+        .col.future-col { flex: 2; }
+        .col.roadmap-col { flex: 1; }
         .card.accent { border-left: 3px solid #f59e0b; background: #fffbeb; }
         .card.accent h3 { color: #92400e; }
         .card.accent:hover { border-left-color: #d97706; }
@@ -56,7 +62,7 @@
             <span class="tag">Summary & Roadmap</span>
         </div>
         <div class="body">
-            <div class="col">
+            <div class="col future-col">
                 <h2>未来工作</h2>
                 <div class="card">
                     <h3>定制策略框架搭建</h3>
@@ -80,41 +86,48 @@
                 </div>
             </div>
 
-            <div class="col">
+            <div class="col roadmap-col">
                 <h2>路线图</h2>
                 <div class="roadmap">
                     <div class="road-item">
                         <div class="road-dot"></div>
                         <div class="road-text">
                             <div class="road-phase">Phase 1</div>
-                            <div class="road-desc">Calculus_21 完整公理体系 + 基本定理库</div>
+                            <div class="road-desc">完成 Calculus_21 知识库</div>
                         </div>
                     </div>
                     <div class="road-item">
                         <div class="road-dot"></div>
                         <div class="road-text">
                             <div class="road-phase">Phase 2</div>
-                            <div class="road-desc">定制策略框架标准化 + Mitar 交互增强</div>
+                            <div class="road-desc">扩展 Mathlib , 定制策略框架</div>
                         </div>
                     </div>
                     <div class="road-item">
                         <div class="road-dot"></div>
                         <div class="road-text">
                             <div class="road-phase">Phase 3</div>
-                            <div class="road-desc">知识宇宙浏览器 + 证明依赖图</div>
+                            <div class="road-desc">完善 Mitar 基础设施, 增强交互体验</div>
                         </div>
                     </div>
                     <div class="road-item">
                         <div class="road-dot"></div>
                         <div class="road-text">
                             <div class="road-phase">Phase 4</div>
-                            <div class="road-desc">AI 辅助策略生成 + 跨数学分支扩展</div>
+                            <div class="road-desc">同步开发 $\TeX$ / Typst 文档编写插件</div>
                         </div>
                     </div>
                     <div class="road-item">
                         <div class="road-dot"></div>
                         <div class="road-text">
                             <div class="road-phase">Phase 5</div>
+                            <div class="road-desc">继续编写更多形式化知识库</div>
+                        </div>
+                    </div>
+                    <div class="road-item">
+                        <div class="road-dot"></div>
+                        <div class="road-text">
+                            <div class="road-phase">Phase 6</div>
                             <div class="road-desc">交互式教学平台部署上线</div>
                         </div>
                     </div>

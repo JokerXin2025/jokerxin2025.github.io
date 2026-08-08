@@ -4,13 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./common.css">
-    <style>
-        .code-box .kw { color: #2563eb; }
-        .code-box .cm { color: #9ca3af; }
-        .code-box .str { color: #059669; }
-        .code-box .num { color: #d97706; }
-        .code-box .sec { color: #7c3aed; font-weight: 600; }
-    </style>
 </head>
 <body>
     <div class="slide">
@@ -20,53 +13,49 @@
         </div>
         <div class="body">
             <div class="main">
-                <div class="code-box"><span class="sec"># 带参数捕获：unfold.toml</span>
+                <div class="code-box"><span class="sec"># unfold.toml (带参数捕获)</span>
 <span class="kw">name</span> = <span class="str">"unfold"</span>
-<span class="kw">syntax</span> = <span class="str">"unfold $concept"</span>            <span class="cm"># $concept 捕获标识符</span>
+<span class="kw">syntax</span> = <span class="str">"unfold $concept"</span>               <span class="cm"># `$concept` 捕获参数</span>
 <span class="kw">tag</span> = <span class="str">"应用定义"</span>
 <span class="kw">content</span> = <span class="str">"根据 ${concept} 的定义, 我们需要证明 ${goal'}"</span>
 
-<span class="sec"># 条件分支：have.toml</span>
-<span class="kw">name</span> = <span class="str">"have"</span>
-<span class="kw">syntax</span> = <span class="str">"have"</span>
-<span class="kw">tag</span> = <span class="str">"引入前提"</span>
-<span class="kw">put_off</span> = <span class="num">true</span>                         <span class="cm"># 产生新自由变量的策略</span>
-<span class="kw">content</span> = <span class="str">"要证明该命题, 只需证明 ${goal}"</span>
+<span class="sec"># norm_num.toml (条件分支)</span>
+<span class="kw">name</span> = <span class="str">"norm_num"</span>
+<span class="kw">syntax</span> = <span class="str">"norm_num"</span>
+<span class="kw">tag</span> = <span class="str">"数值"</span>
+<span class="kw">put_off</span> = <span class="num">true</span>
+<span class="kw">content</span> = <span class="str">"该命题在数值上可标准化为 ${goal}"</span>
 
-[<span class="kw">Final</span>]                                <span class="cm"># 终结步骤时覆盖 content</span>
-<span class="kw">content</span> = <span class="str">"由此可得 ${goal}"</span>
+[<span class="kw">Final</span>]                                  <span class="cm"># 作为终结步骤时覆盖原有模版</span>
+<span class="kw">content</span> = <span class="str">"通过数值计算即可证明 ${goal}"</span>
 
-[<span class="kw">Contra</span>]                               <span class="cm"># 目标为"矛盾"时覆盖 content</span>
-<span class="kw">content</span> = <span class="str">"推出矛盾，因此原命题得证"</span>
+[<span class="kw">Contra</span>]                                 <span class="cm"># 目标为“矛盾”时覆盖原有模版</span>
+<span class="kw">content</span> = <span class="str">"在数值上不相等, 由此产生矛盾"</span>
 
 <span class="sec"># 加载到项目中</span>
-<span class="kw">#load_tactics</span> mathlib                    <span class="cm">-- 加载 Mathlib 内置策略规则</span>
-<span class="kw">#load_tactics_toml</span> <span class="str">".../my_tactics/"</span>   <span class="cm">-- 加载自定义策略规则目录</span></div>
+<span class="kw">#load_tactics</span> mathlib                    <span class="cm"># 加载 Mathlib 内置策略规则</span>
+<span class="kw">#load_tactics_toml</span> <span class="str">".../my_tactics/"</span>     <span class="cm"># 加载自定义策略规则目录</span></div>
             </div>
             <div class="side">
                 <div class="card-ft card">
-                    <h3>一条 TOML，一种策略</h3>
-                    <p>每个策略一个 <code>.toml</code> 文件。<strong>54 种策略</strong>已适配（内置 28 + Mathlib 26），新增策略只需新建一个文件。</p>
+                    <h3>一条 TOML —— 一种策略</h3>
+                    <p>每个策略用法对应一个 <code>.toml</code> 文件, 内置 <strong>54 种策略</strong> . ( Lean 28 + Mathlib 26 )</p>
                 </div>
                 <div class="card-ft card">
-                    <h3>语法匹配</h3>
-                    <p><code>syntax</code> 字段用 <code>$label</code> 捕获参数，前缀优先匹配。<code>$goal</code> 和 <code>$goal'</code> 捕获策略前后的证明目标。</p>
-                </div>
-                <div class="card-ft card">
-                    <h3>内容模板</h3>
-                    <p><code>content</code> 中用 <code>${label}</code> 引用捕获的参数，<code>${goal}</code> 引用当前目标。文本一经写出，Mitar 自动渲染为 KaTeX 数学公式。</p>
+                    <h3>智能语法匹配</h3>
+                    <p><code>syntax</code> 字段用 <code>$label</code> 捕获参数, 前缀优先匹配.<br>使用 <code>$goal</code> 和 <code>$goal'</code> 可捕获策略前后的证明目标.</p>
                 </div>
                 <div class="card-ft card">
                     <h3>条件分支</h3>
-                    <p><code>Final</code>（终结步骤）、<code>Contra</code>（导出矛盾）、<code>NonFinal</code>（未完成）——同一策略在不同上下文中展示不同内容。</p>
+                    <p><code>Final</code> (终结步骤)、<code>Contra</code> (导出矛盾)、<code>NonFinal</code> (中间步骤)<br>同一策略在不同上下文中展示不同内容.</p>
                 </div>
                 <div class="card-ft card">
-                    <h3>拖后记录</h3>
-                    <p><code>put_off = true</code> 处理 <code>have</code> 等产生新变量的策略，确保新变量在后续步骤中才被记录。</p>
+                    <h3>延迟记录</h3>
+                    <p><code>put_off</code> 处理 <code>have</code> 等产生新变量的策略, 确保新变量在产生后才被记录.</p>
                 </div>
                 <div class="card-ft card">
-                    <h3>开箱即用</h3>
-                    <p>内置 54 种策略规则，覆盖日常证明需求。<code>mitar make file.lean</code> 一键生成交互式 HTML。</p>
+                    <h3>Mathlib 版本隔离</h3>
+                    <p>Mathlib 策略规则作为配置文件, 确保在不同 Mathlib 版本下都能正确工作.</p>
                 </div>
             </div>
         </div>

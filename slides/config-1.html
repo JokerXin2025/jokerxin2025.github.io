@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./common.css">
+    <script defer src="../js/katex.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 </head>
 <body>
     <div class="slide">
@@ -31,27 +35,25 @@
 <span class="kw">def</span> Power (a : ℝ) (n : ℕ) : ℝ := ...
 
 <span class="cm">-- 显示类型切换：同一概念在不同语境下的不同表述</span>
-<span class="kw">@</span>[<span class="kw">mitar</span> <span class="str">"@1 + @2"</span> Add]
-<span class="kw">@</span>[<span class="kw">mitar</span> <span class="str">"@1 \\oplus @2"</span> Add (
-  target_display := <span class="str">"Fancy"</span>)]
-<span class="kw">def</span> HAdd.hAdd ...</div>
+<span class="kw">attribute</span> [<span class="kw">mitar</span> <span class="str">"@1+@2"</span> Add] HAdd.hAdd
+<span class="kw">attribute</span> [<span class="kw">mitar</span> <span class="str">"@1与@2的和"</span> Text (display := Word)] HAdd.hAdd</div>
             </div>
             <div class="side">
                 <div class="card-ft card">
-                    <h3>设计目标</h3>
-                    <p>零依赖的轻量库，代码量极小。安装 Mitar 时自动安装，湖文件中引入本地依赖即可使用。</p>
+                    <h3>多语境适配</h3>
+                    <p>可为同一概念/定理编写不同语境下的表述, 大幅提升证明可读性.</p>
                 </div>
                 <div class="card-ft card">
                     <h3>全局变量管理</h3>
-                    <p>按类型分配独立变量名池：实数用 x,y,z，自然数用 n,m,k。全文不重名，学习者一眼辨别变量类型。</p>
+                    <p>按类型分配独立变量名池, 实数用 $x,y,z$ , 自然数用 $n,m,k$ .<br>全文符号不重名, 使得学习者可更轻易区分变量.</p>
                 </div>
                 <div class="card-ft card">
                     <h3>优先级自动处理</h3>
-                    <p>自动判断运算优先级，在需要处添加括号。<code>(x+y)z</code> 自动保留，<code>(xy)+z</code> 自动省略。创作者无需关心排版。</p>
+                    <p>自动根据节点类型判断运算优先级并添加括号, 降低构建知识库的工作量.<br><code>(x+y)z</code> 自动保留, <code>(xy)+z</code> 自动省略.</p>
                 </div>
                 <div class="card-ft card">
                     <h3>Lambda 变量绑定</h3>
-                    <p><code>#1</code> 绑定参数的 De Bruijn 索引，确保嵌套 lambda 内的变量名一致——"函数在 <strong>x=1</strong> 处收敛"，两个 x 严格统一。</p>
+                    <p><code>#1</code> 绑定参数的 De Bruijn 索引, 确保 lambda 函数体内外的变量名一致.<br>例如“函数 $x^2 + 1$ 在 $x=1$ 处收敛于 $2$”, 两个 $x$ 严格统一.</p>
                 </div>
             </div>
         </div>

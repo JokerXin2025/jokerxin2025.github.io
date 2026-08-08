@@ -31,9 +31,9 @@
         .layer.l2 h3 { color: #d97706; }
         .layer.l1 h3 { color: #374151; }
 
-        .scenarios { flex: 1; display: flex; flex-direction: column; gap: 1.2vh; }
+        .scenarios { flex: 1.2; display: flex; flex-direction: column; gap: 1vh; }
         .scen {
-            padding: 1.3vh 1.5vw;
+            padding: 1vh 1.3vw;
             background: #fff;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
@@ -45,10 +45,10 @@
             box-shadow: 0 6px 16px rgba(0,0,0,0.06);
             border-color: #d1d5db;
         }
-        .scen h3 { font-size: 1vw; font-weight: 600; color: #374151; margin-bottom: 0.3vh; }
+        .scen h3 { font-size: 1vw; font-weight: 600; color: #374151; margin-bottom: 0.2vh; }
         .scen p { font-size: 0.8vw; line-height: 1.45; color: #6b7280; }
 
-        .vision { flex: 0.9; justify-content: center; }
+        .vision { flex: 0.7; justify-content: center; }
         .vision-inner {
             padding: 3vh 2.5vw;
             border: 1px solid #bfdbfe;
@@ -78,41 +78,54 @@
         <div class="body">
             <div class="layers">
                 <div class="layer l3">
-                    <div class="layer-num">LAYER 3</div>
-                    <h3>交互层 — Mitar</h3>
-                    <p>证明步骤可展开/折叠, 由学习者 <strong>自由控制阅读节奏</strong></p>
+                    <div class="layer-num">LAYER 4</div>
+                    <h3>交互层 — 辅助教学系统</h3>
+                    <p>证明步骤可展开/折叠 —— 由学习者 <strong>自由控制阅读节奏</strong></p>
                 </div>
                 <div class="layer l2">
-                    <div class="layer-num">LAYER 2</div>
-                    <h3>语义层 — 定制策略</h3>
+                    <div class="layer-num">LAYER 3</div>
+                    <h3>逻辑层 — 定制策略</h3>
                     <p>以推理逻辑单元为粒度的定制策略 —— <strong class="sa">读者看到的是解题思路</strong></p>
+                </div>
+                <div class="layer l1">
+                    <div class="layer-num">LAYER 2</div>
+                    <h3>表述层 — 知识库</h3>
+                    <p>对标各分支标准教材的知识库 —— 严格对齐问题表述语义</p>
                 </div>
                 <div class="layer l1">
                     <div class="layer-num">LAYER 1</div>
                     <h3>验证层 — Lean 4</h3>
-                    <p>底层形式化引擎确保每一步推理 <strong>被严格验证</strong> , 杜绝教学中的模糊论证</p>
+                    <p>底层形式化引擎确保每一步推理 <strong>被严格验证</strong> —— 杜绝教学中的模糊论证</p>
                 </div>
             </div>
 
             <div class="scenarios">
                 <div class="scen">
-                    <h3>交互式课本</h3>
-                    <p>定理附带可展开的证明树，从顶层概览到底层细节，由学生自主导航。</p>
+                    <h3>交互式教材</h3>
+                    <p>定理附带可展开的证明树, 从策略概览到底层细节, 由学生自主控制阅读深度</p>
                 </div>
                 <div class="scen">
-                    <h3>智能习题系统</h3>
-                    <p>自动生成变体，实时给出结构化反馈而非简单对/错判断。</p>
+                    <h3>课堂实时演示</h3>
+                    <p>教师逐步展开证明步骤, 策略标注对应课堂用语, 直观展示逻辑结构</p>
                 </div>
                 <div class="scen">
-                    <h3>板书级教学辅助</h3>
-                    <p>一键生成策略标注的证明展示，策略名直接对应课堂语言。</p>
+                    <h3>自适应练习</h3>
+                    <p>自动生成变体题目, 结构化反馈取代简单对错, 精准定位逻辑薄弱点</p>
+                </div>
+                <div class="scen">
+                    <h3>知识图谱导航</h3>
+                    <p>定理间依赖关系一目了然, 点击任意引理或定义即可跳转, 构建完整知识网络</p>
+                </div>
+                <div class="scen">
+                    <h3>证明策略训练</h3>
+                    <p>策略名直接对应解题思路, 帮助学生识别常见证明模式, 从模仿到独立构造</p>
                 </div>
             </div>
 
             <div class="vision">
                 <div class="vision-inner">
                     <h2>终极愿景</h2>
-                    <p>一本 <strong>“活的数学教材”</strong><br>每个定义经过形式化验证<br>每个证明步骤配有语义解释<br>读者可无限深入任何细节</p>
+                    <p>一本 <strong>“活的数学教材”</strong><br>每个定理经过形式化验证<br>每个证明步骤配有语义解释<br>读者可无限深入任何细节</p>
                 </div>
             </div>
         </div>
