@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./common.css">
+    <script defer src="../js/katex.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        .code-sm {
+            padding: 0.8vh 1.2vw;
+            background: #f3f4f6; border-radius: 6px;
+            font-family: "SF Mono", monospace;
+            font-size: 0.68vw; line-height: 1.5; color: #374151;
+            white-space: pre; overflow: hidden;
+            border: 1px solid #e5e7eb;
+            margin-top: 0.3vh;
+        }
+        .code-sm .kw { color: #2563eb; }
+        .code-sm .cm { color: #9ca3af; }
+        .code-sm .num { color: #d97706; }
+        .strat-item {
+            padding: 0.8vh 1.2vw;
+            border-left: 2px solid #f59e0b;
+            background: #fffbeb;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            display: flex; flex-direction: column; gap: 0.3vh;
+        }
+        .strat-item:hover { border-left-color: #d97706; }
+        .strat-item .strat-title { font-size: 0.82vw; font-weight: 700; color: #d97706; margin: 0; }
+        .strat-item .strat-title code { font-family: "SF Mono", monospace; font-size: 0.82vw; color: #d97706; font-weight: 700; }
+        .strat-item .strat-desc { font-size: 0.72vw; line-height: 1.4; color: #78716c; margin: 0; }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-header">
+            <h1>Calculus_21 —— 为形式化教学而生的微积分库</h1>
+            <span class="tag">Lean 4.32.0 · Mathlib v4.32.0</span>
+        </div>
+        <div class="body">
+            <div class="col">
+                <h2>未定相等 <code>=?</code></h2>
+                <div class="card">
+                    <h3>处理部分函数的天然方案</h3>
+                    <p>极限计算中表达式可能无定义。<code>A =? B</code> 含义：若 <code>B</code> 无定义则成立，否则 <code>A = some B</code>。<strong>允许 calc 跳过未定义项，贴合手算习惯。</strong></p>
+                </div>
+                <div class="card">
+                    <h3>自反 + 传递 + 混合</h3>
+                    <p><code>=?</code> 可与 <code>=</code> 无缝混合于 calc 块。<strong>证明流的可读性与数学草稿一致。</strong></p>
+                </div>
+                <div class="code-sm"><span class="cm">-- =? 的定义：B 无定义时无条件成立</span>
+<span class="kw">def</span> UdEqual (A B : Option α) : Prop :=
+  <span class="kw">match</span> B <span class="kw">with</span>
+  | none => True
+  | some B! => A = the B!
+
+<span class="kw">infix</span>:<span class="num">50</span> <span class="str">" =? "</span> => UdEqual</div>
+            </div>
+
+            <div class="col">
+                <h2>表达式系统</h2>
+                <div class="card">
+                    <h3>统一的 Function 抽象</h3>
+                    <p>数列、函数、表达式统一到 <code>Function</code>，<code>domain</code>（定义域）和 <code>map</code>（映射）是核心字段。<strong>定义域是值而非命题，贴合直觉。</strong></p>
+                </div>
+                <div class="card">
+                    <h3>Option 承载部分性</h3>
+                    <p>函数值类型为 <code>Option ℝ</code>，<code>none</code> 表未定义。<code>the</code> 宏是 <code>Option.some</code> 语法糖。<strong>与 =? 协同处理边界。</strong></p>
+                </div>
+                <div class="code-sm"><span class="cm">-- 数列极限：SeqLimit(A, L) 即 A 收敛于 L</span>
+<span class="kw">def</span> SeqLimit (A : Sequence) (L : ℝ) : Prop :=
+  A.final = none
+  ∧ ∀ ε > <span class="num">0</span>, ∃ N : ℕ, ∀ n > N,
+    A.map n ∈ Nbho L ε
+
+<span class="cm">-- 函数极限：四种方向统一接口</span>
+<span class="kw">def</span> FuncLimit | LeftLimit
+<span class="kw">def</span> RightLimit | NegInftyLimit</div>
+            </div>
+
+            <div class="col">
+                <h2>定制策略</h2>
+                <div class="strat-item">
+                    <p class="strat-title"><code>lim_calc</code>&emsp;连续性代入</p>
+                    <p class="strat-desc">基于初等函数的连续性直接代入极限点计算</p>
+                </div>
+                <div class="strat-item">
+                    <p class="strat-title"><code>lim_congr_by</code>&emsp;极限表达式改写</p>
+                    <p class="strat-desc">利用去心邻域内同余性对极限表达式进行改写，支持嵌入 ring / field 等自动化终结策略</p>
+                </div>
+                <div class="strat-item">
+                    <p class="strat-title"><code>lim_equiv</code>&emsp;等价无穷小代换</p>
+                    <p class="strat-desc">自动匹配 $\sin x\sim x$ 等常见等价无穷小</p>
+                </div>
+                <div class="strat-item">
+                    <p class="strat-title"><code>lim_rational</code>&emsp;有理函数极限计算器</p>
+                    <p class="strat-desc">与 SymPy 交互，自动因式分解并求解有理函数极限</p>
+                </div>
+                <div class="strat-item">
+                    <p class="strat-title"><code>deriv</code>&emsp;导数计算器</p>
+                    <p class="strat-desc">计算初等函数的导数值</p>
+                </div>
+                <div class="strat-item">
+                    <p class="strat-title"><code>lim_luo</code>&emsp;应用洛必达法则</p>
+                    <p class="strat-desc">使用洛必达法则, 对 $0/0$ 或 $\infty/\infty$ 型不定式同时求导分子和分母</p>
+                </div>
+                <div class="strat-item">
+                    <p class="strat-title"><code>int_notice</code>&emsp;积分验证器</p>
+                    <p class="strat-desc">直接通过求导验证不定积分/定积分结果</p>
+                </div>
+                <div class="strat-item">
+                    <p class="strat-title"><code>int_by_parts</code>&emsp;应用分部积分法</p>
+                    <p class="strat-desc">使用分部积分法, 对不定积分/定积分进行拆分</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

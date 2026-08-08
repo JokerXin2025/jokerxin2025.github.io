@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>命题</title>
+
+    <link rel="stylesheet" href="./css/basic.css">
+    <link rel="stylesheet" href="./css/step.css">
+    <link rel="stylesheet" href="./css/goal.css">
+    <link rel="stylesheet" href="./css/strategy.css">
+    <link rel="stylesheet" href="./css/sundry.css">
+    <link rel="stylesheet" href="./css/animation.css">
+    <link rel="stylesheet" href="./css/codicon.css">
+
+    <script defer src="js/katex.js"></script>
+    <script defer src="js/animation.js"></script>
+    <script defer src="js/equation_size.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://kit.fontawesome.com/22e1239b05.js" crossorigin="anonymous"></script>
+
+    <style>
+        html { overflow-y: hidden !important; }
+        .step-block.calc { position: relative; }
+        .hover-label {
+            position: absolute;
+            left: 14px; top: 50%; transform: translateY(-50%);
+            min-width: 36px; height: 24px;
+            display: flex; align-items: center;
+            font-family: 'Consolas', monospace;
+            font-size: 12px; font-weight: 600;
+            color: #334155;
+            white-space: nowrap;
+            opacity: 0; transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+        .step-block.calc:hover .hover-label { opacity: 1; }
+        .step-block.calc:hover .step-tag.calc { opacity: 0; }
+        .step-tag.calc { transition: opacity 0.2s ease; }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="main-content" class="proof-container" style="margin: 3vw">
+
+        <h2>
+            <sup class="proof-mark pass"><i class="codicon codicon-check-all"></i></sup>
+            证明
+        </h2>
+
+        <div><div class="step-block calc">
+            <span class="hover-label">等价无穷小</span>
+            <span class="step-tag calc">计算</span>
+            <span class="step-lhs"> $\displaystyle\lim\limits_{x\to0}\frac{e^{x^{2}}-\cos x}{x\sin x}$ </span>
+            <span class="step-rel">$=$</span>
+            <span class="step-rhs"> $\displaystyle\lim\limits_{x\to0}\frac{e^{x^{2}}-\cos x}{x^{2}}$ </span>
+            <span class="step-cal-end"></span>
+        </div>
+        <div class="step-block calc">
+            <span class="hover-label">洛必达法则</span>
+            <span class="step-tag calc"></span>
+            <span class="step-lhs"></span>
+            <span class="step-rel">$\textcolor{lightgrey}=$</span>
+            <span class="step-rhs"> $\displaystyle\lim\limits_{x\to0}\frac{e^{x^{2}}\cdot (2x)-(-\sin x)}{2x}$ </span>
+            <span class="step-cal-end"></span>
+        </div>
+        <div class="step-block calc">
+            <span class="hover-label">化简</span>
+            <span class="step-tag calc"></span>
+            <span class="step-lhs"></span>
+            <span class="step-rel">$=$</span>
+            <span class="step-rhs"> $\displaystyle\lim\limits_{x\to0}\frac{e^{x^{2}}\cdot (2x)+\sin x}{2x}$ </span>
+            <span class="step-cal-end"></span>
+        </div>
+        <div class="step-block calc">
+            <span class="hover-label">洛必达法则</span>
+            <span class="step-tag calc"></span>
+            <span class="step-lhs"></span>
+            <span class="step-rel">$\textcolor{lightgrey}=$</span>
+            <span class="step-rhs"> $\displaystyle\lim\limits_{x\to0}\frac{e^{x^{2}}\cdot (4x^{2})+2e^{x^{2}}+\cos x}{2}$ </span>
+            <span class="step-cal-end"></span>
+        </div>
+        <div class="step-block calc">
+            <span class="hover-label">代入</span>
+            <span class="step-tag calc"></span>
+            <span class="step-lhs"></span>
+            <span class="step-rel">$=$</span>
+            <span class="step-rhs"> $\dfrac{3}{2}$ </span>
+            <span class="step-cal-end"></span>
+        </div></div>
+
+        <div class="qed">□</div>
+
+    </div>
+
+</body>
+</html>

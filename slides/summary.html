@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./common.css">
+    <style>
+        .card.accent { border-left: 3px solid #f59e0b; background: #fffbeb; }
+        .card.accent h3 { color: #92400e; }
+        .card.accent:hover { border-left-color: #d97706; }
+        .card.accent p { color: #78716c; }
+        .roadmap { display: flex; flex-direction: column; gap: 0; position: relative; }
+        .road-item {
+            display: flex; align-items: flex-start; gap: 1vw;
+            padding: 1.2vh 0;
+            position: relative;
+        }
+        .road-dot {
+            flex-shrink: 0;
+            width: 1.1vw; height: 1.1vw;
+            border-radius: 50%;
+            background: #93c5fd;
+            border: 2px solid #2563eb;
+            margin-top: 0.5vh;
+            transition: all 0.2s ease;
+        }
+        .road-item:hover .road-dot {
+            background: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+        }
+        .road-line {
+            position: absolute;
+            left: 0.35vw; top: 1.4vh; bottom: 0;
+            width: 0; border-left: 1.5px dashed #d1d5db;
+            transform: translateX(-50%);
+        }
+        .road-item:last-child .road-line { display: none; }
+        .road-text { flex: 1; }
+        .road-phase {
+            font-size: 1vw; font-weight: 700; color: #2563eb;
+            letter-spacing: 1px; margin-bottom: 0.3vh;
+        }
+        .road-desc {
+            font-size: 1.1vw; line-height: 1.4; color: #4b5563;
+            transition: color 0.2s ease;
+        }
+        .road-item:hover .road-desc { color: #1f2937; }
+        strong { color: #2563eb; font-weight: 600; }
+        .sa { color: #d97706; }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-header">
+            <h1>总结与展望</h1>
+            <span class="tag">Summary & Roadmap</span>
+        </div>
+        <div class="body">
+            <div class="col">
+                <h2>未来工作</h2>
+                <div class="card">
+                    <h3>定制策略框架搭建</h3>
+                    <p>在现有 Mathlib 基础上, 搭建一套 <strong>更符合人类逻辑</strong> 的定制策略框架 —— 细化区分函数/命题/集合外延性、商归纳/强归纳/普通归纳等</p>
+                </div>
+                <div class="card">
+                    <h3>Mitar 基础设施完善</h3>
+                    <p>提供 <strong>命令行工具</strong> , 支持批量生成证明页面, 开展大规模测试, 确保与主流 Mathlib 证明的兼容性</p>
+                </div>
+                <div class="card">
+                    <h3>AI 辅助形式化讲义</h3>
+                    <p>从微积分出发, 由 AI 协助编写 <strong>覆盖数学各分支</strong> 的形式化讲义并添加 Mitar 配置, 大规模构建形式化教学材料</p>
+                </div>
+                <div class="card">
+                    <h3>周边生态配套</h3>
+                    <p>开发可嵌入 Mitar 的网页幻灯片框架、大模型集成、$\TeX$ / Typst 文档编写插件等, 为形式化教育提供 <strong>良好生态</strong></p>
+                </div>
+                <div class="card">
+                    <h3>交互式教育平台</h3>
+                    <p>全面构建支持 <strong>定制策略导航</strong> 的交互式教育平台：学生按策略浏览证明, 教师自定义教学路径</p>
+                </div>
+            </div>
+
+            <div class="col">
+                <h2>路线图</h2>
+                <div class="roadmap">
+                    <div class="road-item">
+                        <div class="road-dot"></div>
+                        <div class="road-text">
+                            <div class="road-phase">Phase 1</div>
+                            <div class="road-desc">Calculus_21 完整公理体系 + 基本定理库</div>
+                        </div>
+                    </div>
+                    <div class="road-item">
+                        <div class="road-dot"></div>
+                        <div class="road-text">
+                            <div class="road-phase">Phase 2</div>
+                            <div class="road-desc">定制策略框架标准化 + Mitar 交互增强</div>
+                        </div>
+                    </div>
+                    <div class="road-item">
+                        <div class="road-dot"></div>
+                        <div class="road-text">
+                            <div class="road-phase">Phase 3</div>
+                            <div class="road-desc">知识宇宙浏览器 + 证明依赖图</div>
+                        </div>
+                    </div>
+                    <div class="road-item">
+                        <div class="road-dot"></div>
+                        <div class="road-text">
+                            <div class="road-phase">Phase 4</div>
+                            <div class="road-desc">AI 辅助策略生成 + 跨数学分支扩展</div>
+                        </div>
+                    </div>
+                    <div class="road-item">
+                        <div class="road-dot"></div>
+                        <div class="road-text">
+                            <div class="road-phase">Phase 5</div>
+                            <div class="road-desc">交互式教学平台部署上线</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

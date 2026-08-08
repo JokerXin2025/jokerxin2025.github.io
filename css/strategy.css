@@ -1,7 +1,7 @@
 .strategy-block {
     margin-left: 24px;
-    padding: 0 16px 8px 0;
     border-radius: 8px;
+    padding: 0 16px 8px 0;
     transition: 0.25s;
 }
 .strategy-block:hover {
@@ -20,6 +20,9 @@
     background: var(--contradiction-color-background);
     border-left: 2px solid var(--contradiction-color);
 }
+.strategy-block.decompose {
+    border-left: 2px solid var(--border-color);
+}
 
 .tag.cases {
     color: var(--cases-color);
@@ -34,5 +37,10 @@
 .tag.contradiction {
     color: var(--contradiction-color);
     border: 1px solid var(--contradiction-color-light);
+    margin: 20px 0 0 20px;
+}
+.tag.decompose {
+    color: var(--cases-color);
+    border: 1px solid var(--cases-color-light);
     margin: 20px 0 0 20px;
 }

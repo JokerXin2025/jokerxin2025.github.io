@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./common.css">
+    <style>
+        .layers { flex: 1.2; display: flex; flex-direction: column; gap: 1.3vh; }
+        .layer {
+            padding: 1.8vh 2vw;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+            cursor: default;
+        }
+        .layer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            border-color: #d1d5db;
+        }
+        .layer-num {
+            font-size: 0.72vw; font-weight: 700; color: #9ca3af;
+            letter-spacing: 2px; margin-bottom: 0.4vh;
+        }
+        .layer h3 { font-size: 1.2vw; font-weight: 600; margin-bottom: 0.5vh; }
+        .layer p { font-size: 0.82vw; line-height: 1.5; color: #6b7280; }
+
+        .layer.l3 h3 { color: #374151; }
+        .layer.l2 { border-left: 3px solid #f59e0b; }
+        .layer.l2 h3 { color: #d97706; }
+        .layer.l1 h3 { color: #374151; }
+
+        .scenarios { flex: 1; display: flex; flex-direction: column; gap: 1.2vh; }
+        .scen {
+            padding: 1.3vh 1.5vw;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            cursor: default;
+        }
+        .scen:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            border-color: #d1d5db;
+        }
+        .scen h3 { font-size: 1vw; font-weight: 600; color: #374151; margin-bottom: 0.3vh; }
+        .scen p { font-size: 0.8vw; line-height: 1.45; color: #6b7280; }
+
+        .vision { flex: 0.9; justify-content: center; }
+        .vision-inner {
+            padding: 3vh 2.5vw;
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            text-align: center;
+            transition: all 0.25s ease;
+            width: 100%;
+        }
+        .vision-inner:hover {
+            box-shadow: 0 8px 24px rgba(37,99,235,0.08);
+            border-color: #93c5fd;
+            transform: translateY(-2px);
+        }
+        .vision-inner h2 { font-size: 1.3vw; color: #2563eb; margin-bottom: 1vh; }
+        .vision-inner p { font-size: 0.85vw; color: #4b5563; line-height: 1.7; }
+
+        strong { color: #2563eb; font-weight: 600; }
+        .sa { color: #d97706; }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-header">
+            <h1>形式化辅助教学系统的构想</h1>
+            <span class="tag">Vision of Auxiliary Formalized Teaching System</span>
+        </div>
+        <div class="body">
+            <div class="layers">
+                <div class="layer l3">
+                    <div class="layer-num">LAYER 3</div>
+                    <h3>交互层 — Mitar</h3>
+                    <p>证明步骤可展开/折叠, 由学习者 <strong>自由控制阅读节奏</strong></p>
+                </div>
+                <div class="layer l2">
+                    <div class="layer-num">LAYER 2</div>
+                    <h3>语义层 — 定制策略</h3>
+                    <p>以推理逻辑单元为粒度的定制策略 —— <strong class="sa">读者看到的是解题思路</strong></p>
+                </div>
+                <div class="layer l1">
+                    <div class="layer-num">LAYER 1</div>
+                    <h3>验证层 — Lean 4</h3>
+                    <p>底层形式化引擎确保每一步推理 <strong>被严格验证</strong> , 杜绝教学中的模糊论证</p>
+                </div>
+            </div>
+
+            <div class="scenarios">
+                <div class="scen">
+                    <h3>交互式课本</h3>
+                    <p>定理附带可展开的证明树，从顶层概览到底层细节，由学生自主导航。</p>
+                </div>
+                <div class="scen">
+                    <h3>智能习题系统</h3>
+                    <p>自动生成变体，实时给出结构化反馈而非简单对/错判断。</p>
+                </div>
+                <div class="scen">
+                    <h3>板书级教学辅助</h3>
+                    <p>一键生成策略标注的证明展示，策略名直接对应课堂语言。</p>
+                </div>
+            </div>
+
+            <div class="vision">
+                <div class="vision-inner">
+                    <h2>终极愿景</h2>
+                    <p>一本 <strong>“活的数学教材”</strong><br>每个定义经过形式化验证<br>每个证明步骤配有语义解释<br>读者可无限深入任何细节</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

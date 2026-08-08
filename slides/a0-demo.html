@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A0 演示</title>
+    <link rel="stylesheet" href="./common.css">
+    <style>
+        .left-panel {
+            flex: 1; display: flex; flex-direction: column; min-width: 0;
+        }
+        .left-panel h2 {
+            font-size: 1.1vw; font-weight: 600; color: #1f2937; margin-bottom: 1vh;
+        }
+        .code-panel {
+            min-height: 0;
+            padding: 1.2vh 1.2vw;
+            margin-top: 1.5vh;
+            background: #f3f4f6; border-radius: 6px;
+            font-family: "SF Mono", monospace;
+            font-size: 0.8vw; line-height: 1.75; color: #374151;
+            white-space: pre; overflow: auto;
+            border: 1px solid #e5e7eb;
+        }
+        .code-panel .kw { color: #e62006; }
+        .code-panel .cm { color: #9ca3af; }
+        .code-panel .tac { color: #2563eb; }
+        .code-panel .num { color: #d97706; }
+
+        .right-panel {
+            flex: 1; display: flex; flex-direction: column; min-width: 0;
+        }
+        .right-panel h2 {
+            font-size: 1.1vw; font-weight: 600; color: #1f2937; margin-bottom: 1vh;
+        }
+        .right-panel iframe {
+            width: 100%; height: 55vh;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px; background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-header">
+            <h1>实例演示</h1>
+            <span class="tag">Example Demonstration</span>
+        </div>
+        <div class="body">
+            <div class="left-panel">
+                <h2>Lean 证明脚本</h2>
+                <div class="code-panel"><span class="kw">example</span> :
+  lim (fun x ↦ (exp (x ^ <span class="num">2</span>) - cos x) / (x * sin x)) <span class="num">0</span> = the (<span class="num">3</span> / <span class="num">2</span>)
+:= <span class="kw">calc</span>
+       lim (fun x ↦ (exp (x ^ <span class="num">2</span>) - cos x) / (x * sin x)) <span class="num">0</span>
+    =  lim (fun x ↦ (exp (x ^ <span class="num">2</span>) - cos x) / (x ^ 2)) <span class="num">0</span>
+       := <span class="kw">by</span> <span class="tac">lim_equiv</span>
+    =? lim (fun x ↦ (exp (x ^ <span class="num">2</span>) * (<span class="num">2</span> * x) - (-sin x)) / (<span class="num">2</span> * x)) <span class="num">0</span>
+       := <span class="kw">by</span> <span class="tac">lim_luo</span>
+    =  lim (fun x ↦ (exp (x ^ <span class="num">2</span>) * (<span class="num">2</span> * x) + sin x) / (<span class="num">2</span> * x)) <span class="num">0</span>
+       := <span class="kw">by</span> <span class="tac">lim_congr_by ring within</span> <span class="num">1</span>
+    =? lim (fun x ↦ (exp (x ^ <span class="num">2</span>) * (<span class="num">4</span> * x ^ <span class="num">2</span>) + <span class="num">2</span> * exp (x ^ <span class="num">2</span>) + cos x) / <span class="num">2</span>) <span class="num">0</span>
+       := <span class="kw">by</span> <span class="tac">lim_luo</span>
+    =  the (<span class="num">3</span> / <span class="num">2</span>)
+       := <span class="kw">by</span> <span class="tac">lim_calc</div></span>
+            </div>
+            <div class="right-panel">
+                <h2>Mitar 生成的交互式证明</h2>
+                <iframe src="../A0.html" style="margin-top: 1.5vh"></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

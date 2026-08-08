@@ -1,0 +1,173 @@
+/* ============================================================
+   Slides Framework — 全屏演示框架样式（浅色主题）
+   ============================================================ */
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #fafbfc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Slide Frame ---------- */
+#slide-frame {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+    z-index: 1;
+}
+
+/* ---------- Slide Counter ---------- */
+.slide-counter {
+    position: fixed;
+    bottom: clamp(16px, 2.8vmin, 44px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    padding: clamp(4px, 0.6vmin, 8px) clamp(12px, 1.5vmin, 24px);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: rgba(0, 0, 0, 0.55);
+    font-size: clamp(12px, 1.4vmin, 20px);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    opacity: 1;
+}
+
+.slide-counter.hidden {
+    opacity: 0;
+}
+
+/* ---------- Navigation Buttons ---------- */
+.nav-btn {
+    position: fixed;
+    z-index: 10;
+
+    width:  clamp(44px, 8vmin, 120px);
+    height: clamp(44px, 8vmin, 120px);
+
+    border-radius: 50%;
+    border: clamp(1.2px, 0.12vmin, 2px) solid rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        opacity 0.35s ease,
+        background 0.35s ease,
+        color 0.35s ease,
+        border-color 0.35s ease,
+        transform 0.25s ease,
+        box-shadow 0.35s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+/* 按钮内 SVG 图标随按钮缩放 */
+.nav-btn svg {
+    width:  55%;
+    height: 55%;
+}
+
+/* 默认状态：半透明暗淡 */
+.nav-btn {
+    opacity: 0.5;
+}
+
+/* hover：变亮 */
+.nav-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.95);
+    color: rgba(0, 0, 0, 0.7);
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 clamp(16px, 2vmin, 32px) rgba(0, 0, 0, 0.06),
+                0 clamp(3px, 0.4vmin, 6px) clamp(12px, 1.5vmin, 24px) rgba(0, 0, 0, 0.08);
+    transform: scale(1.08);
+}
+
+/* active：按下反馈 */
+.nav-btn:active {
+    transform: scale(0.94);
+    transition: transform 0.1s ease;
+}
+
+/* 禁用状态 */
+.nav-btn:disabled {
+    opacity: 0.12 !important;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ---------- 按钮位置 ---------- */
+.nav-btn-prev {
+    bottom: clamp(18px, 3vmin, 48px);
+    left:   clamp(14px, 3.5vmin, 48px);
+}
+
+.nav-btn-next {
+    bottom: clamp(18px, 3vmin, 48px);
+    right:  clamp(14px, 3.5vmin, 48px);
+}
+
+.nav-btn-fullscreen {
+    top:    clamp(12px, 2.5vmin, 36px);
+    right:  clamp(12px, 2.5vmin, 36px);
+
+    width:  clamp(32px, 5.5vmin, 72px);
+    height: clamp(32px, 5.5vmin, 72px);
+    border-radius: clamp(8px, 1vmin, 14px);
+}
+
+/* ---------- 自动隐藏 ---------- */
+.nav-btn.idle {
+    opacity: 0.18;
+}
+
+/* ---------- 响应式：超小屏幕微调 ---------- */
+@media (max-width: 480px) {
+    .nav-btn {
+        width:  44px;
+        height: 44px;
+    }
+    .nav-btn-prev {
+        bottom: 14px;
+        left:   10px;
+    }
+    .nav-btn-next {
+        bottom: 14px;
+        right:  10px;
+    }
+    .nav-btn-fullscreen {
+        top:   8px;
+        right: 8px;
+        width:  32px;
+        height: 32px;
+    }
+    .slide-counter {
+        bottom: 10px;
+        font-size: 11px;
+        padding: 3px 10px;
+    }
+}

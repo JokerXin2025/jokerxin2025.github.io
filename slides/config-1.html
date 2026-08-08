@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./common.css">
+</head>
+<body>
+    <div class="slide">
+        <div class="slide-header">
+            <h1>Mitar 表述配置</h1>
+            <span class="tag">Mitar's Statement Configuration</span>
+        </div>
+        <div class="body">
+            <div class="main">
+                <div class="code-box"><span class="cm">-- 数列收敛</span>
+<span class="kw">@</span>[<span class="kw">mitar</span> <span class="str">"数列@1收敛于@2"</span> Text]
+<span class="kw">def</span> SeqLimit (A : Sequence) (L : ℝ) : Prop :=
+  A.final = none
+  ∧ ∀ ε > <span class="num">0</span>, ∃ N : ℕ, ∀ n > N, A.map n ∈ Nbho L ε
+
+<span class="cm">-- 函数极限 (利用 #1 关联参数 @1 的 lambda 绑定变量)</span>
+<span class="kw">@</span>[<span class="kw">mitar</span> <span class="str">"函数@1在 $#1=@2$ 处收敛于@3"</span> Text]
+<span class="kw">def</span> FuncLimit (F : Function) (x₀ L : ℝ) : Prop :=
+  (∃ δ > <span class="num">0</span>, Nbhd x₀ δ ⊆ F.domain)
+  ∧ (∀ ε > <span class="num">0</span>, ∃ δ > <span class="num">0</span>,
+      ∀ x ∈ Nbhd x₀ δ, F.map x ∈ Nbho L ε)
+
+<span class="cm">-- 幂运算 (根据幂结构的显示效果自动处理括号)</span>
+<span class="kw">@</span>[<span class="kw">mitar</span> <span class="str">"@1^{@2}"</span> Supscript]
+<span class="kw">def</span> Power (a : ℝ) (n : ℕ) : ℝ := ...
+
+<span class="cm">-- 显示类型切换：同一概念在不同语境下的不同表述</span>
+<span class="kw">@</span>[<span class="kw">mitar</span> <span class="str">"@1 + @2"</span> Add]
+<span class="kw">@</span>[<span class="kw">mitar</span> <span class="str">"@1 \\oplus @2"</span> Add (
+  target_display := <span class="str">"Fancy"</span>)]
+<span class="kw">def</span> HAdd.hAdd ...</div>
+            </div>
+            <div class="side">
+                <div class="card-ft card">
+                    <h3>设计目标</h3>
+                    <p>零依赖的轻量库，代码量极小。安装 Mitar 时自动安装，湖文件中引入本地依赖即可使用。</p>
+                </div>
+                <div class="card-ft card">
+                    <h3>全局变量管理</h3>
+                    <p>按类型分配独立变量名池：实数用 x,y,z，自然数用 n,m,k。全文不重名，学习者一眼辨别变量类型。</p>
+                </div>
+                <div class="card-ft card">
+                    <h3>优先级自动处理</h3>
+                    <p>自动判断运算优先级，在需要处添加括号。<code>(x+y)z</code> 自动保留，<code>(xy)+z</code> 自动省略。创作者无需关心排版。</p>
+                </div>
+                <div class="card-ft card">
+                    <h3>Lambda 变量绑定</h3>
+                    <p><code>#1</code> 绑定参数的 De Bruijn 索引，确保嵌套 lambda 内的变量名一致——"函数在 <strong>x=1</strong> 处收敛"，两个 x 严格统一。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

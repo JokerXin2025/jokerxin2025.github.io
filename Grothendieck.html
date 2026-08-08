@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <base href="./">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/basic.css">
+    <link rel="stylesheet" href="css/step.css">
+    <link rel="stylesheet" href="css/goal.css">
+    <link rel="stylesheet" href="css/strategy.css">
+    <link rel="stylesheet" href="css/sundry.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/codicon.css">
+    <link rel="stylesheet" href="css/screen_warning.css">
+    <link rel="stylesheet" href="css/diagram.css">
+
+    <script defer src="js/katex.js"></script>
+    <script defer src="js/animation.js"></script>
+    <script defer src="js/equation_size.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://kit.fontawesome.com/22e1239b05.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* 仅保留 diagram.css 未覆盖的独有样式 */
+
+        .diagram-svg foreignObject { overflow: visible; }
+        .diagram-svg .adj-label-katex {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; height: 100%; font-size: 11px; font-weight: 600;
+        }
+
+        /* ===== Flip Card ===== */
+        .proof-flip {
+            /* 移除了 perspective 以消除长内容的 3D 畸变 */
+        }
+        .proof-flip-inner {
+            position: relative;
+            /* 调整了动画时长和曲线，使扁平翻转更利落 */
+            transition: transform 0.5s ease-in-out;
+            transform-style: preserve-3d;
+        }
+        .proof-flip-inner.flipped { transform: rotateY(180deg); }
+        .proof-flip-front { backface-visibility: hidden; }
+        .proof-flip-back {
+            position: absolute; inset: 0;
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .proof-flip-back .code-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 16px;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+        .proof-flip-back .code-header span {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 12px; color: #6b7280;
+        }
+        .proof-flip-back pre {
+            margin: 0; padding: 16px;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 12.5px; line-height: 1.55;
+            color: #374151;
+            overflow: auto; flex: 1;
+            tab-size: 2;
+            white-space: pre;
+            counter-reset: line;
+        }
+        /* Syntax highlighting for Lean */
+        .proof-flip-back .kw  { color: #e62006; }
+        .proof-flip-back .cm  { color: #9ca3af; font-style: italic; }
+        .proof-flip-back .str { color: #059669; }
+        .proof-flip-back .num { color: #d97706; }
+        .proof-flip-back .tac { color: #2563eb; }
+        .proof-flip-back .sec { color: #7c3aed; font-weight: 600; }
+       /* Flip button */
+        .flip-btn {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px;
+            font-size: 0.7em; font-weight: 500;
+            border: 0 solid;
+            background: #fff; color: #6b7280;
+            cursor: pointer; transition: all 0.2s;
+            vertical-align: middle; user-select: none;
+        }
+        .flip-btn:hover { background: #f3f4f6; color: #111827; border-color: #d1d5db; }
+        .flip-btn i { font-size: 13px; }
+
+        /* ===== QED Interactive ===== */
+        .qed-container {
+            position: relative;
+            display: flex; justify-content: flex-end; width: 100%;
+            height: 36px;
+            margin: 12px 0;
+        }
+        .qed-box {
+            position: absolute; right: 0; top: 0;
+            width: 60px; height: 44px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            background: transparent;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-radius 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.35s;
+        }
+        .qed-box:hover, .qed-box.expanded {
+            width: 300px; height: 44px;
+            border-radius: 8px;
+            border-color: #2563eb;
+            background: #fff;
+        }
+        .qed-symbol {
+            font-size: 24px; color: #6b7280;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .qed-box:hover .qed-symbol, .qed-box.expanded .qed-symbol {
+            opacity: 0; transform: scale(0.5);
+            pointer-events: none;
+        }
+        .qed-dialog {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; gap: 6px;
+            padding: 4px 8px;
+            opacity: 0; transform: translateX(10px);
+            transition: opacity 0.2s ease 0.15s, transform 0.2s ease 0.15s;
+            pointer-events: none;
+        }
+        .qed-box:hover .qed-dialog, .qed-box.expanded .qed-dialog {
+            opacity: 1; transform: translateX(0);
+            pointer-events: auto;
+        }
+        .qed-input {
+            flex: 1; height: 100%; min-width: 0;
+            border: none; outline: none;
+            font-size: 13px; color: #374151;
+            background: transparent;
+        }
+        .qed-input::placeholder { color: #9ca3af; }
+        .qed-submit {
+            width: 24px; height: 24px; padding: 0;
+            border: none; background: transparent; color: #2563eb;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; flex-shrink: 0;
+            transition: color 0.2s;
+        }
+        .qed-submit:hover { color: #1d4ed8; }
+    </style>
+</head>
+
+<body>
+
+<div id="device-warning">
+    <div class="warning-content">
+        <div class="warning-icon"><i class="codicon codicon-move"></i></div>
+        <h2 class="warning-title">请使用平板或电脑访问</h2>
+        <p class="warning-desc">为了保证最佳阅读体验<br>本页面暂不支持窄屏浏览</p>
+    </div>
+</div>
+
+<div id="main-content" class="proof-container" style="padding-bottom:25vh;">
+
+    <!-- ===== 定理陈述 ===== -->
+    <div class="proposition-box">
+        <div class="proposition-title">
+            <span class="ref-link">Grothendieck 群函子</span>
+        </div>
+        <p>
+            设 $M$ 为<strong>交换幺半群</strong>, 在 $M\times M$ 上定义等价关系:
+            $$(a,b)\sim(c,d)\quad\Longleftrightarrow\quad\exists k\in M,\; a+d+k = b+c+k$$
+            记 <strong>Grothendieck 群</strong> $G(M):=(M\times M)/{\sim}$, 配备有
+            <ul type="square">
+                <li>加法 $[(a,b)]+[(c,d)]=[(a+c,b+d)]$</li>
+                <li>加法幺元 $[(0,0)]$</li>
+                <li>加法逆元 $-[(a,b)]=[(b,a)]$</li>
+            </ul>
+        </p>
+        <p>
+            <strong>(1) 群结构</strong> : $G(M)$ 构成<strong>交换群</strong>
+        </p>
+        <p>
+            <strong>(2) 泛性质</strong> : 对任意交换群 $N$ 及幺半群同态 $f:M\to N$，存在唯一群同态 $\tilde{f}:G(M)\to N$ 使得 $\tilde{f}\circ i = f$ 成立<br>
+            换言之, <strong>Grothendieck 群函子</strong> $G:\mathsf{CMon}\to\mathsf{Ab}$ 是<strong>遗忘函子</strong> $U:\mathsf{Ab}\to\mathsf{CMon}$ 的<strong>左伴随函子</strong>。
+        </p>
+    </div>
+
+    <!-- 将 h2 转变为 flex 布局并两端对齐 -->
+    <h2 style="display: flex; align-items: center; justify-content: space-between;">
+        <span>
+            <sup class="proof-mark pass"><i class="codicon codicon-check-all"></i></sup>
+            证明
+        </span>
+        <button class="flip-btn" onclick="toggleProofFlip()" id="flipBtn" title="查看 Lean 源码">
+            <i class="codicon codicon-file-code"></i>
+        </button>
+    </h2>
+
+    <div class="proof-flip">
+      <div class="proof-flip-inner" id="proofFlip">
+        <div class="proof-flip-front">
+
+<div class="goal-content">
+
+    <details class="goal-block" open>
+        <summary>
+            <i class="fa-solid fa-play toggle-icon"></i>
+            <span class="tag default">引理 I</span>
+            <span>$x + (-x) = 0$ 对所有 $x\in G(M)$ 成立</span>
+        </summary>
+        <div class="goal-content with-line">
+            <div class="step-block">
+                <span class="step-tag">商归纳</span>
+                <span class="step-content">不妨令 $x=[(a,b)]$</span>
+            </div>
+            <div><div class="step-block calc">
+                <span class="step-tag calc">计算</span>
+                <span class="step-lhs"> $[(a,b)] + (-[(a,b)])$ </span>
+                <span class="step-rel">$=$</span>
+                <span class="step-rhs"> $[(a,b)] + [(b,a)]$ </span>
+                <span class="step-cal-end"></span>
+            </div>
+            <div class="step-block calc">
+                <span class="step-tag calc"></span>
+                <span class="step-lhs"></span>
+                <span class="step-rel">$=$</span>
+                <span class="step-rhs"> $[(a+b,b+a)]$ </span>
+                <span class="step-cal-end"></span>
+            </div>
+            <div class="step-block calc">
+                <span class="step-tag calc"></span>
+                <span class="step-lhs"></span>
+                <span class="step-rel">$=$</span>
+                <span class="step-rhs"> $0$ </span>
+                <span class="step-cal-end"></span>
+            </div></div>
+        </div>
+    </details>
+
+    <details class="goal-block" close>
+        <summary>
+            <i class="fa-solid fa-play toggle-icon"></i>
+            <span class="tag default">引理 II</span>
+            <span>$-x + x = 0$ 对所有 $x\in G(M)$ 成立</span>
+        </summary>
+        <div class="goal-content with-line">
+            <div class="step-block">
+                <span class="step-tag">商归纳</span>
+                <span class="step-content">不妨令 $x=[(a,b)]$</span>
+            </div>
+            <div><div class="step-block calc">
+                <span class="step-tag calc">计算</span>
+                <span class="step-lhs"> $-[(a,b)] + [(a,b)]$ </span>
+                <span class="step-rel">$=$</span>
+                <span class="step-rhs"> $[(b,a)] + [(a,b)]$ </span>
+                <span class="step-cal-end"></span>
+            </div>
+            <div class="step-block calc">
+                <span class="step-tag calc"></span>
+                <span class="step-lhs"></span>
+                <span class="step-rel">$=$</span>
+                <span class="step-rhs"> $[(b+a,a+b)]$ </span>
+                <span class="step-cal-end"></span>
+            </div>
+            <div class="step-block calc">
+                <span class="step-tag calc"></span>
+                <span class="step-lhs"></span>
+                <span class="step-rel">$=$</span>
+                <span class="step-rhs"> $0$ </span>
+                <span class="step-cal-end"></span>
+            </div></div>
+        </div>
+    </details>
+
+    <!-- constructor: 目标拆解 -->
+    <div class="strategy-block decompose">
+        <span class="tag decompose">目标拆解</span>
+        <div class="goal-content">
+
+            <!-- ===== 子目标 I ===== -->
+            <details class="goal-block" open>
+                <summary>
+                    <i class="fa-solid fa-play toggle-icon"></i>
+                    <span class="tag default">子目标 I</span>
+                    <span>$G(M)$ 构成加法交换群</span>
+                </summary>
+                <div class="goal-content with-line">
+
+                    <div class="step-block">
+                        <span class="step-tag">资料</span>
+                        <span class="step-content"><strong>加法</strong> 为 $(\cdot +\cdot)$<br><strong>加法幺元</strong> 为 $0$<br><strong>加法逆</strong> 为 $(-\cdot)$</span>
+                    </div>
+
+                    <!-- 目标拆解：逐条验证交换群公理 -->
+                    <div class="strategy-block decompose">
+                        <span class="tag decompose">目标拆解</span>
+                        <div class="goal-content">
+
+                            <!-- add_assoc -->
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">加法结合律</span>
+                                    <span>$x+y+z = x+(y+z)$ 对一切 $x,y,z\in G(M)$ 成立</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">商归纳</span>
+                                        <span class="step-content">不妨令 $x=[(a_1,a_2)]\ ,\ y=[(b_1,b_2)]\ ,\ z=[(c_1,c_2)]$</span>
+                                    </div>
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $(x+y)+z$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(a_1+b_1,\;a_2+b_2)] + [(c_1,c_2)]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[((a_1+b_1)+c_1,\;(a_2+b_2)+c_2)]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(a_1+(b_1+c_1),\;a_2+(b_2+c_2))]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $x+(y+z)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <!-- zero_add -->
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">加法左幺元</span>
+                                    <span>$0 + x = x$ 对一切 $x \in G(M)$ 成立</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">商归纳</span>
+                                        <span class="step-content">不妨令 $x=[(a,b)]$</span>
+                                    </div>
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $0 + [(a,b)]$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(0+a,\;0+b)]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(a,b)]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <!-- add_zero -->
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">加法右幺元</span>
+                                    <span>$x + 0 = x$ 对一切 $x \in G(M)$ 成立</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">商归纳</span>
+                                        <span class="step-content">不妨令 $x=[(a,b)]$</span>
+                                    </div>
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $[(a,b)] + 0$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(a+0,\;b+0)]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(a,b)]$ </span>
+                                        <span class="step-cal-end"></span
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <!-- add_comm -->
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">加法交换律</span>
+                                    <span>$x + y = y + x$ 对一切 $x,y \in G(M)$ 成立</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">商归纳</span>
+                                        <span class="step-content">不妨令 $x=[(a_1,a_2)]\ ,\ y=[(b_1,b_2)]$</span>
+                                    </div>
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $[(a_1,a_2)] + [(b_1,b_2)]$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(a_1+b_1,\;a_2+b_2)]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(b_1+a_1,\;b_2+a_2)]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $[(b_1,b_2)] + [(a_1,a_2)]$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <!-- neg_add_cancel -->
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">加法逆元</span>
+                                    <span>$-x + x = 0$ 对一切 $x \in G(M)$ 成立</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">应用结论</span>
+                                        <span class="step-content">由<span class="ref-link">引理 II</span>即可给出证明</span>
+                                    </div>
+                                </div>
+                            </details>
+
+                        </div>
+                    </div>
+
+                </div>
+            </details>
+
+            <!-- ===== 子目标 II ===== -->
+            <details class="goal-block" open>
+                <summary>
+                    <i class="fa-solid fa-play toggle-icon"></i>
+                    <span class="tag default">泛性质</span>
+                    <span>存在唯一的 $\tilde{f}$ 使得 $\tilde{f}\circ i = f$</span>
+                </summary>
+                <div class="goal-content with-line">
+
+                    <!-- ===== 交换图 ===== -->
+                    <div class="strategy-block diagram">
+                        <span class="tag diagram">交换图</span>
+                        <div class="goal-content">
+                            <figure class="diagram-figure">
+                                <div class="diagram-zoom-bar">
+                                    <input type="range" id="diagramZoom" min="50" max="100" value="50" step="5" oninput="updateZoom(this.value)">
+                                    <span class="diagram-zoom-value" id="diagramZoomLabel">50%</span>
+                                </div>
+                                <div class="diagram-zoom-stage" id="diagramZoomStage">
+                                <svg class="diagram-svg" id="diagramGrothendieck" viewBox="-20 -15 550 290" xmlns="http://www.w3.org/2000/svg" role="img">
+                                    <defs>
+                                        <marker id="a-solid" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+                                        <marker id="a-dashed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+                                        <marker id="a-unique" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#3b82f6"/></marker>
+                                        <marker id="a-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#0d9488"/></marker>
+                                        <marker id="a-violet" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8b5cf6"/></marker>
+                                    </defs>
+
+                                    <!-- i: M → G(M) — 垂直 -->
+                                    <line x1="145.0" y1="135.0" x2="145.0" y2="30.0" marker-end="url(#a-solid)" class="mor-line"/>
+                                    <foreignObject x="90" y="65" width="80" height="40"><div xmlns="http://www.w3.org/1999/xhtml" class="mor-label-katex">$i$</div></foreignObject>
+
+                                    <!-- f: M → N — 水平 -->
+                                    <line x1="165.0" y1="155.0" x2="380.0" y2="155.0" marker-end="url(#a-solid)" class="mor-line"/>
+                                    <foreignObject x="238" y="156" width="80" height="40"><div xmlns="http://www.w3.org/1999/xhtml" class="mor-label-katex">$f$</div></foreignObject>
+
+                                    <!-- f̃: G(M) → N — 斜边 -->
+                                    <line x1="165.0" y1="30.0" x2="380.0" y2="140.0" stroke-dasharray="5 3" marker-end="url(#a-unique)" class="mor-line unique animated"/>
+                                    <foreignObject x="235" y="45" width="120" height="40"><div xmlns="http://www.w3.org/1999/xhtml" class="mor-label-katex unique">$\exists!\,\tilde{f}$</div></foreignObject>
+
+                                    <!-- Objects -->
+                                    <foreignObject x="85" y="130" width="120" height="50"><div xmlns="http://www.w3.org/1999/xhtml" class="obj-label-katex monoid">$M$</div></foreignObject>
+                                    <foreignObject x="339" y="130" width="120" height="50"><div xmlns="http://www.w3.org/1999/xhtml" class="obj-label-katex group">$N$</div></foreignObject>
+                                    <foreignObject x="99" y="-20" width="120" height="50"><div xmlns="http://www.w3.org/1999/xhtml" class="obj-label-katex group">$G(M)$</div></foreignObject>
+                                </svg>
+                                </div>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <details class="goal-block" close>
+                        <summary>
+                            <i class="fa-solid fa-play toggle-icon"></i>
+                            <span class="tag default">注意到</span>
+                            <span>$ f(0) = 0$</span>
+                        </summary>
+                        <div class="goal-content with-line">
+
+                            <!-- 推导 f(0)=0（calc 块） -->
+                            <div><div class="step-block calc">
+                                <span class="step-tag calc">计算</span>
+                                <span class="step-lhs"> $f(0)$ </span>
+                                <span class="step-rel">$=$</span>
+                                <span class="step-rhs"> $(f(0)+f(0))-f(0)$ </span>
+                                <span class="step-cal-end"></span>
+                            </div>
+                            <div class="step-block calc">
+                                <span class="step-tag calc"></span>
+                                <span class="step-lhs"></span>
+                                <span class="step-rel">$=$</span>
+                                <span class="step-rhs"> $f(0)-f(0)$ </span>
+                                <span class="step-cal-end"></span>
+                            </div>
+                            <div class="step-block calc">
+                                <span class="step-tag calc"></span>
+                                <span class="step-lhs"></span>
+                                <span class="step-rel">$=$</span>
+                                <span class="step-rhs"> $0$ </span>
+                                <span class="step-cal-end"></span>
+                            </div></div>
+                        </div>
+                    </details>
+
+                    <details class="goal-block" open>
+                        <summary>
+                            <i class="fa-solid fa-play toggle-icon"></i>
+                            <span class="tag default">卖弄</span>
+                            <span>$ f(n\cdot a) = n\cdot f(a) $对一切 $a \in M$ 和 $n \in \mathbb{N}$ 成立</span>
+                        </summary>
+                        <div class="goal-content with-line">
+
+                            <!-- 数学归纳法：f 保持 ℕ 数乘 -->
+                            <div class="strategy-block induction">
+                                <span class="tag induction">数学归纳法</span>
+                                <div class="goal-content">
+
+                                    <div class="step-block">
+                                        <span class="step-tag">归纳对象</span>
+                                        <span class="step-content">对自然数 $n$ 使用<span class="ref-link">数学归纳法</span></span>
+                                    </div>
+
+                                    <details class="goal-block" open>
+                                        <summary>
+                                            <i class="fa-solid fa-play toggle-icon"></i>
+                                            <span class="tag default">基础情形</span>
+                                            <span>$n=0$</span>
+                                        </summary>
+                                        <div class="goal-content with-line">
+                                            <div><div class="step-block calc">
+                                                <span class="step-tag calc">计算</span>
+                                                <span class="step-lhs"> $f(0\cdot a)$ </span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $f(0)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $0$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $0\cdot f(a)$ </span>
+                                                <span class="step-cal-end"></span>
+                                                <span class="final-mark induction">$\to\,$ 完成</span>
+                                            </div></div>
+                                        </div>
+                                    </details>
+
+                                    <details class="goal-block" open>
+                                        <summary>
+                                            <i class="fa-solid fa-play toggle-icon"></i>
+                                            <span class="tag default">归纳步骤</span>
+                                            <span>$n = k + 1$</span>
+                                        </summary>
+                                        <div class="goal-content with-line">
+                                            <div><div class="step-block calc">
+                                                <span class="step-tag calc">计算</span>
+                                                <span class="step-lhs"> $f((k+1)\cdot a)$ </span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $f(k\cdot a + a)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $f(k\cdot a) + f(a)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $k\cdot f(a) + f(a)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $k\cdot f(a) + 1\cdot f(a)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $(k+1)\cdot f(a)$ </span>
+                                                <span class="step-cal-end"></span>
+                                                <span class="final-mark induction">$\to\,$ 完成</span>
+                                            </div></div>
+                                        </div>
+                                    </details>
+
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- ===== II-A: 存在性 ===== -->
+                    <details class="goal-block" open>
+                        <summary>
+                            <i class="fa-solid fa-play toggle-icon"></i>
+                            <span class="tag default">存在性</span>
+                            <span>存在 $\tilde{f} : G(M) \to N$ 使得 $\tilde{f}$ 是群同态并且 $\tilde{f}\circ i = f$</span>
+                        </summary>
+                        <div class="goal-content with-line">
+
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">良定义性</span>
+                                    <span>$\tilde{f}_{\text{raw}}$ 在 $\sim$ 下是良定义的</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">提取</span>
+                                        <span class="step-content">设 $p=(p_1, p_2)$ 且 $q=(q_1, q_2)$，且 $p \sim q$。由等价关系，存在 $k \in M$ 使得 $p_1 + q_2 + k = p_2 + q_1 + k$。</span>
+                                    </div>
+                                    <div class="step-block">
+                                        <span class="step-tag">推导</span>
+                                        <span class="step-content">等式两边应用同态 $f$（利用 $f$ 保持加法的性质展开）：<br>$f(p_1) + f(q_2) + f(k) = f(p_2) + f(q_1) + f(k)$</span>
+                                    </div>
+                                    <div class="step-block">
+                                        <span class="step-tag">推导</span>
+                                        <span class="step-content">在目标交换群 $N$ 中消去等式右侧的 $f(k)$，得到核心等式：<br>$f(p_1) + f(q_2) = f(p_2) + f(q_1)$</span>
+                                    </div>
+                                    
+                                    <div class="step-block">
+                                        <span class="step-tag">引理</span>
+                                        <span class="step-content">通过验证 $(f(p_1) - f(p_2)) - (f(q_1) - f(q_2)) = 0$，证明两者相等：</span>
+                                    </div>
+                                    <!-- 对应 Lean 中的 h_result calc 块 -->
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $(f(p_1) - f(p_2)) - (f(q_1) - f(q_2))$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $(f(p_1) + f(q_2)) - (f(p_2) + f(q_1))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $0$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+
+                                    <div class="step-block">
+                                        <span class="step-tag">推导</span>
+                                        <span class="step-content">由相减为 $0$ 可知 $f(p_1) - f(p_2) = f(q_1) - f(q_2)$。将其代入定义：</span>
+                                    </div>
+                                    <!-- 对应 Lean 中最终的 ftilde_raw 链式计算 -->
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $\tilde{f}_{\text{raw}}(p)$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(p_1) - f(p_2)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(q_1) - f(q_2)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}_{\text{raw}}(q)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <div class="step-block">
+                                <span class="step-tag">定义</span>
+                                <span class="step-content">令 $\tilde{f}_{\text{raw}}(a,b) := f(a)-f(b)$ 为候选函数在代表元上的行为。</span>
+                            </div>
+
+                            <!-- 验证良定义 -->
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">良定义性</span>
+                                    <span>$\tilde{f}_{\text{raw}}$ 在 $\sim$ 下是良定义的</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">策略</span>
+                                        <span class="step-content">若 $(p_1,p_2)\sim(q_1,q_2)$，则存在 $k$ 使 $p_1+q_2+k = p_2+q_1+k$。将等式两边作用 $f$ 后在交换群 $N$ 中消去 $f(k)$ 即得两边相等。</span>
+                                    </div>
+                                    <div class="step-block">
+                                        <span class="step-tag">提取</span>
+                                        <span class="step-content">从等价关系中提取见证元 $k$ 及等式。</span>
+                                    </div>
+                                    <div class="step-block">
+                                        <span class="step-tag">推导</span>
+                                        <span class="step-content">对提取出的等式两边应用 $f$（利用 $f$ 保持加法）得到 $N$ 中的等式。</span>
+                                    </div>
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $\tilde{f}_{\text{raw}}(p)$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(p_1)-f(p_2)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $(f(p_1)-f(p_2)) + 0$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $(f(p_1)-f(p_2)) + \big((f(p_1)+f(q_2)+f(k)) - (f(p_2)+f(q_1)+f(k))\big)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(q_1)-f(q_2)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}_{\text{raw}}(q)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <div class="step-block">
+                                <span class="step-tag">构造</span>
+                                <span class="step-content">由良定义性，通过商映射提升得到 $\tilde{f}:G(M)\to N$。</span>
+                            </div>
+
+                            <!-- 验证群同态 -->
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">态射</span>
+                                    <span>$\tilde{f}$ 是群同态</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">商归纳</span>
+                                        <span class="step-content">用商空间双重归纳回到代表元 $(a,b),(c,d)$ 上验证加法保持。</span>
+                                    </div>
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $\tilde{f}([(a,b)]+[(c,d)])$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}([(a+c,\;b+d)])$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(a+c)-f(b+d)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $(f(a)+f(c))-(f(b)+f(d))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $(f(a)-f(b))+(f(c)-f(d))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}([(a,b)]) + \tilde{f}([(c,d)])$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <!-- 验证交换性 -->
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">典范性</span>
+                                    <span>$\tilde{f} \circ i = f$</span>
+                                </summary>
+                                <div class="goal-content with-line">
+
+                                    <div class="step-block">
+                                        <span class="step-tag">外延性</span>
+                                        <span class="step-content">任取 $a \in M$ , 逐点验证函数相等</span>
+                                    </div>
+
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $\tilde{f}(i(a))$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}([(a,0)])$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(a)-f(0)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(a)-0$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(a)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <!-- 推导 ftilde 的零元保持与取负保持 -->
+                            <details class="goal-block" close>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">注意到</span>
+                                    <span>$\tilde{f}(0)=0$</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $\tilde{f}(0)$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}(i(0))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(0)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $0$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                            <details class="goal-block" open>
+                                <summary>
+                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                    <span class="tag default">我们有</span>
+                                    <span>$\tilde{f}(-x) = -\tilde{f}(x)$</span>
+                                </summary>
+                                <div class="goal-content with-line">
+                                    <div class="step-block">
+                                        <span class="step-tag">外延性</span>
+                                        <span class="step-content">任取 $x \in G(M)$ , 逐点验证函数相等</span>
+                                    </div>
+
+                                    <details class="goal-block" open>
+                                        <summary>
+                                            <i class="fa-solid fa-play toggle-icon"></i>
+                                            <span class="tag default">我们有</span>
+                                            <span>$\tilde{f}(x) + \tilde{f}(-x) = 0$</span>
+                                        </summary>
+                                        <div class="goal-content with-line">
+                                            <div><div class="step-block calc">
+                                                <span class="step-tag calc">计算</span>
+                                                <span class="step-lhs"> $\tilde{f}(x) + \tilde{f}(-x)$ </span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $\tilde{f}(x + (-x))$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $\tilde{f}(0)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $0$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div></div>
+                                        </div>
+                                    </details>
+                            
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $\tilde{f}(-x)$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $0 + \tilde{f}(-x)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $(-\tilde{f}(x) + \tilde{f}(x)) + \tilde{f}(-x)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $-\tilde{f}(x) + (\tilde{f}(x) + \tilde{f}(-x))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $-\tilde{f}(x) + 0$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $-\tilde{f}(x)$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div></div>
+                                </div>
+                            </details>
+
+                        </div>
+                    </details>
+
+                    <!-- ===== II-B: 唯一性（反证法） ===== -->
+                    <details class="goal-block" open>
+                        <summary>
+                            <i class="fa-solid fa-play toggle-icon"></i>
+                            <span class="tag default">唯一性</span>
+                            <span>不存在两个不同的 $\tilde{f}$ 同时满足上述条件</span>
+                        </summary>
+                        <div class="goal-content with-line">
+
+                            <div class="strategy-block contradiction">
+                                <span class="tag contradiction">反证法</span>
+                                <div class="goal-content">
+
+                                    <div class="step-block">
+                                        <span class="step-tag">假设</span>
+                                        <span class="step-content">设 $g: G(M) \to N$ 满足群同态条件且 $g \circ i = f$，但 $g \neq \tilde{f}$。</span>
+                                    </div>
+
+                                    <details class="goal-block" open>
+                                        <summary>
+                                            <i class="fa-solid fa-play toggle-icon"></i>
+                                            <span class="tag default">注意到</span>
+                                            <span>$g(x) \neq \tilde{f}(x)$ 对某个 $x\in G(M)$ 成立</span>
+                                        </summary>
+                                        <div class="goal-content with-line">
+
+                                            <div class="strategy-block contradiction">
+                                                <span class="tag contradiction">反证法</span>
+                                                <div class="goal-content">
+
+                                                    <div class="step-block">
+                                                        <span class="step-tag">假设</span>
+                                                        <span class="step-content">假设对所有 $x\in G(M)$ 均有 $g(x)=\tilde{f}(x)$</span>
+                                                    </div>
+                                                    <div class="step-block">
+                                                        <span class="step-tag">推导</span>
+                                                        <span class="step-content">由函数外延性得 $g=\tilde{f}$</span>
+                                                    </div>
+                                                    <div class="step-block">
+                                                        <span class="step-tag">矛盾</span>
+                                                        <span class="step-content">与 $g\neq\tilde{f}$ 矛盾，故反证假设不成立</span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </details>
+
+                                    <div class="step-block">
+                                        <span class="step-tag">代入</span>
+                                        <span class="step-content">取这样的 $x$，以下记 $h_{\text{diff}}: g(x) \neq \tilde{f}(x)$</span>
+                                    </div>
+
+                                    <details class="goal-block" open>
+                                        <summary>
+                                            <i class="fa-solid fa-play toggle-icon"></i>
+                                            <span class="tag default">注意到</span>
+                                            <span>$x$ 可写为 $i(a) + (-i(b))$ 的形式</span>
+                                        </summary>
+                                        <div class="goal-content with-line">
+                                            <div class="step-block">
+                                                <span class="step-tag">提取代表元</span>
+                                                <span class="step-content">由商空间定义，存在 $(a,b)\in M\times M$ 使得 $x = [(a,b)]$</span>
+                                            </div>
+                                            <div class="step-block">
+                                                <span class="step-tag">重写</span>
+                                                <span class="step-content">$[(a,b)] = [(a+0,\\;0+b)] = i(a) + (-i(b))$</span>
+                                            </div>
+                                        </div>
+                                    </details>
+
+                                    <div class="step-block">
+                                        <span class="step-tag">代入</span>
+                                        <span class="step-content">将 $x$ 替换为 $i(a) + (-i(b))$，此后目标中 $x$ 均以此形式出现</span>
+                                    </div>
+
+                                    <details class="goal-block" open>
+                                        <summary>
+                                            <i class="fa-solid fa-play toggle-icon"></i>
+                                            <span class="tag default">我们有</span>
+                                            <span>$g(-y) = -g(y)$ 对一切 $y \in G(M)$ 成立</span>
+                                        </summary>
+                                        <div class="goal-content with-line">
+
+                                            <details class="goal-block" close>
+                                                <summary>
+                                                    <i class="fa-solid fa-play toggle-icon"></i>
+                                                    <span class="tag default">注意到</span>
+                                                    <span>$g(y) + g(-y) = 0$</span>
+                                                </summary>
+                                                <div class="goal-content with-line">
+
+                                                    <div><div class="step-block calc">
+                                                        <span class="step-tag calc">计算</span>
+                                                        <span class="step-lhs"> $g(y) + g(-y)$ </span>
+                                                        <span class="step-rel">$=$</span>
+                                                        <span class="step-rhs"> $g(y + (-y))$ </span>
+                                                        <span class="step-cal-end"></span>
+                                                    </div>
+                                                    <div class="step-block calc">
+                                                        <span class="step-tag calc"></span>
+                                                        <span class="step-lhs"></span>
+                                                        <span class="step-rel">$=$</span>
+                                                        <span class="step-rhs"> $g(0)$ </span>
+                                                        <span class="step-cal-end"></span>
+                                                    </div>
+                                                    <div class="step-block calc">
+                                                        <span class="step-tag calc"></span>
+                                                        <span class="step-lhs"></span>
+                                                        <span class="step-rel">$=$</span>
+                                                        <span class="step-rhs"> $g(i(0))$ </span>
+                                                        <span class="step-cal-end"></span>
+                                                    </div>
+                                                    <div class="step-block calc">
+                                                        <span class="step-tag calc"></span>
+                                                        <span class="step-lhs"></span>
+                                                        <span class="step-rel">$=$</span>
+                                                        <span class="step-rhs"> $f(0)$ </span>
+                                                        <span class="step-cal-end"></span>
+                                                    </div>
+                                                    <div class="step-block calc">
+                                                        <span class="step-tag calc"></span>
+                                                        <span class="step-lhs"></span>
+                                                        <span class="step-rel">$=$</span>
+                                                        <span class="step-rhs"> $0$ </span>
+                                                        <span class="step-cal-end"></span>
+                                                    </div></div>
+                                                </div>
+                                            </details>
+                                    
+                                            <div><div class="step-block calc">
+                                                <span class="step-tag calc">计算</span>
+                                                <span class="step-lhs"> $g(-y)$ </span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $0 + g(-y)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $(-g(y) + g(y)) + g(-y)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $-g(y) + (g(y) + g(-y))$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $-g(y) + 0$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div>
+                                            <div class="step-block calc">
+                                                <span class="step-tag calc"></span>
+                                                <span class="step-lhs"></span>
+                                                <span class="step-rel">$=$</span>
+                                                <span class="step-rhs"> $-g(y)$ </span>
+                                                <span class="step-cal-end"></span>
+                                            </div></div>
+                                    
+                                        </div>
+                                    </details>
+
+                                    <div class="step-block">
+                                        <span class="step-tag">目标转移</span>
+                                        <span class="step-content">待证目标可转化为 $g(i(a) + (-i(b))) = \tilde{f}(i(a) + (-i(b)))$</span>
+                                    </div>
+
+                                    <!-- 合并计算链：g → f → ftilde -->
+                                    <div><div class="step-block calc">
+                                        <span class="step-tag calc">计算</span>
+                                        <span class="step-lhs"> $g(i(a) + (-i(b)))$ </span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $g(i(a)) + g(-i(b))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $g(i(a)) + (-g(i(b)))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $f(a) + (-f(b))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}(i(a)) + (-\tilde{f}(i(b)))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}(i(a)) + \tilde{f}(-i(b))$ </span>
+                                        <span class="step-cal-end"></span>
+                                    </div>
+                                    <div class="step-block calc">
+                                        <span class="step-tag calc"></span>
+                                        <span class="step-lhs"></span>
+                                        <span class="step-rel">$=$</span>
+                                        <span class="step-rhs"> $\tilde{f}(i(a) + (-i(b)))$ </span>
+                                        <span class="step-cal-end"></span>
+                                        <span class="final-mark contradiction">$\to\,$ 矛盾</span>
+                                    </div></div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </details>
+
+                </div>
+            </details>
+
+        </div>
+    </div>
+
+</div>
+
+    <div class="qed-container">
+      <div class="qed-box" id="qedBox">
+        <span class="qed-symbol">□</span>
+        <div class="qed-dialog">
+          <input type="text" class="qed-input" id="qedInput"
+                 placeholder="在此输入你的创意"
+                 onkeydown="if(event.key==='Enter')qedSubmit()">
+          <button class="qed-submit" onclick="qedSubmit()" title="开始">
+            <i class="codicon codicon-arrow-right"></i>&emsp;
+          </button>
+        </div>
+      </div>
+    </div>
+
+        </div><!-- proof-flip-front -->
+        <div class="proof-flip-back">
+          <div class="code-header">
+            <span>Grothendieck.lean</span>
+            <span>257 lines</span>
+          </div>
+          <pre><code><span class="kw">import</span> Mathlib.Algebra.Group.Basic
+<span class="kw">import</span> Mathlib.Data.Quot
+<span class="kw">import</span> Mathlib.Tactic
+
+<span class="kw">macro_rules</span> | `(tactic| <span class="tac">trivial</span>) =<span class="kw">&gt;</span> `(tactic| <span class="tac">intros</span>; <span class="tac">rfl</span>)
+
+<span class="kw">namespace</span> Grothendieck
+
+<span class="kw">variable</span> (M : Type<span class="kw">*</span>) [AddCommMonoid M]
+
+<span class="sec">def</span> GrRel : (M <span class="kw">×</span> M) <span class="kw">→</span> (M <span class="kw">×</span> M) <span class="kw">→</span> Prop <span class="kw">:=</span>
+  <span class="kw">λ</span> p q =<span class="kw">&gt;</span> <span class="kw">∃</span> k : M, p.<span class="num">1</span> <span class="kw">+</span> q.<span class="num">2</span> <span class="kw">+</span> k = p.<span class="num">2</span> <span class="kw">+</span> q.<span class="num">1</span> <span class="kw">+</span> k
+
+<span class="sec">def</span> Gr : Type _ <span class="kw">:=</span> Quot (GrRel M)
+
+<span class="kw">namespace</span> Gr
+<span class="kw">variable</span> {M}
+
+<span class="sec">def</span> mk (a b : M) : Gr M <span class="kw">:=</span> Quot.mk (GrRel M) (a, b)
+
+<span class="sec">lemma</span> add_respects (p q p&#x27; q&#x27; : M <span class="kw">×</span> M) (hp : GrRel M p p&#x27;) (hq : GrRel M q q&#x27;) :
+    GrRel M (p.<span class="num">1</span> <span class="kw">+</span> q.<span class="num">1</span>, p.<span class="num">2</span> <span class="kw">+</span> q.<span class="num">2</span>) (p&#x27;.<span class="num">1</span> <span class="kw">+</span> q&#x27;.<span class="num">1</span>, p&#x27;.<span class="num">2</span> <span class="kw">+</span> q&#x27;.<span class="num">2</span>) <span class="kw">:=</span> <span class="kw">by</span>
+  <span class="tac">rcases</span> hp <span class="kw">with</span> <span class="kw">⟨</span>kp, hp<span class="kw">⟩</span>
+  <span class="tac">rcases</span> hq <span class="kw">with</span> <span class="kw">⟨</span>kq, hq<span class="kw">⟩</span>
+  <span class="tac">use</span> kp <span class="kw">+</span> kq
+  <span class="tac">calc</span>
+    (p.<span class="num">1</span> <span class="kw">+</span> q.<span class="num">1</span>) <span class="kw">+</span> (p&#x27;.<span class="num">2</span> <span class="kw">+</span> q&#x27;.<span class="num">2</span>) <span class="kw">+</span> (kp <span class="kw">+</span> kq) = (p.<span class="num">1</span> <span class="kw">+</span> p&#x27;.<span class="num">2</span> <span class="kw">+</span> kp) <span class="kw">+</span> (q.<span class="num">1</span> <span class="kw">+</span> q&#x27;.<span class="num">2</span> <span class="kw">+</span> kq) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">abel_nf</span>
+    _ = (p.<span class="num">2</span> <span class="kw">+</span> p&#x27;.<span class="num">1</span> <span class="kw">+</span> kp) <span class="kw">+</span> (q.<span class="num">1</span> <span class="kw">+</span> q&#x27;.<span class="num">2</span> <span class="kw">+</span> kq) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [hp]
+    _ = (p.<span class="num">2</span> <span class="kw">+</span> p&#x27;.<span class="num">1</span> <span class="kw">+</span> kp) <span class="kw">+</span> (q.<span class="num">2</span> <span class="kw">+</span> q&#x27;.<span class="num">1</span> <span class="kw">+</span> kq) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [hq]
+    _ = (p.<span class="num">2</span> <span class="kw">+</span> q.<span class="num">2</span>) <span class="kw">+</span> (p&#x27;.<span class="num">1</span> <span class="kw">+</span> q&#x27;.<span class="num">1</span>) <span class="kw">+</span> (kp <span class="kw">+</span> kq) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">abel_nf</span>
+
+<span class="sec">lemma</span> neg_respects (p q : M <span class="kw">×</span> M) (h : GrRel M p q) : GrRel M (p.<span class="num">2</span>, p.<span class="num">1</span>) (q.<span class="num">2</span>, q.<span class="num">1</span>) <span class="kw">:=</span> <span class="kw">by</span>
+  <span class="tac">rcases</span> h <span class="kw">with</span> <span class="kw">⟨</span>k, h<span class="kw">⟩</span>
+  <span class="tac">use</span> k
+  <span class="tac">exact</span> h.symm
+
+<span class="sec">instance</span> : Add (Gr M) <span class="kw">where</span>
+  add <span class="kw">:=</span> (Quot.liftOn₂ · ·
+          (<span class="kw">fun</span> p q =<span class="kw">&gt;</span>
+            Gr.mk (p.<span class="num">1</span> <span class="kw">+</span> q.<span class="num">1</span>) (p.<span class="num">2</span> <span class="kw">+</span> q.<span class="num">2</span>))
+          (<span class="kw">fun</span> a b₁ b₂ hb =<span class="kw">&gt;</span>
+            Quot.sound (add_respects a b₁ a b₂ (<span class="kw">by</span> <span class="tac">use</span> <span class="num">0</span>; <span class="tac">abel</span>) hb))
+          (<span class="kw">fun</span> a₁ a₂ b ha =<span class="kw">&gt;</span>
+            Quot.sound (add_respects a₁ b a₂ b ha (<span class="kw">by</span> <span class="tac">use</span> <span class="num">0</span>; <span class="tac">abel</span>))))
+<span class="sec">instance</span> : Zero (Gr M) <span class="kw">where</span>
+  zero <span class="kw">:=</span> Gr.mk <span class="num">0</span> <span class="num">0</span>
+<span class="sec">instance</span> : Neg (Gr M) <span class="kw">where</span>
+  neg x <span class="kw">:=</span> Quot.liftOn x (<span class="kw">λ</span> p =<span class="kw">&gt;</span> Gr.mk p.<span class="num">2</span> p.<span class="num">1</span>) (<span class="kw">λ</span> p q h =<span class="kw">&gt;</span> Quot.sound (neg_respects p q h))
+
+<span class="sec">def</span> i : M <span class="kw">→</span> Gr M <span class="kw">:=</span> <span class="kw">λ</span> a =<span class="kw">&gt;</span> Gr.mk a <span class="num">0</span>
+
+<span class="kw">end</span> Gr
+<span class="kw">end</span> Grothendieck
+
+<span class="kw">open</span> Grothendieck
+
+<span class="sec">structure</span> GrothendieckResult (M : Type<span class="kw">*</span>) [AddCommMonoid M] <span class="kw">where</span>
+  group : AddCommGroup (Gr M)
+  universal : <span class="kw">∀</span> {N : Type<span class="kw">*</span>} [AddCommGroup N] (f : M <span class="kw">→</span> N)
+    (_ : <span class="kw">∀</span> a b, f (a <span class="kw">+</span> b) = f a <span class="kw">+</span> f b),
+    <span class="kw">∃</span>! g : Gr M <span class="kw">→</span> N, (<span class="kw">∀</span> x y, g (x <span class="kw">+</span> y) = g x <span class="kw">+</span> g y) ∧ (<span class="kw">∀</span> a, g (Gr.i a) = f a)
+
+<span class="sec">def</span> main_<span class="sec">theorem</span> {M : Type<span class="kw">*</span>} [AddCommMonoid M] : GrothendieckResult M <span class="kw">:=</span> <span class="kw">by</span>
+  <span class="tac">have</span> gr_add_right_neg : <span class="kw">∀</span> x : Gr M, x <span class="kw">+</span> (<span class="kw">-</span>x) = <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span>
+    <span class="tac">intro</span> x
+    <span class="tac">induction</span> x <span class="kw">using</span> Quot.inductionOn
+    <span class="tac">rename_i</span> p
+    <span class="tac">rcases</span> p <span class="kw">with</span> <span class="kw">⟨</span>a, b<span class="kw">⟩</span>
+    <span class="tac">change</span> Quot.mk _ (a <span class="kw">+</span> b, b <span class="kw">+</span> a) = Quot.mk _ (<span class="num">0</span>, <span class="num">0</span>)
+    <span class="tac">apply</span> Quot.sound
+    <span class="tac">unfold</span> GrRel
+    <span class="tac">use</span> <span class="num">0</span>
+    <span class="tac">abel_nf</span>
+  <span class="tac">have</span> gr_neg_add_cancel : <span class="kw">∀</span> x : Gr M, <span class="kw">-</span>x <span class="kw">+</span> x = <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span>
+    <span class="tac">intro</span> x
+    <span class="tac">induction</span> x <span class="kw">using</span> Quot.inductionOn
+    <span class="tac">rename_i</span> p
+    <span class="tac">rcases</span> p <span class="kw">with</span> <span class="kw">⟨</span>a, b<span class="kw">⟩</span>
+    <span class="tac">change</span> Quot.mk _ (b <span class="kw">+</span> a, a <span class="kw">+</span> b) = Quot.mk _ (<span class="num">0</span>, <span class="num">0</span>)
+    <span class="tac">apply</span> Quot.sound
+    <span class="tac">unfold</span> GrRel
+    <span class="tac">use</span> <span class="num">0</span>
+    <span class="tac">abel_nf</span>
+  <span class="tac">constructor</span>
+  · <span class="tac">refine</span> {
+      add <span class="kw">:=</span> (· <span class="kw">+</span> ·)
+      nsmul <span class="kw">:=</span> nsmulRec
+      neg <span class="kw">:=</span> (<span class="kw">-</span>·)
+      sub <span class="kw">:=</span> <span class="kw">fun</span> x y =<span class="kw">&gt;</span> x <span class="kw">+</span> (<span class="kw">-</span>y)
+      zero <span class="kw">:=</span> <span class="num">0</span>
+      add_assoc <span class="kw">:=</span> ?_
+      zero_add <span class="kw">:=</span> ?_
+      add_zero <span class="kw">:=</span> ?_
+      nsmul_zero <span class="kw">:=</span> ?_
+      nsmul_succ <span class="kw">:=</span> ?_
+      sub_eq_add_neg <span class="kw">:=</span> ?_
+      zsmul <span class="kw">:=</span> zsmulRec
+      zsmul_zero&#x27; <span class="kw">:=</span> ?_
+      zsmul_succ&#x27; <span class="kw">:=</span> ?_
+      zsmul_neg&#x27; <span class="kw">:=</span> ?_
+      add_comm <span class="kw">:=</span> ?_
+      neg_add_cancel <span class="kw">:=</span> gr_neg_add_cancel
+    }
+    · <span class="tac">intro</span> x y z
+      <span class="tac">induction</span> x <span class="kw">using</span> Quot.inductionOn; <span class="tac">rename_i</span> p; <span class="tac">rcases</span> p <span class="kw">with</span> <span class="kw">⟨</span>a<span class="num">1</span>, a<span class="num">2</span><span class="kw">⟩</span>
+      <span class="tac">induction</span> y <span class="kw">using</span> Quot.inductionOn; <span class="tac">rename_i</span> q; <span class="tac">rcases</span> q <span class="kw">with</span> <span class="kw">⟨</span>b<span class="num">1</span>, b<span class="num">2</span><span class="kw">⟩</span>
+      <span class="tac">induction</span> z <span class="kw">using</span> Quot.inductionOn; <span class="tac">rename_i</span> r; <span class="tac">rcases</span> r <span class="kw">with</span> <span class="kw">⟨</span>c<span class="num">1</span>, c<span class="num">2</span><span class="kw">⟩</span>
+      <span class="tac">show</span> (Gr.mk a<span class="num">1</span> a<span class="num">2</span> <span class="kw">+</span> Gr.mk b<span class="num">1</span> b<span class="num">2</span>) <span class="kw">+</span> Gr.mk c<span class="num">1</span> c<span class="num">2</span> = Gr.mk a<span class="num">1</span> a<span class="num">2</span> <span class="kw">+</span> (Gr.mk b<span class="num">1</span> b<span class="num">2</span> <span class="kw">+</span> Gr.mk c<span class="num">1</span> c<span class="num">2</span>)
+      <span class="tac">calc</span>
+        (Gr.mk a<span class="num">1</span> a<span class="num">2</span> <span class="kw">+</span> Gr.mk b<span class="num">1</span> b<span class="num">2</span>) <span class="kw">+</span> Gr.mk c<span class="num">1</span> c<span class="num">2</span> = Gr.mk (a<span class="num">1</span> <span class="kw">+</span> b<span class="num">1</span>) (a<span class="num">2</span> <span class="kw">+</span> b<span class="num">2</span>) <span class="kw">+</span> Gr.mk c<span class="num">1</span> c<span class="num">2</span> <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = Gr.mk ((a<span class="num">1</span> <span class="kw">+</span> b<span class="num">1</span>) <span class="kw">+</span> c<span class="num">1</span>) ((a<span class="num">2</span> <span class="kw">+</span> b<span class="num">2</span>) <span class="kw">+</span> c<span class="num">2</span>) <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = Gr.mk (a<span class="num">1</span> <span class="kw">+</span> (b<span class="num">1</span> <span class="kw">+</span> c<span class="num">1</span>)) (a<span class="num">2</span> <span class="kw">+</span> (b<span class="num">2</span> <span class="kw">+</span> c<span class="num">2</span>)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [add_assoc, add_assoc]
+        _ = Gr.mk a<span class="num">1</span> a<span class="num">2</span> <span class="kw">+</span> Gr.mk (b<span class="num">1</span> <span class="kw">+</span> c<span class="num">1</span>) (b<span class="num">2</span> <span class="kw">+</span> c<span class="num">2</span>) <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = Gr.mk a<span class="num">1</span> a<span class="num">2</span> <span class="kw">+</span> (Gr.mk b<span class="num">1</span> b<span class="num">2</span> <span class="kw">+</span> Gr.mk c<span class="num">1</span> c<span class="num">2</span>) <span class="kw">:=</span> <span class="tac">rfl</span>
+    · <span class="tac">intro</span> x
+      <span class="tac">induction</span> x <span class="kw">using</span> Quot.inductionOn; <span class="tac">rename_i</span> p; <span class="tac">rcases</span> p <span class="kw">with</span> <span class="kw">⟨</span>a, b<span class="kw">⟩</span>
+      <span class="tac">show</span> <span class="num">0</span> <span class="kw">+</span> Gr.mk a b = Gr.mk a b
+      <span class="tac">calc</span>
+        <span class="num">0</span> <span class="kw">+</span> Gr.mk a b = Gr.mk <span class="num">0</span> <span class="num">0</span> <span class="kw">+</span> Gr.mk a b <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = Gr.mk (<span class="num">0</span> <span class="kw">+</span> a) (<span class="num">0</span> <span class="kw">+</span> b) <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = Gr.mk a b <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [zero_add, zero_add]
+    · <span class="tac">intro</span> x
+      <span class="tac">induction</span> x <span class="kw">using</span> Quot.inductionOn; <span class="tac">rename_i</span> p; <span class="tac">rcases</span> p <span class="kw">with</span> <span class="kw">⟨</span>a, b<span class="kw">⟩</span>
+      <span class="tac">show</span> Gr.mk a b <span class="kw">+</span> <span class="num">0</span> = Gr.mk a b
+      <span class="tac">calc</span>
+        Gr.mk a b <span class="kw">+</span> <span class="num">0</span> = Gr.mk a b <span class="kw">+</span> Gr.mk <span class="num">0</span> <span class="num">0</span> <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = Gr.mk (a <span class="kw">+</span> <span class="num">0</span>) (b <span class="kw">+</span> <span class="num">0</span>) <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = Gr.mk a b <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [add_zero, add_zero]
+    · <span class="tac">trivial</span>
+    · <span class="tac">trivial</span>
+    · <span class="tac">trivial</span>
+    · <span class="tac">trivial</span>
+    · <span class="tac">trivial</span>
+    · <span class="tac">trivial</span>
+    · <span class="tac">intro</span> x y
+      <span class="tac">induction</span> x <span class="kw">using</span> Quot.inductionOn; <span class="tac">rename_i</span> p; <span class="tac">rcases</span> p <span class="kw">with</span> <span class="kw">⟨</span>a<span class="num">1</span>, a<span class="num">2</span><span class="kw">⟩</span>
+      <span class="tac">induction</span> y <span class="kw">using</span> Quot.inductionOn; <span class="tac">rename_i</span> q; <span class="tac">rcases</span> q <span class="kw">with</span> <span class="kw">⟨</span>b<span class="num">1</span>, b<span class="num">2</span><span class="kw">⟩</span>
+      <span class="tac">show</span> Gr.mk a<span class="num">1</span> a<span class="num">2</span> <span class="kw">+</span> Gr.mk b<span class="num">1</span> b<span class="num">2</span> = Gr.mk b<span class="num">1</span> b<span class="num">2</span> <span class="kw">+</span> Gr.mk a<span class="num">1</span> a<span class="num">2</span>
+      <span class="tac">calc</span>
+        Gr.mk a<span class="num">1</span> a<span class="num">2</span> <span class="kw">+</span> Gr.mk b<span class="num">1</span> b<span class="num">2</span> = Gr.mk (a<span class="num">1</span> <span class="kw">+</span> b<span class="num">1</span>) (a<span class="num">2</span> <span class="kw">+</span> b<span class="num">2</span>) <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = Gr.mk (b<span class="num">1</span> <span class="kw">+</span> a<span class="num">1</span>) (b<span class="num">2</span> <span class="kw">+</span> a<span class="num">2</span>) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [add_comm a<span class="num">1</span>, add_comm a<span class="num">2</span>]
+        _ = Gr.mk b<span class="num">1</span> b<span class="num">2</span> <span class="kw">+</span> Gr.mk a<span class="num">1</span> a<span class="num">2</span> <span class="kw">:=</span> <span class="tac">rfl</span>
+  · <span class="tac">intro</span> N _ f hf_add
+    <span class="tac">have</span> hf_zero : f <span class="num">0</span> = <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span>
+      <span class="tac">have</span> h <span class="kw">:=</span> hf_add <span class="num">0</span> <span class="num">0</span>
+      <span class="tac">rw</span> [add_zero] <span class="kw">at</span> h
+      <span class="tac">calc</span>
+        f <span class="num">0</span> = (f <span class="num">0</span> <span class="kw">+</span> f <span class="num">0</span>) <span class="kw">-</span> f <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">abel</span>
+        _ = f <span class="num">0</span> <span class="kw">-</span> f <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [<span class="kw">←</span> h]
+        _ = <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">simp</span>
+    <span class="tac">have</span> h_f_nsmul : <span class="kw">∀</span> (a : M) (n : ℕ), f (n <span class="kw">•</span> a) = n <span class="kw">•</span> f a <span class="kw">:=</span> <span class="kw">by</span>
+      <span class="tac">intro</span> a n
+      <span class="tac">induction</span> n <span class="kw">with</span>
+      | zero =<span class="kw">&gt;</span>
+        <span class="tac">calc</span>
+          f (<span class="num">0</span> <span class="kw">•</span> a) = f <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [zero_smul]
+          _ = <span class="num">0</span> <span class="kw">:=</span> hf_zero
+          _ = <span class="num">0</span> <span class="kw">•</span> f a <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [zero_smul]
+      | succ k ih =<span class="kw">&gt;</span>
+        <span class="tac">calc</span>
+          f ((k <span class="kw">+</span> <span class="num">1</span>) <span class="kw">•</span> a) = f (k <span class="kw">•</span> a <span class="kw">+</span> a) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [add_smul, one_smul]
+          _ = f (k <span class="kw">•</span> a) <span class="kw">+</span> f a <span class="kw">:=</span> hf_add _ _
+          _ = k <span class="kw">•</span> f a <span class="kw">+</span> f a <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [ih]
+          _ = k <span class="kw">•</span> f a <span class="kw">+</span> <span class="num">1</span> <span class="kw">•</span> f a <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [one_smul]
+          _ = (k <span class="kw">+</span> <span class="num">1</span>) <span class="kw">•</span> f a <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [<span class="kw">←</span> add_smul]
+    <span class="tac">let</span> ftilde_raw : (M <span class="kw">×</span> M) <span class="kw">→</span> N <span class="kw">:=</span> <span class="kw">fun</span> p =<span class="kw">&gt;</span> f p.<span class="num">1</span> <span class="kw">-</span> f p.<span class="num">2</span>
+    <span class="tac">have</span> h_respects : <span class="kw">∀</span> (p q : M <span class="kw">×</span> M), Grothendieck.GrRel M p q <span class="kw">→</span> ftilde_raw p = ftilde_raw q <span class="kw">:=</span> <span class="kw">by</span>
+      <span class="tac">intro</span> p q h_rel
+      <span class="tac">rcases</span> h_rel <span class="kw">with</span> <span class="kw">⟨</span>k, h_eq<span class="kw">⟩</span>
+      <span class="tac">have</span> h_f_eq : f p.<span class="num">1</span> <span class="kw">+</span> f q.<span class="num">2</span> <span class="kw">+</span> f k = f p.<span class="num">2</span> <span class="kw">+</span> f q.<span class="num">1</span> <span class="kw">+</span> f k <span class="kw">:=</span> <span class="kw">by</span>
+        <span class="tac">have</span> <span class="kw">:=</span> congrArg f h_eq
+        <span class="tac">simpa</span> [add_assoc, hf_add] <span class="kw">using</span> this
+      <span class="tac">have</span> h_cancel : f p.<span class="num">1</span> <span class="kw">+</span> f q.<span class="num">2</span> = f p.<span class="num">2</span> <span class="kw">+</span> f q.<span class="num">1</span> <span class="kw">:=</span> add_right_cancel (<span class="kw">by</span> <span class="tac">simpa</span> [add_assoc] <span class="kw">using</span> h_f_eq)
+      <span class="tac">have</span> h_result : f p.<span class="num">1</span> <span class="kw">-</span> f p.<span class="num">2</span> = f q.<span class="num">1</span> <span class="kw">-</span> f q.<span class="num">2</span> <span class="kw">:=</span> <span class="kw">by</span>
+        <span class="tac">apply</span> sub_eq_zero.mp
+        <span class="tac">calc</span>
+          (f p.<span class="num">1</span> <span class="kw">-</span> f p.<span class="num">2</span>) <span class="kw">-</span> (f q.<span class="num">1</span> <span class="kw">-</span> f q.<span class="num">2</span>) = (f p.<span class="num">1</span> <span class="kw">+</span> f q.<span class="num">2</span>) <span class="kw">-</span> (f p.<span class="num">2</span> <span class="kw">+</span> f q.<span class="num">1</span>) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">abel</span>
+          _ = <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [h_cancel, sub_self]
+      <span class="tac">calc</span>
+        ftilde_raw p = f p.<span class="num">1</span> <span class="kw">-</span> f p.<span class="num">2</span> <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = f q.<span class="num">1</span> <span class="kw">-</span> f q.<span class="num">2</span> <span class="kw">:=</span> h_result
+        _ = ftilde_raw q <span class="kw">:=</span> <span class="tac">rfl</span>
+    <span class="tac">let</span> ftilde : Gr M <span class="kw">→</span> N <span class="kw">:=</span> Quot.<span class="tac">lift</span> ftilde_raw h_respects
+    <span class="tac">have</span> h_ftilde_add : <span class="kw">∀</span> x y, ftilde (x <span class="kw">+</span> y) = ftilde x <span class="kw">+</span> ftilde y <span class="kw">:=</span> <span class="kw">by</span>
+      <span class="tac">intro</span> x y; <span class="tac">refine</span> Quot.induction_on₂ x y ?_; <span class="tac">intro</span> <span class="kw">⟨</span>a, b<span class="kw">⟩</span> <span class="kw">⟨</span>c, d<span class="kw">⟩</span>
+      <span class="tac">show</span> ftilde (Gr.mk (a <span class="kw">+</span> c) (b <span class="kw">+</span> d)) = ftilde (Gr.mk a b) <span class="kw">+</span> ftilde (Gr.mk c d)
+      <span class="tac">calc</span>
+        ftilde (Gr.mk (a <span class="kw">+</span> c) (b <span class="kw">+</span> d)) = f (a <span class="kw">+</span> c) <span class="kw">-</span> f (b <span class="kw">+</span> d) <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = (f a <span class="kw">+</span> f c) <span class="kw">-</span> (f b <span class="kw">+</span> f d) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [hf_add a c, hf_add b d]
+        _ = (f a <span class="kw">-</span> f b) <span class="kw">+</span> (f c <span class="kw">-</span> f d) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">abel</span>
+        _ = ftilde (Gr.mk a b) <span class="kw">+</span> ftilde (Gr.mk c d) <span class="kw">:=</span> <span class="tac">rfl</span>
+    <span class="tac">have</span> h_ftilde_comm : <span class="kw">∀</span> a, ftilde (Gr.i a) = f a <span class="kw">:=</span> <span class="kw">by</span>
+      <span class="tac">intro</span> a
+      <span class="tac">calc</span>
+        ftilde (Gr.i a) = ftilde (Gr.mk a <span class="num">0</span>) <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = f a <span class="kw">-</span> f <span class="num">0</span> <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = f a <span class="kw">-</span> <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [hf_zero]
+        _ = f a <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">simp</span>
+    <span class="tac">have</span> h_ftilde_zero : ftilde <span class="num">0</span> = <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span>
+      <span class="tac">calc</span>
+        ftilde <span class="num">0</span> = ftilde (Gr.i <span class="num">0</span>) <span class="kw">:=</span> <span class="tac">rfl</span>
+        _ = f <span class="num">0</span> <span class="kw">:=</span> h_ftilde_comm <span class="num">0</span>
+        _ = <span class="num">0</span> <span class="kw">:=</span> hf_zero
+    <span class="tac">have</span> h_ftilde_neg : <span class="kw">∀</span> x, ftilde (<span class="kw">-</span>x) = <span class="kw">-</span>(ftilde x) <span class="kw">:=</span> <span class="kw">by</span>
+      <span class="tac">intro</span> x
+      <span class="tac">have</span> h_sum : ftilde x <span class="kw">+</span> ftilde (<span class="kw">-</span>x) = <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span>
+        <span class="tac">calc</span>
+          ftilde x <span class="kw">+</span> ftilde (<span class="kw">-</span>x) = ftilde (x <span class="kw">+</span> (<span class="kw">-</span>x)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [<span class="kw">←</span> h_ftilde_add]
+          _ = ftilde <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [gr_add_right_neg]
+          _ = <span class="num">0</span> <span class="kw">:=</span> h_ftilde_zero
+      <span class="tac">calc</span>
+        ftilde (<span class="kw">-</span>x) = <span class="num">0</span> <span class="kw">+</span> ftilde (<span class="kw">-</span>x) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">simp</span> only [zero_add]
+        _ = (<span class="kw">-</span>(ftilde x) <span class="kw">+</span> ftilde x) <span class="kw">+</span> ftilde (<span class="kw">-</span>x) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">simp</span>
+        _ = <span class="kw">-</span>(ftilde x) <span class="kw">+</span> (ftilde x <span class="kw">+</span> ftilde (<span class="kw">-</span>x)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">abel</span>
+        _ = <span class="kw">-</span>(ftilde x) <span class="kw">+</span> <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [h_sum]
+        _ = <span class="kw">-</span>(ftilde x) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">simp</span>
+    <span class="tac">refine</span> <span class="kw">⟨</span>ftilde, ?_existence, ?_uniqueness<span class="kw">⟩</span>
+    <span class="kw">case</span> _existence =<span class="kw">&gt;</span>
+      <span class="tac">exact</span> <span class="kw">⟨</span>h_ftilde_add, h_ftilde_comm<span class="kw">⟩</span>
+    <span class="kw">case</span> _uniqueness =<span class="kw">&gt;</span>
+      <span class="tac">intro</span> g <span class="kw">⟨</span>h_hom_g, h_comm_g<span class="kw">⟩</span>
+      by_contra h_ne
+      <span class="tac">have</span> h_exists_diff : <span class="kw">∃</span> x : Gr M, g x <span class="kw">≠</span> ftilde x <span class="kw">:=</span> <span class="kw">by</span>
+        by_contra h_no_ex
+        <span class="tac">push</span> Not <span class="kw">at</span> h_no_ex
+        <span class="tac">apply</span> h_ne; <span class="tac">ext</span> x
+        <span class="tac">exact</span> h_no_ex x
+      <span class="tac">rcases</span> h_exists_diff <span class="kw">with</span> <span class="kw">⟨</span>x, h_diff<span class="kw">⟩</span>
+      <span class="tac">have</span> hx : <span class="kw">∃</span> (a b : M), x = Gr.i a <span class="kw">+</span> (<span class="kw">-</span>(Gr.i b)) <span class="kw">:=</span> <span class="kw">by</span>
+        <span class="tac">obtain</span> <span class="kw">⟨</span><span class="kw">⟨</span>a, b<span class="kw">⟩</span>, <span class="tac">rfl</span><span class="kw">⟩</span> <span class="kw">:=</span> Quot.exists_rep x
+        <span class="tac">use</span> a, b
+        <span class="tac">show</span> Gr.mk a b = Gr.mk (a <span class="kw">+</span> <span class="num">0</span>) (<span class="num">0</span> <span class="kw">+</span> b)
+        <span class="tac">rw</span> [add_zero, zero_add]
+      <span class="tac">rcases</span> hx <span class="kw">with</span> <span class="kw">⟨</span>a, b, <span class="tac">rfl</span><span class="kw">⟩</span>
+      <span class="tac">have</span> h_neg_g : <span class="kw">∀</span> y, g (<span class="kw">-</span>y) = <span class="kw">-</span> g y <span class="kw">:=</span> <span class="kw">by</span>
+        <span class="tac">intro</span> y
+        <span class="tac">have</span> h_sum : g y <span class="kw">+</span> g (<span class="kw">-</span>y) = <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span>
+          <span class="tac">calc</span>
+            g y <span class="kw">+</span> g (<span class="kw">-</span>y) = g (y <span class="kw">+</span> (<span class="kw">-</span>y)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [<span class="kw">←</span> h_hom_g y (<span class="kw">-</span>y)]
+            _ = g <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [gr_add_right_neg]
+            _ = g (Gr.i <span class="num">0</span>) <span class="kw">:=</span> <span class="tac">rfl</span>
+            _ = f <span class="num">0</span> <span class="kw">:=</span> h_comm_g <span class="num">0</span>
+            _ = <span class="num">0</span> <span class="kw">:=</span> hf_zero
+        <span class="tac">calc</span>
+          g (<span class="kw">-</span>y) = <span class="num">0</span> <span class="kw">+</span> g (<span class="kw">-</span>y) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">simp</span>
+          _ = (<span class="kw">-</span> g y <span class="kw">+</span> g y) <span class="kw">+</span> g (<span class="kw">-</span>y) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">simp</span>
+          _ = <span class="kw">-</span> g y <span class="kw">+</span> (g y <span class="kw">+</span> g (<span class="kw">-</span>y)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">abel</span>
+          _ = <span class="kw">-</span> g y <span class="kw">+</span> <span class="num">0</span> <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [h_sum]
+          _ = <span class="kw">-</span> g y <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">simp</span>
+      <span class="tac">apply</span> h_diff
+      <span class="tac">calc</span>
+        g (Gr.i a <span class="kw">+</span> <span class="kw">-</span>(Gr.i b)) = g (Gr.i a) <span class="kw">+</span> g (<span class="kw">-</span>(Gr.i b)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [h_hom_g]
+        _ = g (Gr.i a) <span class="kw">+</span> <span class="kw">-</span>(g (Gr.i b)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [h_neg_g]
+        _ = f a <span class="kw">+</span> <span class="kw">-</span>(f b) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [h_comm_g, h_comm_g]
+        _ = ftilde (Gr.i a) <span class="kw">+</span> <span class="kw">-</span>(ftilde (Gr.i b)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [<span class="kw">←</span> h_ftilde_comm, <span class="kw">←</span> h_ftilde_comm]
+        _ = ftilde (Gr.i a) <span class="kw">+</span> ftilde (<span class="kw">-</span>(Gr.i b)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [<span class="kw">←</span> h_ftilde_neg]
+        _ = ftilde (Gr.i a <span class="kw">+</span> <span class="kw">-</span>(Gr.i b)) <span class="kw">:=</span> <span class="kw">by</span> <span class="tac">rw</span> [<span class="kw">←</span> h_ftilde_add]
+</code></pre>
+        </div>
+      </div><!-- proof-flip-inner -->
+    </div><!-- proof-flip -->
+
+</div>
+
+<script>
+function toggleProofFlip() {
+    var inner = document.getElementById('proofFlip');
+    var btn = document.getElementById('flipBtn');
+    var flipped = inner.classList.toggle('flipped');
+    // 修改返回状态时的图标为 codicon-file-symlink-file，同时附带“源码”文字初始状态
+    btn.innerHTML = flipped
+        ? '<i class="codicon codicon-file-symlink-file"></i>'
+        : '<i class="codicon codicon-file-code"></i>';
+    btn.title = flipped ? '返回证明' : '查看 Lean 源码';
+}
+document.addEventListener("DOMContentLoaded",function(){
+    renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+    updateZoom(50);
+});
+function updateZoom(v){
+    var p=parseInt(v),s=p/100;
+    var svg=document.getElementById('diagramGrothendieck');
+    var st=document.getElementById('diagramZoomStage');
+    if(svg&&st){var n=svg.clientWidth/(400/150);svg.style.transform='scale('+s+')';st.style.height=(n*s)+'px';}
+    var l=document.getElementById('diagramZoomLabel');if(l)l.textContent=p+'%';
+}
+function qedSubmit() {
+    var input = document.getElementById('qedInput');
+    var text = input.value.trim();
+    if (!text) return;
+    console.log('QED edit request:', text);
+    input.value = '';
+    // blink feedback
+    var box = document.getElementById('qedBox');
+    box.style.borderColor = '#059669';
+    setTimeout(function(){ box.style.borderColor = ''; }, 800);
+}
+window.addEventListener('resize',function(){var s=document.getElementById('diagramZoom');if(s)updateZoom(s.value);});
+document.addEventListener("DOMContentLoaded",function(){var s=localStorage.getItem('diagram-zoom');if(s){var r=document.getElementById('diagramZoom');if(r){r.value=s;updateZoom(s);}}});
+</script>
+
+</body>
+</html>

@@ -43,3 +43,6 @@
 .codicon-check-all:before { content: "\ebb1" }
 .codicon-copilot-warning:before { content: "\ec38" }
 .codicon-copilot-error:before { content: "\ec4d" }
+.codicon-file-code:before { content: "\eae9" }
+.codicon-file-symlink-file:before { content: "\eaee" }
+.codicon-arrow-right:before { content: "\ea9c" }
