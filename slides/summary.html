@@ -10,8 +10,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <style>
         .col.future-col { flex: 2; }
+        .col.future-col .card h3 { font-size: 1.25vw; }
+        .col.future-col .card p { font-size: 0.9vw; }
         .col.roadmap-col { flex: 1; }
-        .card.accent { border-left: 3px solid #f59e0b; background: #fffbeb; }
+        .card.accent { border-left: 0.1562vw solid #f59e0b; background: #fffbeb; }
         .card.accent h3 { color: #92400e; }
         .card.accent:hover { border-left-color: #d97706; }
         .card.accent p { color: #78716c; }
@@ -26,28 +28,28 @@
             width: 1.1vw; height: 1.1vw;
             border-radius: 50%;
             background: #93c5fd;
-            border: 2px solid #2563eb;
+            border: 0.1042vw solid #2563eb;
             margin-top: 0.5vh;
             transition: all 0.2s ease;
         }
         .road-item:hover .road-dot {
             background: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+            box-shadow: 0 0 0 0.1562vw rgba(37,99,235,0.15);
         }
         .road-line {
             position: absolute;
             left: 0.35vw; top: 1.4vh; bottom: 0;
-            width: 0; border-left: 1.5px dashed #d1d5db;
+            width: 0; border-left: 0.0781vw dashed #d1d5db;
             transform: translateX(-50%);
         }
         .road-item:last-child .road-line { display: none; }
         .road-text { flex: 1; }
         .road-phase {
             font-size: 1vw; font-weight: 700; color: #2563eb;
-            letter-spacing: 1px; margin-bottom: 0.3vh;
+            letter-spacing: 0.0521vw; margin-bottom: 0.3vh;
         }
         .road-desc {
-            font-size: 1.1vw; line-height: 1.4; color: #4b5563;
+            font-size: 1.25vw; line-height: 1.4; color: #4b5563;
             transition: color 0.2s ease;
         }
         .road-item:hover .road-desc { color: #1f2937; }

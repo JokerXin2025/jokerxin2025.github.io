@@ -36,6 +36,7 @@
 .step-content {
     flex: 1;
     align-items: center;
+    line-height: 1.75;
 }
 
 .step-rel {

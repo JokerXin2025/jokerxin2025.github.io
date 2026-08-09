@@ -33,19 +33,19 @@ html, body {
 /* ---------- Slide Counter ---------- */
 .slide-counter {
     position: fixed;
-    bottom: clamp(16px, 2.8vmin, 44px);
+    bottom: clamp(1.4815vh, 2.8vmin, 4.0741vh);
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
-    padding: clamp(4px, 0.6vmin, 8px) clamp(12px, 1.5vmin, 24px);
-    border-radius: 20px;
+    padding: clamp(0.2083vw, 0.6vmin, 0.4167vw) clamp(0.625vw, 1.5vmin, 1.25vw);
+    border-radius: 1.0417vw;
     background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(0.4167vw);
+    -webkit-backdrop-filter: blur(0.4167vw);
     color: rgba(0, 0, 0, 0.55);
-    font-size: clamp(12px, 1.4vmin, 20px);
+    font-size: clamp(0.625vw, 1.4vmin, 1.0417vw);
     font-weight: 500;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.026vw;
     pointer-events: none;
     transition: opacity 0.4s ease;
     opacity: 1;
@@ -60,14 +60,14 @@ html, body {
     position: fixed;
     z-index: 10;
 
-    width:  clamp(44px, 8vmin, 120px);
-    height: clamp(44px, 8vmin, 120px);
+    width:  clamp(2.2917vw, 8vmin, 6.25vw);
+    height: clamp(4.0741vh, 8vmin, 11.1111vh);
 
     border-radius: 50%;
-    border: clamp(1.2px, 0.12vmin, 2px) solid rgba(0, 0, 0, 0.12);
+    border: clamp(0.0625vw, 0.12vmin, 0.1042vw) solid rgba(0, 0, 0, 0.12);
     background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(0.5208vw);
+    -webkit-backdrop-filter: blur(0.5208vw);
     color: rgba(0, 0, 0, 0.35);
     cursor: pointer;
     display: flex;
@@ -102,8 +102,8 @@ html, body {
     background: rgba(255, 255, 255, 0.95);
     color: rgba(0, 0, 0, 0.7);
     border-color: rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 clamp(16px, 2vmin, 32px) rgba(0, 0, 0, 0.06),
-                0 clamp(3px, 0.4vmin, 6px) clamp(12px, 1.5vmin, 24px) rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 clamp(0.8333vw, 2vmin, 1.6667vw) rgba(0, 0, 0, 0.06),
+                0 clamp(0.1562vw, 0.4vmin, 0.3125vw) clamp(0.625vw, 1.5vmin, 1.25vw) rgba(0, 0, 0, 0.08);
     transform: scale(1.08);
 }
 
@@ -122,22 +122,22 @@ html, body {
 
 /* ---------- 按钮位置 ---------- */
 .nav-btn-prev {
-    bottom: clamp(18px, 3vmin, 48px);
-    left:   clamp(14px, 3.5vmin, 48px);
+    bottom: clamp(1.6667vh, 3vmin, 4.4444vh);
+    left:   clamp(0.7292vw, 3.5vmin, 2.5vw);
 }
 
 .nav-btn-next {
-    bottom: clamp(18px, 3vmin, 48px);
-    right:  clamp(14px, 3.5vmin, 48px);
+    bottom: clamp(1.6667vh, 3vmin, 4.4444vh);
+    right:  clamp(0.7292vw, 3.5vmin, 2.5vw);
 }
 
 .nav-btn-fullscreen {
-    top:    clamp(12px, 2.5vmin, 36px);
-    right:  clamp(12px, 2.5vmin, 36px);
+    top:    clamp(1.1111vh, 2.5vmin, 3.3333vh);
+    right:  clamp(0.625vw, 2.5vmin, 1.875vw);
 
-    width:  clamp(32px, 5.5vmin, 72px);
-    height: clamp(32px, 5.5vmin, 72px);
-    border-radius: clamp(8px, 1vmin, 14px);
+    width:  clamp(1.6667vw, 5.5vmin, 3.75vw);
+    height: clamp(2.963vh, 5.5vmin, 6.6667vh);
+    border-radius: clamp(0.4167vw, 1vmin, 0.7292vw);
 }
 
 /* ---------- 自动隐藏 ---------- */
@@ -148,26 +148,26 @@ html, body {
 /* ---------- 响应式：超小屏幕微调 ---------- */
 @media (max-width: 480px) {
     .nav-btn {
-        width:  44px;
-        height: 44px;
+        width:  2.2917vw;
+        height: 4.0741vh;
     }
     .nav-btn-prev {
-        bottom: 14px;
-        left:   10px;
+        bottom: 1.2963vh;
+        left:   0.5208vw;
     }
     .nav-btn-next {
-        bottom: 14px;
-        right:  10px;
+        bottom: 1.2963vh;
+        right:  0.5208vw;
     }
     .nav-btn-fullscreen {
-        top:   8px;
-        right: 8px;
-        width:  32px;
-        height: 32px;
+        top:   0.7407vh;
+        right: 0.4167vw;
+        width:  1.6667vw;
+        height: 2.963vh;
     }
     .slide-counter {
-        bottom: 10px;
-        font-size: 11px;
-        padding: 3px 10px;
+        bottom: 0.9259vh;
+        font-size: 0.5729vw;
+        padding: 0.1562vw 0.5208vw;
     }
 }

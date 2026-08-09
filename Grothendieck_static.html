@@ -29,7 +29,7 @@
         .diagram-svg foreignObject { overflow: visible; }
         .diagram-svg .adj-label-katex {
             display: flex; align-items: center; justify-content: center;
-            width: 100%; height: 100%; font-size: 11px; font-weight: 600;
+            width: 100%; height: 100%; font-size: 0.5729vw; font-weight: 600;
         }
 
         /* ===== Flip Card ===== */
@@ -46,26 +46,26 @@
             backface-visibility: hidden;
             transform: rotateY(180deg);
             background: #fff;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
+            border-radius: 0.4167vw;
+            border: 0.0521vw solid #e5e7eb;
             overflow: hidden;
             display: flex; flex-direction: column;
         }
         .proof-flip-back .code-header {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 16px;
+            padding: 0.9259vh 0.8333vw;
             background: #f3f4f6;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 0.0926vh solid #e5e7eb;
             flex-shrink: 0;
         }
         .proof-flip-back .code-header span {
             font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 12px; color: #6b7280;
+            font-size: 0.9vw; color: #6b7280;
         }
         .proof-flip-back pre {
-            margin: 0; padding: 16px;
+            margin: 0; padding: 0.8333vw;
             font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-            font-size: 12.5px; line-height: 1.55;
+            font-size: 0.9vw; line-height: 1.55;
             color: #374151;
             overflow: auto; flex: 1;
             tab-size: 2;
@@ -81,8 +81,8 @@
         .proof-flip-back .sec { color: #7c3aed; font-weight: 600; }
        /* Flip button */
         .flip-btn {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 3px 10px;
+            display: inline-flex; align-items: center; gap: 0.2083vw;
+            padding: 0.2778vh 0.5208vw;
             font-size: 0.7em; font-weight: 500;
             border: 0 solid;
             background: #fff; color: #6b7280;
@@ -90,20 +90,20 @@
             vertical-align: middle; user-select: none;
         }
         .flip-btn:hover { background: #f3f4f6; color: #111827; border-color: #d1d5db; }
-        .flip-btn i { font-size: 13px; }
+        .flip-btn i { font-size: 0.6771vw; }
 
         /* ===== QED Interactive ===== */
         .qed-container {
             position: relative;
             display: flex; justify-content: flex-end; width: 100%;
-            height: 36px;
-            margin: 12px 0;
+            height: 3.3333vh;
+            margin: 1.1111vh 0;
         }
         .qed-box {
             position: absolute; right: 0; top: 0;
-            width: 60px; height: 44px;
-            border: 1px solid transparent;
-            border-radius: 4px;
+            width: 3.125vw; height: 4.0741vh;
+            border: 0.0521vw solid transparent;
+            border-radius: 0.2083vw;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             overflow: hidden;
@@ -114,13 +114,13 @@
                         border-color 0.35s;
         }
         .qed-box:hover, .qed-box.expanded {
-            width: 300px; height: 44px;
-            border-radius: 8px;
+            width: 15.625vw; height: 4.0741vh;
+            border-radius: 0.4167vw;
             border-color: #2563eb;
             background: #fff;
         }
         .qed-symbol {
-            font-size: 24px; color: #6b7280;
+            font-size: 1.25vw; color: #6b7280;
             transition: opacity 0.15s ease, transform 0.15s ease;
         }
         .qed-box:hover .qed-symbol, .qed-box.expanded .qed-symbol {
@@ -129,9 +129,9 @@
         }
         .qed-dialog {
             position: absolute; inset: 0;
-            display: flex; align-items: center; gap: 6px;
-            padding: 4px 8px;
-            opacity: 0; transform: translateX(10px);
+            display: flex; align-items: center; gap: 0.3125vw;
+            padding: 0.3704vh 0.4167vw;
+            opacity: 0; transform: translateX(0.5208vw);
             transition: opacity 0.2s ease 0.15s, transform 0.2s ease 0.15s;
             pointer-events: none;
         }
@@ -142,16 +142,16 @@
         .qed-input {
             flex: 1; height: 100%; min-width: 0;
             border: none; outline: none;
-            font-size: 13px; color: #374151;
+            font-size: 0.6771vw; color: #374151;
             background: transparent;
         }
-        .qed-input::placeholder { color: #9ca3af; }
+        .qed-input { color: #9ca3af; }
         .qed-submit {
-            width: 24px; height: 24px; padding: 0;
+            width: 1.25vw; height: 2.2222vh; padding: 0;
             border: none; background: transparent; color: #2563eb;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 16px; flex-shrink: 0;
+            font-size: 0.8333vw; flex-shrink: 0;
             transition: color 0.2s;
         }
         .qed-submit:hover { color: #1d4ed8; }
@@ -168,34 +168,34 @@
     </div>
 </div>
 
-<div id="main-content" class="proof-container" style="padding-bottom:25vh;">
+<div id="main-content" class="proof-container" style="padding-bottom: 25vh">
 
     <!-- ===== 定理陈述 ===== -->
     <div class="proposition-box">
         <div class="proposition-title">
-            <span class="ref-link">Grothendieck 群函子</span>
+            <strong>Grothendieck 群函子</strong>
         </div>
         <p>
-            设 $M$ 为<strong>交换幺半群</strong>, 在 $M\times M$ 上定义等价关系:
-            $$(a,b)\sim(c,d)\quad\Longleftrightarrow\quad\exists k\in M,\; a+d+k = b+c+k$$
-            记 <strong>Grothendieck 群</strong> $G(M):=(M\times M)/{\sim}$, 配备有
+            设 $M$ 为<strong class="ref-link">交换幺半群</strong>, 在 $M\times M$ 上定义等价关系:
+            $$(a,b)\sim(c,d)\quad\Longleftrightarrow\quad\exists\ k\in M\ :\ a+d+k = b+c+k$$
+            记 <strong class="ref-link">Grothendieck 群</strong> $G(M):=(M\times M)/{\sim}$ , 配备有
             <ul type="square">
-                <li>加法 $[(a,b)]+[(c,d)]=[(a+c,b+d)]$</li>
-                <li>加法幺元 $[(0,0)]$</li>
-                <li>加法逆元 $-[(a,b)]=[(b,a)]$</li>
+                <li>加法 : $[(a,b)]+[(c,d)]=[(a+c,b+d)]$</li>
+                <li>加法幺元 : $[(0,0)]$</li>
+                <li>加法逆元 : $-[(a,b)]=[(b,a)]$</li>
             </ul>
         </p>
         <p>
-            <strong>(1) 群结构</strong> : $G(M)$ 构成<strong>交换群</strong>
+            <strong>(1) 群结构</strong> : $G(M)$ 构成<strong class="ref-link">交换群</strong>
         </p>
         <p>
-            <strong>(2) 泛性质</strong> : 对任意交换群 $N$ 及幺半群同态 $f:M\to N$，存在唯一群同态 $\tilde{f}:G(M)\to N$ 使得 $\tilde{f}\circ i = f$ 成立<br>
-            换言之, <strong>Grothendieck 群函子</strong> $G:\mathsf{CMon}\to\mathsf{Ab}$ 是<strong>遗忘函子</strong> $U:\mathsf{Ab}\to\mathsf{CMon}$ 的<strong>左伴随函子</strong>。
+            <strong>(2) 泛性质</strong> : 对任意交换群 $N$ 及幺半群同态 $f:M\to N$ , 存在唯一群同态 $\tilde{f}:G(M)\to N$ 使得 $\tilde{f}\circ i = f$ 成立<br>
+            换言之, <strong class="ref-link">Grothendieck 群函子</strong> $G:\mathsf{CMon}\to\mathsf{Ab}$ 是<strong class="ref-link">遗忘函子</strong> $U:\mathsf{Ab}\to\mathsf{CMon}$ 的<strong class="ref-link">左伴随函子</strong>
         </p>
     </div>
 
     <!-- 将 h2 转变为 flex 布局并两端对齐 -->
-    <h2 style="display: flex; align-items: center; justify-content: space-between;">
+    <h2 style="display: flex; align-items: center; justify-content: space-between">
         <span>
             <sup class="proof-mark pass"><i class="codicon codicon-check-all"></i></sup>
             证明
@@ -290,7 +290,7 @@
             <details class="goal-block" open>
                 <summary>
                     <i class="fa-solid fa-play toggle-icon"></i>
-                    <span class="tag default">子目标 I</span>
+                    <span class="tag default">代数结构</span>
                     <span>$G(M)$ 构成加法交换群</span>
                 </summary>
                 <div class="goal-content with-line">
@@ -481,8 +481,8 @@
                                     <input type="range" id="diagramZoom" min="50" max="100" value="50" step="5" oninput="updateZoom(this.value)">
                                     <span class="diagram-zoom-value" id="diagramZoomLabel">50%</span>
                                 </div>
-                                <div class="diagram-zoom-stage" id="diagramZoomStage" style="text-align:center;">
-                                    <img src="Comm.png" alt="Grothendieck 群泛性质交换图" id="diagramGrothendieck" style="display:block; margin:0 auto; max-width:100%; height:auto; transform-origin:top center;">
+                                <div class="diagram-zoom-stage" id="diagramZoomStage" style="text-align: center">
+                                    <img src="Comm.png" alt="Grothendieck 群泛性质交换图" id="diagramGrothendieck" style="display: block; margin: 0 auto; max-width: 100%; height: auto; transform-origin: top center">
                                 </div>
                             </figure>
                         </div>
@@ -633,7 +633,7 @@
 
                             <div class="step-block">
                                 <span class="step-tag">定义</span>
-                                <span class="step-content">令 $\tilde{f}_{\text{raw}} : (M \times M) \to N$ 为 $\tilde{f}_{\text{raw}}(p) := f(p_1) - f(p_2)$。</span>
+                                <span class="step-content">令 $\tilde{f}_{\text{raw}} : (M \times M) \to N$ 为 $\tilde{f}_{\text{raw}}(p) := f(p_1) - f(p_2)$</span>
                             </div>
 
                             <!-- 验证良定义 -->
@@ -641,20 +641,20 @@
                                 <summary>
                                     <i class="fa-solid fa-play toggle-icon"></i>
                                     <span class="tag default">良定义性</span>
-                                    <span>若 $p \sim q$，则 $\tilde{f}_{\text{raw}}(p) = \tilde{f}_{\text{raw}}(q)$</span>
+                                    <span>若 $p \sim q$ , 则 $\tilde{f}_{\text{raw}}(p) = \tilde{f}_{\text{raw}}(q)$</span>
                                 </summary>
                                 <div class="goal-content with-line">
                                     <div class="step-block">
                                         <span class="step-tag">前提</span>
-                                        <span class="step-content">由 $p \sim q$，存在 $k \in M$ 使得 $$p_1 + q_2 + k = p_2 + q_1 + k$$</span>
+                                        <span class="step-content">由 $p \sim q$ , 存在 $k \in M$ 使得 $$p_1 + q_2 + k = p_2 + q_1 + k$$</span>
                                     </div>
                                     <div class="step-block">
                                         <span class="step-tag">推导</span>
-                                        <span class="step-content">等式两边同时作用 $f$，并由 $f$ 保持加法的性质展开，得$$f(p_1) + f(q_2) + f(k) = f(p_2) + f(q_1) + f(k)$$</span>
+                                        <span class="step-content">等式两边同时作用 $f$ , 并由 $f$ 保持加法的性质展开, 得$$f(p_1) + f(q_2) + f(k) = f(p_2) + f(q_1) + f(k)$$</span>
                                     </div>
                                     <div class="step-block">
                                         <span class="step-tag">消去律</span>
-                                        <span class="step-content">在目标交换群 $N$ 中消去右侧的 $f(k)$，得到$$f(p_1) + f(q_2) = f(p_2) + f(q_1)$$</span>
+                                        <span class="step-content">在目标交换群 $N$ 中消去右侧的 $f(k)$ , 得到$$f(p_1) + f(q_2) = f(p_2) + f(q_1)$$</span>
                                     </div>
 
                                     <details class="goal-block" open>
@@ -715,7 +715,7 @@
 
                             <div class="step-block">
                                 <span class="step-tag">定义</span>
-                                <span class="step-content">令 $\tilde{f}_{\text{raw}}(a,b) := f(a)-f(b)$ 为候选函数在代表元上的行为。</span>
+                                <span class="step-content">令 $\tilde{f}_{\text{raw}}(a,b) := f(a)-f(b)$ 为候选函数在代表元上的行为</span>
                             </div>
 
                             <!-- 验证良定义 -->
@@ -728,15 +728,15 @@
                                 <div class="goal-content with-line">
                                     <div class="step-block">
                                         <span class="step-tag">策略</span>
-                                        <span class="step-content">若 $(p_1,p_2)\sim(q_1,q_2)$，则存在 $k$ 使 $p_1+q_2+k = p_2+q_1+k$。将等式两边作用 $f$ 后在交换群 $N$ 中消去 $f(k)$ 即得两边相等。</span>
+                                        <span class="step-content">若 $(p_1,p_2)\sim(q_1,q_2)$ , 则存在 $k$ 使 $$p_1+q_2+k = p_2+q_1+k$$将等式两边作用 $f$ 后在交换群 $N$ 中消去 $f(k)$ 即得两边相等</span>
                                     </div>
                                     <div class="step-block">
                                         <span class="step-tag">提取</span>
-                                        <span class="step-content">从等价关系中提取见证元 $k$ 及等式。</span>
+                                        <span class="step-content">从等价关系中提取见证元 $k$ 及等式</span>
                                     </div>
                                     <div class="step-block">
                                         <span class="step-tag">推导</span>
-                                        <span class="step-content">对提取出的等式两边应用 $f$（利用 $f$ 保持加法）得到 $N$ 中的等式。</span>
+                                        <span class="step-content">对提取出的等式两边应用 $f$（利用 $f$ 保持加法）得到 $N$ 中的等式</span>
                                     </div>
                                     <div><div class="step-block calc">
                                         <span class="step-tag calc">计算</span>
@@ -778,7 +778,7 @@
 
                             <div class="step-block">
                                 <span class="step-tag">构造</span>
-                                <span class="step-content">由良定义性，通过商映射提升得到 $\tilde{f}:G(M)\to N$。</span>
+                                <span class="step-content">由良定义性, 通过商映射提升得到 $\tilde{f}:G(M)\to N$</span>
                             </div>
 
                             <!-- 验证群同态 -->
@@ -791,7 +791,7 @@
                                 <div class="goal-content with-line">
                                     <div class="step-block">
                                         <span class="step-tag">商归纳</span>
-                                        <span class="step-content">用商空间双重归纳回到代表元 $(a,b),(c,d)$ 上验证加法保持。</span>
+                                        <span class="step-content">用商空间双重归纳回到代表元 $(a,b),(c,d)$ 上验证加法保持</span>
                                     </div>
                                     <div><div class="step-block calc">
                                         <span class="step-tag calc">计算</span>
@@ -1007,7 +1007,7 @@
 
                                     <div class="step-block">
                                         <span class="step-tag">假设</span>
-                                        <span class="step-content">设 $g: G(M) \to N$ 满足群同态条件且 $g \circ i = f$，但 $g \neq \tilde{f}$。</span>
+                                        <span class="step-content">设 $g: G(M) \to N$ 满足群同态条件且 $g \circ i = f$ , 但 $g \neq \tilde{f}$</span>
                                     </div>
 
                                     <details class="goal-block" open>
@@ -1032,7 +1032,8 @@
                                                     </div>
                                                     <div class="step-block">
                                                         <span class="step-tag">矛盾</span>
-                                                        <span class="step-content">与 $g\neq\tilde{f}$ 矛盾，故反证假设不成立</span>
+                                                        <span class="step-content">与 $g\neq\tilde{f}$ 矛盾, 故反证假设不成立</span>
+                                                        <span class="final-mark contradiction">$\to\,$ 矛盾</span>
                                                     </div>
 
                                                 </div>
@@ -1043,7 +1044,7 @@
 
                                     <div class="step-block">
                                         <span class="step-tag">代入</span>
-                                        <span class="step-content">取这样的 $x$，以下记 $h_{\text{diff}}: g(x) \neq \tilde{f}(x)$</span>
+                                        <span class="step-content">取这样的 $x$ , 以下记 $h_{\text{diff}}: g(x) \neq \tilde{f}(x)$</span>
                                     </div>
 
                                     <details class="goal-block" open>
@@ -1055,7 +1056,7 @@
                                         <div class="goal-content with-line">
                                             <div class="step-block">
                                                 <span class="step-tag">提取代表元</span>
-                                                <span class="step-content">由商空间定义，存在 $(a,b)\in M\times M$ 使得 $x = [(a,b)]$</span>
+                                                <span class="step-content">由商空间定义, 存在 $(a,b)\in M\times M$ 使得 $x = [(a,b)]$</span>
                                             </div>
                                             <div class="step-block">
                                                 <span class="step-tag">重写</span>
@@ -1066,7 +1067,7 @@
 
                                     <div class="step-block">
                                         <span class="step-tag">代入</span>
-                                        <span class="step-content">将 $x$ 替换为 $i(a) + (-i(b))$，此后目标中 $x$ 均以此形式出现</span>
+                                        <span class="step-content">将 $x$ 替换为 $i(a) + (-i(b))$ , 此后目标中 $x$ 均以此形式出现</span>
                                     </div>
 
                                     <details class="goal-block" open>

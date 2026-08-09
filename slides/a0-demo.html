@@ -7,20 +7,20 @@
     <link rel="stylesheet" href="./common.css">
     <style>
         .left-panel {
-            flex: 1; display: flex; flex-direction: column; min-width: 0;
+            flex: 0.9; display: flex; flex-direction: column; min-width: 0;
         }
         .left-panel h2 {
-            font-size: 1.1vw; font-weight: 600; color: #1f2937; margin-bottom: 1vh;
+            font-size: 2vw; font-weight: 600; color: #1f2937; margin-bottom: 1vh;
         }
         .code-panel {
             min-height: 0;
             padding: 1.2vh 1.2vw;
             margin-top: 1.5vh;
-            background: #f3f4f6; border-radius: 6px;
+            background: #f3f4f6; border-radius: 0.3125vw;
             font-family: "SF Mono", monospace;
             font-size: 0.8vw; line-height: 1.75; color: #374151;
             white-space: pre; overflow: auto;
-            border: 1px solid #e5e7eb;
+            border: 0.0521vw solid #e5e7eb;
         }
         .code-panel .kw { color: #e62006; }
         .code-panel .cm { color: #9ca3af; }
@@ -31,12 +31,18 @@
             flex: 1; display: flex; flex-direction: column; min-width: 0;
         }
         .right-panel h2 {
-            font-size: 1.1vw; font-weight: 600; color: #1f2937; margin-bottom: 1vh;
+            font-size: 2vw; font-weight: 600; color: #1f2937; margin-bottom: 1vh;
         }
-        .right-panel iframe {
-            width: 100%; height: 55vh;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px; background: #fff;
+        .right-panel .iframe-wrap {
+            width: 100%; height: 55vh; overflow: hidden;
+            border: 0.0521vw solid #e5e7eb;
+            border-radius: 0.3125vw; background: #fff;
+            margin-top: 1.5vh;
+        }
+        .right-panel .iframe-wrap iframe {
+            width: 125%; height: 125%;
+            transform: scale(0.8); transform-origin: 0 0;
+            border: none;
         }
     </style>
 </head>
@@ -50,23 +56,25 @@
             <div class="left-panel">
                 <h2>Lean 证明脚本</h2>
                 <div class="code-panel"><span class="kw">example</span> :
-  lim (fun x ↦ (exp (x ^ <span class="num">2</span>) - cos x) / (x * sin x)) <span class="num">0</span> = the (<span class="num">3</span> / <span class="num">2</span>)
+  lim (fun x ↦ (exp (x^<span class="num">2</span>) - cos x) / (x * sin x)) <span class="num">0</span> = the (<span class="num">3</span> / <span class="num">2</span>)
 := <span class="kw">calc</span>
-       lim (fun x ↦ (exp (x ^ <span class="num">2</span>) - cos x) / (x * sin x)) <span class="num">0</span>
-    =  lim (fun x ↦ (exp (x ^ <span class="num">2</span>) - cos x) / (x ^ 2)) <span class="num">0</span>
+       lim (fun x ↦ (exp (x^<span class="num">2</span>) - cos x) / (x * sin x)) <span class="num">0</span>
+    =  lim (fun x ↦ (exp (x^<span class="num">2</span>) - cos x) / (x^<span class="num">2</span>)) <span class="num">0</span>
        := <span class="kw">by</span> <span class="tac">lim_equiv</span>
-    =? lim (fun x ↦ (exp (x ^ <span class="num">2</span>) * (<span class="num">2</span> * x) - (-sin x)) / (<span class="num">2</span> * x)) <span class="num">0</span>
+    =? lim (fun x ↦ (exp (x^<span class="num">2</span>) * (<span class="num">2</span> * x) - (-sin x)) / (<span class="num">2</span> * x)) <span class="num">0</span>
        := <span class="kw">by</span> <span class="tac">lim_luo</span>
-    =  lim (fun x ↦ (exp (x ^ <span class="num">2</span>) * (<span class="num">2</span> * x) + sin x) / (<span class="num">2</span> * x)) <span class="num">0</span>
+    =  lim (fun x ↦ (exp (x^<span class="num">2</span>) * (<span class="num">2</span> * x) + sin x) / (<span class="num">2</span> * x)) <span class="num">0</span>
        := <span class="kw">by</span> <span class="tac">lim_congr_by ring within</span> <span class="num">1</span>
-    =? lim (fun x ↦ (exp (x ^ <span class="num">2</span>) * (<span class="num">4</span> * x ^ <span class="num">2</span>) + <span class="num">2</span> * exp (x ^ <span class="num">2</span>) + cos x) / <span class="num">2</span>) <span class="num">0</span>
+    =? lim (fun x ↦ (exp (x^<span class="num">2</span>) * (<span class="num">4</span> * x^<span class="num">2</span>) + <span class="num">2</span> * exp (x^<span class="num">2</span>) + cos x) / <span class="num">2</span>) <span class="num">0</span>
        := <span class="kw">by</span> <span class="tac">lim_luo</span>
     =  the (<span class="num">3</span> / <span class="num">2</span>)
        := <span class="kw">by</span> <span class="tac">lim_calc</div></span>
             </div>
             <div class="right-panel">
                 <h2>Mitar 生成的交互式证明</h2>
-                <iframe src="../A0.html" style="margin-top: 1.5vh"></iframe>
+                <div class="iframe-wrap">
+                    <iframe src="../A0.html"></iframe>
+                </div>
             </div>
         </div>
     </div>

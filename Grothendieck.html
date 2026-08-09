@@ -29,7 +29,7 @@
         .diagram-svg foreignObject { overflow: visible; }
         .diagram-svg .adj-label-katex {
             display: flex; align-items: center; justify-content: center;
-            width: 100%; height: 100%; font-size: 11px; font-weight: 600;
+            width: 100%; height: 100%; font-size: 0.5729vw; font-weight: 600;
         }
 
         /* ===== Flip Card ===== */
@@ -49,26 +49,26 @@
             backface-visibility: hidden;
             transform: rotateY(180deg);
             background: #fff;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
+            border-radius: 0.4167vw;
+            border: 0.0521vw solid #e5e7eb;
             overflow: hidden;
             display: flex; flex-direction: column;
         }
         .proof-flip-back .code-header {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 16px;
+            padding: 0.9259vh 0.8333vw;
             background: #f3f4f6;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 0.0926vh solid #e5e7eb;
             flex-shrink: 0;
         }
         .proof-flip-back .code-header span {
             font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 12px; color: #6b7280;
+            font-size: 0.625vw; color: #6b7280;
         }
         .proof-flip-back pre {
-            margin: 0; padding: 16px;
+            margin: 0; padding: 0.8333vw;
             font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-            font-size: 12.5px; line-height: 1.55;
+            font-size: 0.651vw; line-height: 1.55;
             color: #374151;
             overflow: auto; flex: 1;
             tab-size: 2;
@@ -84,8 +84,8 @@
         .proof-flip-back .sec { color: #7c3aed; font-weight: 600; }
        /* Flip button */
         .flip-btn {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 3px 10px;
+            display: inline-flex; align-items: center; gap: 0.2083vw;
+            padding: 0.2778vh 0.5208vw;
             font-size: 0.7em; font-weight: 500;
             border: 0 solid;
             background: #fff; color: #6b7280;
@@ -93,20 +93,20 @@
             vertical-align: middle; user-select: none;
         }
         .flip-btn:hover { background: #f3f4f6; color: #111827; border-color: #d1d5db; }
-        .flip-btn i { font-size: 13px; }
+        .flip-btn i { font-size: 0.6771vw; }
 
         /* ===== QED Interactive ===== */
         .qed-container {
             position: relative;
             display: flex; justify-content: flex-end; width: 100%;
-            height: 36px;
-            margin: 12px 0;
+            height: 3.3333vh;
+            margin: 1.1111vh 0;
         }
         .qed-box {
             position: absolute; right: 0; top: 0;
-            width: 60px; height: 44px;
-            border: 1px solid transparent;
-            border-radius: 4px;
+            width: 3.125vw; height: 4.0741vh;
+            border: 0.0521vw solid transparent;
+            border-radius: 0.2083vw;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             overflow: hidden;
@@ -117,13 +117,13 @@
                         border-color 0.35s;
         }
         .qed-box:hover, .qed-box.expanded {
-            width: 300px; height: 44px;
-            border-radius: 8px;
+            width: 15.625vw; height: 4.0741vh;
+            border-radius: 0.4167vw;
             border-color: #2563eb;
             background: #fff;
         }
         .qed-symbol {
-            font-size: 24px; color: #6b7280;
+            font-size: 1.25vw; color: #6b7280;
             transition: opacity 0.15s ease, transform 0.15s ease;
         }
         .qed-box:hover .qed-symbol, .qed-box.expanded .qed-symbol {
@@ -132,9 +132,9 @@
         }
         .qed-dialog {
             position: absolute; inset: 0;
-            display: flex; align-items: center; gap: 6px;
-            padding: 4px 8px;
-            opacity: 0; transform: translateX(10px);
+            display: flex; align-items: center; gap: 0.3125vw;
+            padding: 0.3704vh 0.4167vw;
+            opacity: 0; transform: translateX(0.5208vw);
             transition: opacity 0.2s ease 0.15s, transform 0.2s ease 0.15s;
             pointer-events: none;
         }
@@ -145,16 +145,16 @@
         .qed-input {
             flex: 1; height: 100%; min-width: 0;
             border: none; outline: none;
-            font-size: 13px; color: #374151;
+            font-size: 0.6771vw; color: #374151;
             background: transparent;
         }
-        .qed-input::placeholder { color: #9ca3af; }
+        .qed-input: :placeholder { color: #9ca3af; }
         .qed-submit {
-            width: 24px; height: 24px; padding: 0;
+            width: 1.25vw; height: 2.2222vh; padding: 0;
             border: none; background: transparent; color: #2563eb;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 16px; flex-shrink: 0;
+            font-size: 0.8333vw; flex-shrink: 0;
             transition: color 0.2s;
         }
         .qed-submit:hover { color: #1d4ed8; }
@@ -171,7 +171,7 @@
     </div>
 </div>
 
-<div id="main-content" class="proof-container" style="padding-bottom:25vh;">
+<div id="main-content" class="proof-container" style="padding-bottom: 25vh">
 
     <!-- ===== 定理陈述 ===== -->
     <div class="proposition-box">
@@ -198,7 +198,7 @@
     </div>
 
     <!-- 将 h2 转变为 flex 布局并两端对齐 -->
-    <h2 style="display: flex; align-items: center; justify-content: space-between;">
+    <h2 style="display: flex; align-items: center; justify-content: space-between">
         <span>
             <sup class="proof-mark pass"><i class="codicon codicon-check-all"></i></sup>
             证明

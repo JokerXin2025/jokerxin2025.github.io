@@ -9,39 +9,39 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <style>
-        .layer-card { border-radius: 8px; padding: 1.8vh 1.5vw; background: #fff; border: 1px solid #e5e7eb; transition: all 0.2s ease; cursor: default; }
-        .layer-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-color: #d1d5db; }
-        .layer-card h3 { font-size: 0.95vw; font-weight: 600; color: #374151; margin-bottom: 0.6vh; }
-        .layer-card p  { font-size: 0.82vw; line-height: 1.5; color: #6b7280; margin-bottom: 0.8vh; }
+        .layer-card { border-radius: 0.4167vw; padding: 1.8vh 1.5vw; background: #fff; border: 0.0521vw solid #e5e7eb; transition: all 0.2s ease; cursor: default; }
+        .layer-card:hover { transform: translateY(-0.1852vh); box-shadow: 0 0.2083vw 0.625vw rgba(0,0,0,0.06); border-color: #d1d5db; }
+        .layer-card h3 { font-size: 1.35vw; font-weight: 600; color: #374151; margin-bottom: 0.6vh; }
+        .layer-card p  { font-size: 1vw; line-height: 1.5; color: #6b7280; margin-bottom: 0.8vh; }
         .layer-tag {
-            display: inline-block; padding: 1px 8px;
-            font-size: 0.65vw; font-weight: 600; border-radius: 3px;
+            display: inline-block; padding: 0.0926vh 0.4167vw;
+            font-size: 0.8vw; font-weight: 600; border-radius: 0.1562vw;
             margin-bottom: 1.2vh;
         }
-        .layer-card.defn { border-left: 2px solid #93c5fd; }
+        .layer-card.defn { border-left: 0.1042vw solid #93c5fd; }
         .layer-card.defn .layer-tag { background: #eff6ff; color: #2563eb; }
-        .layer-card.comp { border-left: 2px solid #f59e0b; }
+        .layer-card.comp { border-left: 0.1042vw solid #f59e0b; }
         .layer-card.comp .layer-tag { background: #fffbeb; color: #d97706; }
         .code-sm {
             padding: 0.8vh 1.2vw;
-            background: #f3f4f6; border-radius: 6px;
+            background: #f3f4f6; border-radius: 0.3125vw;
             font-family: "SF Mono", monospace;
-            font-size: 0.68vw; line-height: 1.5; color: #374151;
+            font-size: 0.8vw; line-height: 1.5; color: #374151;
             white-space: pre; overflow: hidden;
-            border: 1px solid #e5e7eb;
+            border: 0.0521vw solid #e5e7eb;
             margin-top: 1.5vh;
         }
         .strat-item {
             padding: 0.8vh 1.2vw;
-            border-left: 2px solid #f59e0b;
-            border-radius: 4px;
+            border-left: 0.1042vw solid #f59e0b;
+            border-radius: 0.2083vw;
             transition: all 0.2s ease;
             display: flex; flex-direction: column; gap: 0.3vh;
         }
         .strat-item:hover { border-left-color: #d97706; }
-        .strat-item .strat-title { font-size: 0.82vw; font-weight: 700; color: #d97706; margin: 0; }
-        .strat-item .strat-title code { font-family: "SF Mono", monospace; font-size: 0.82vw; color: #d97706; font-weight: 700; }
-        .strat-item .strat-desc { font-size: 0.72vw; line-height: 1.4; color: #78716c; margin: 0; }
+        .strat-item .strat-title { font-size: 1.1vw; font-weight: 700; color: #d97706; margin: 0; }
+        .strat-item .strat-title code { font-family: "SF Mono", monospace; font-size: 1.1vw; color: #d97706; font-weight: 700; }
+        .strat-item .strat-desc { font-size: 0.9vw; line-height: 1.4; color: #78716c; margin: 0; }
     </style>
 </head>
 <body>
@@ -83,7 +83,7 @@ structure Function where
                     <p class="strat-desc">基于初等函数的连续性直接代入极限点计算</p>
                 </div>
                 <div class="strat-item">
-                    <p class="strat-title"><code>lim_congr_by</code>&emsp;极限表达式改写</p>
+                    <p class="strat-title"><code>lim_congr</code>&emsp;极限表达式改写</p>
                     <p class="strat-desc">利用去心邻域内同余性对极限表达式进行改写，支持嵌入 ring / field 等自动化终结策略</p>
                 </div>
                 <div class="strat-item">

@@ -20,15 +20,15 @@ html, body {
 
 /* ---------- Header ---------- */
 .slide-header { margin-bottom: 3.5vh; }
-.slide-header h1 { font-size: 2.75vw; font-weight: 700; color: #111827; }
-.slide-header .tag { display: inline-block; margin-top: 0.8vh; font-size: 1vw; color: #6b7280; }
+.slide-header h1 { font-size: 3vw; font-weight: 700; color: #111827; }
+.slide-header .tag { display: inline-block; margin-top: 0.8vh; font-size: 1.5vw; color: #6b7280; }
 
 /* ---------- Layout Helpers ---------- */
 .body { display: flex; gap: 3vw; flex: 1; min-height: 0; margin-top: 2vh;}
 .main { flex: 3; display: flex; flex-direction: column; gap: 1.5vh; min-height: 0; }
 .side { flex: 2.5; display: flex; flex-direction: column; gap: 1.3vh; }
 .col { flex: 1; display: flex; flex-direction: column; gap: 1.3vh; }
-.col h2 { font-size: 1.2vw; font-weight: 600; color: #1f2937; }
+.col h2 { font-size: 1.75vw; font-weight: 600; color: #1f2937; margin-bottom: 1vh; }
 
 /* ---------- Card ---------- */
 .card {

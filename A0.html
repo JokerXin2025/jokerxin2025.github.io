@@ -26,13 +26,14 @@
     <style>
         html { overflow-y: hidden !important; }
         .step-block.calc { position: relative; }
+        .step-tag { font-size: 1.5vw; }
         .hover-label {
             position: absolute;
-            left: 14px; top: 50%; transform: translateY(-50%);
-            min-width: 36px; height: 24px;
+            left: 1.75vw; top: 50%; transform: translateY(-50%);
+            min-width: 3vw; height: 2.5vh;
             display: flex; align-items: center;
             font-family: 'Consolas', monospace;
-            font-size: 12px; font-weight: 600;
+            font-size: 1.5vw; font-weight: 600;
             color: #334155;
             white-space: nowrap;
             opacity: 0; transition: opacity 0.2s ease;
@@ -55,7 +56,7 @@
         </h2>
 
         <div><div class="step-block calc">
-            <span class="hover-label">等价无穷小</span>
+            <span class="hover-label">等价代换</span>
             <span class="step-tag calc">计算</span>
             <span class="step-lhs"> $\displaystyle\lim\limits_{x\to0}\frac{e^{x^{2}}-\cos x}{x\sin x}$ </span>
             <span class="step-rel">$=$</span>
