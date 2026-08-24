@@ -4,38 +4,21 @@
     --diagram-bg:      #eff6ff;
     --diagram-text:    #334155;
     --diagram-muted:   #94a3b8;
-    --diagram-mor:     #64748b;
     --diagram-unique:  #3b82f6;
 }
 .strategy-block.diagram {
     background: var(--diagram-bg);
-    border-left: 2px solid var(--diagram-accent);
-    margin-left: 24px;
-    border-radius: 8px;
-    padding: 0 16px 8px 0;
-    transition: 0.25s;
     position: relative;
+    padding: 12px var(--strategy-content-inset) 10px var(--strategy-content-indent);
 }
 .strategy-block.diagram:hover { box-shadow: 0 0 2px rgba(37, 99, 235, 0.25); }
-.tag.diagram { color: var(--diagram-accent); border: 1px solid var(--diagram-light); margin: 20px 0 0 20px; }
+.strategy-block.diagram .annotation-icon .codicon { color: var(--diagram-accent); }
 .diagram-figure { margin: 8px 16px; }
-.diagram-figure svg { max-width: 100%; height: auto; display: block; transform-origin: top center; transition: transform 0.15s ease; }
-.diagram-zoom-stage { overflow: hidden; transition: height 0.15s ease; }
-.diagram-zoom-bar { position: absolute; top: 18px; right: 12px; display: flex; align-items: center; gap: 8px; font-size: 12px; font-family: 'Consolas', monospace; color: var(--diagram-muted); z-index: 2; background: var(--diagram-bg); padding: 4px 10px; border-radius: 6px; opacity: 0.55; transition: opacity 0.2s; }
+.diagram-figure svg { max-width: 100%; height: auto; display: block; }
+.diagram-zoom-stage svg { display: block; margin: 0 auto; transition: transform 0.15s ease; transform-origin: center center; }
+.diagram-zoom-bar { position: absolute; top: 15px; right: 12px; display: flex; align-items: center; gap: 8px; font-size: 12px; font-family: 'Consolas', monospace; color: var(--diagram-muted); z-index: 2; background: var(--diagram-bg); padding: 4px 10px; border-radius: 6px; opacity: 0.55; transition: opacity 0.2s; }
 .diagram-zoom-bar:hover { opacity: 1; }
 .diagram-zoom-bar input[type="range"] { width: 100px; height: 4px; -webkit-appearance: none; appearance: none; background: var(--diagram-light); border-radius: 2px; outline: none; cursor: pointer; }
 .diagram-zoom-bar input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--diagram-accent); border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.12); cursor: pointer; }
 .diagram-zoom-bar input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--diagram-accent); border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.12); cursor: pointer; }
 .diagram-zoom-value { min-width: 30px; text-align: right; }
-.diagram-svg .mor-line { stroke: var(--diagram-mor); stroke-width: 1.8; fill: none; }
-
-.diagram-svg .mor-line.dashed { stroke: var(--diagram-muted); stroke-dasharray: 5 3; }
-
-.diagram-svg .mor-line.unique { stroke: var(--diagram-unique); stroke-dasharray: 5 3; stroke-width: 2; }
-
-.diagram-svg .mor-line.animated { animation: diagram-dash 1.6s linear infinite; }
-@keyframes diagram-dash { to { stroke-dashoffset: -16; } }
-.diagram-svg .obj-label-katex { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-size: 24px; font-weight: 600; }
-.diagram-svg .obj-label-katex.ghost { font-style: italic; font-weight: 400; color: var(--diagram-muted); }
-.diagram-svg .mor-label-katex { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-size: 20px; }
-.diagram-svg .katex { font-size: 1em !important; }

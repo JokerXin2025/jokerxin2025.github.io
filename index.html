@@ -1,46 +1,89 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" overflow-y: scroll;>
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>形式化辅助教学系统</title>
-    <link rel="stylesheet" href="./slides.css">
+    <title>Mitar</title>
+
+    <link rel="stylesheet" href="/css/codicon.css">
+    <link rel="stylesheet" href="/css/basic.css">
+    <link rel="stylesheet" href="/css/step.css">
+    <link rel="stylesheet" href="/css/goal.css">
+    <link rel="stylesheet" href="/css/strategy.css">
+    <link rel="stylesheet" href="/css/sundry.css">
+    <link rel="stylesheet" href="/css/animation.css">
+    <link rel="stylesheet" href="/css/diagram.css">
+    <link rel="stylesheet" href="/css/references.css">
+    <link rel="stylesheet" href="/css/proof-text.css">
+    <link rel="stylesheet" href="/css/media.css">
+    <link rel="stylesheet" href="/css/code-flip.css">
+    <link rel="stylesheet" href="/css/screen-warning.css">
+    <link rel="stylesheet" href="/css/lean2tex.css">
+
+    <script defer src="/js/katex.js"></script>
+    <script defer src="/js/diagram.js"></script>
+    <script defer src="/js/animation.js"></script>
+    <script defer src="/js/equation_size.js"></script>
+    <script defer src="/js/code-flip.js"></script>
+    <script defer src="/js/references.js"></script>
+    <script defer src="/js/lean2tex.js"></script>
+    <script defer src="/js/proof-indent.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
 </head>
+
 <body>
 
-    <!-- 幻灯片显示区域 -->
-    <iframe id="slide-frame" src="" frameborder="0"
-            allow="autoplay; fullscreen"
-            allowfullscreen></iframe>
+    <div id="device-warning">
+        <div class="warning-content">
+            <div class="warning-icon"><i class="codicon codicon-move"></i></div>
+            <h2 class="warning-title">请使用平板或电脑访问</h2>
+            <p class="warning-desc">
+                为了保证最佳阅读体验<br>
+                本页面暂不支持窄屏浏览
+            </p>
+        </div>
+    </div>
 
-    <!-- 幻灯片计数器 -->
-    <div id="slide-counter" class="slide-counter"></div>
+    <div class="page-layout">
+        <aside class="module-sidebar" aria-label="模块目录">
+          <div class="module-sidebar-inner">
+            <div class="module-sidebar-heading">
+              <span class="page-nav-logo" aria-hidden="true">M</span>
+              <span>模块目录</span>
+            </div>
+            <div class="module-absolute-path">
+              <span>当前位置</span>
+              <strong>Mitar</strong>
+            </div>
+            <nav aria-label="当前模块附近的项目树">
+              <ul class="module-context-tree"><li><span class="module-tree-node"><span class="module-tree-node-mark" aria-hidden="true"></span>MitarDemo</span><ul><li><a class="module-tree-node" href="MitarDemo/Gallery.html"><span class="module-tree-node-mark" aria-hidden="true"></span>Gallery</a></li><li><a class="module-tree-node" href="MitarDemo/Library.html"><span class="module-tree-node-mark" aria-hidden="true"></span>Library</a></li></ul></li></ul>
+            </nav>
+            <a class="module-sidebar-index" href="index.html">查看完整项目索引</a>
+          </div>
+        </aside>
+        <main id="main-content" class="proof-container">
 
-    <!-- 上一页按钮 -->
-    <button id="btn-prev" class="nav-btn nav-btn-prev" title="上一页 (←)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-    </button>
+    <header class="project-header">
+      <p class="eyebrow">Mitar project</p>
+      <h1>Mitar 完整组件展示</h1>
+      <p class="project-metadata">Mitar Contributors · Mitar Demo Collection · 2026</p>
+      <p class="project-abstract">一个由 Proof-Script 编写并由 Mitar 生成的交互式形式化数学展示项目。</p>
+    </header><ol class="module-index"><li><a href="MitarDemo/Gallery.html">MitarDemo.Gallery</a></li>
+    <li><a href="MitarDemo/Library.html">MitarDemo.Library</a></li></ol>
 
-    <!-- 下一页按钮 -->
-    <button id="btn-next" class="nav-btn nav-btn-next" title="下一页 (→)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-    </button>
+        </main>
+    </div>
 
-    <!-- 全屏按钮 -->
-    <button id="btn-fullscreen" class="nav-btn nav-btn-fullscreen" title="全屏 (F)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <polyline points="9 21 3 21 3 15"></polyline>
-            <line x1="21" y1="3" x2="14" y2="10"></line>
-            <line x1="3" y1="21" x2="10" y2="14"></line>
-        </svg>
-    </button>
+<script>
+window.addEventListener('load', function(){
+    setTimeout(function(){ window.dispatchEvent(new Event('resize')) }, 500);
+});
+</script>
 
-    <script src="./js/slides-config.js"></script>
-    <script src="./js/slides.js"></script>
 </body>
 </html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN" overflow-y: scroll;>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MitarDemo.Gallery</title>
+
+    <link rel="stylesheet" href="/css/codicon.css">
+    <link rel="stylesheet" href="/css/basic.css">
+    <link rel="stylesheet" href="/css/step.css">
+    <link rel="stylesheet" href="/css/goal.css">
+    <link rel="stylesheet" href="/css/strategy.css">
+    <link rel="stylesheet" href="/css/sundry.css">
+    <link rel="stylesheet" href="/css/animation.css">
+    <link rel="stylesheet" href="/css/diagram.css">
+    <link rel="stylesheet" href="/css/references.css">
+    <link rel="stylesheet" href="/css/proof-text.css">
+    <link rel="stylesheet" href="/css/media.css">
+    <link rel="stylesheet" href="/css/code-flip.css">
+    <link rel="stylesheet" href="/css/screen-warning.css">
+    <link rel="stylesheet" href="/css/lean2tex.css">
+
+    <script defer src="/js/katex.js"></script>
+    <script defer src="/js/diagram.js"></script>
+    <script defer src="/js/animation.js"></script>
+    <script defer src="/js/equation_size.js"></script>
+    <script defer src="/js/code-flip.js"></script>
+    <script defer src="/js/references.js"></script>
+    <script defer src="/js/lean2tex.js"></script>
+    <script defer src="/js/proof-indent.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+</head>
+
+<body>
+
+    <div id="device-warning">
+        <div class="warning-content">
+            <div class="warning-icon"><i class="codicon codicon-move"></i></div>
+            <h2 class="warning-title">请使用平板或电脑访问</h2>
+            <p class="warning-desc">
+                为了保证最佳阅读体验<br>
+                本页面暂不支持窄屏浏览
+            </p>
+        </div>
+    </div>
+
+    <div class="page-layout">
+        <aside class="module-sidebar" aria-label="模块目录">
+          <div class="module-sidebar-inner">
+            <div class="module-sidebar-heading">
+              <span class="page-nav-logo" aria-hidden="true">M</span>
+              <span>模块目录</span>
+            </div>
+            <div class="module-absolute-path">
+              <span>当前位置</span>
+              <strong>Mitar / MitarDemo / Gallery</strong>
+            </div>
+            <nav aria-label="当前模块附近的项目树">
+              <ul class="module-context-tree"><li class="module-tree-root"><a class="module-tree-parent" href="../index.html"><span class="module-tree-node-mark" aria-hidden="true"></span>MitarDemo</a><ul><li class="is-current-branch"><a class="module-tree-node is-current" href="Gallery.html" aria-current="page"><span class="module-tree-node-mark" aria-hidden="true"></span>Gallery</a></li><li><a class="module-tree-node" href="Library.html"><span class="module-tree-node-mark" aria-hidden="true"></span>Library</a></li></ul></li></ul>
+            </nav>
+            <a class="module-sidebar-index" href="../index.html">查看完整项目索引</a>
+          </div>
+        </aside>
+        <main id="main-content" class="proof-container">
+
+    <section class="proof-text"><h1 id="heading-overview"><span class="proof-text-literal">Mitar 页面组件总览</span></h1>
+    <p><span class="proof-text-literal">这个项目完全由 </span><strong><span class="proof-text-literal">Proof-Script</span></strong><span class="proof-text-literal"> 源码生成。Mitar 读取模块页面 JSON 和独立证明树，
+    再构建最终 HTML。这里同时展示 </span><em><span class="proof-text-literal">斜体</span></em><span class="proof-text-literal">、</span><strong><em><span class="proof-text-literal">粗斜体</span></em></strong><span class="proof-text-literal">、</span><s><span class="proof-text-literal">删除线</span></s><span class="proof-text-literal">、
+    </span><u><span class="proof-text-literal">下划线</span></u><span class="proof-text-literal">、</span><mark><span class="proof-text-literal">高亮文本</span></mark><span class="proof-text-literal">、上标 x</span><sup><span class="proof-text-literal">2</span></sup><span class="proof-text-literal">、下标 a</span><sub><span class="proof-text-literal">n</span></sub><span class="proof-text-literal">、</span><code>inline code</code><span class="proof-text-literal">，
+    以及行内数学 </span>$\forall n \in \mathbb{N},\; n + 0 = n$<span class="proof-text-literal">。</span></p>
+    <p><span class="proof-text-literal">普通文本中的美元符号会保持为字面量：价格是 $5，而不是数学公式。
+    你也可以访问 </span><a href="https://github.com/JokerXin2025/Mitar"><span class="proof-text-literal">Mitar 仓库</span></a><span class="proof-text-literal">，或跳转到
+    </span><a class="page-reference reference-heading" href="Gallery.html#heading-lists">lists</a><span class="proof-text-literal">、参考跨模块定理 </span><a class="page-reference reference-theorem" href="Library.html#theorem-and-left">and-left</a><span class="proof-text-literal">，以及页面图片 </span><a class="page-reference reference-figure" href="Gallery.html#figure-component-preview">component-preview</a><span class="proof-text-literal">。</span></p>
+    <p><span class="proof-text-literal">源码中的普通换行会保留在同一个语义段落中，空行则开始一个新的段落。</span></p>
+    <h2 id="heading-typography"><span class="proof-text-literal">二级标题</span></h2>
+    <h3><span class="proof-text-literal">三级标题</span></h3>
+    <h4><span class="proof-text-literal">四级标题</span></h4>
+    <p><span class="proof-text-literal">不同级别的标题共同组成文档层次，带标签的标题可以成为跨页面引用目标。</span></p>
+    <h2 id="heading-lists"><span class="proof-text-literal">列表系统</span></h2>
+    <p><span class="proof-text-literal">无序列表使用实心圆点：</span></p>
+    <ul><li><p><span class="proof-text-literal">页面组件保持 Lean 源码中的顺序</span></p></li><li><p><span class="proof-text-literal">所有页面加载完成后建立 label 索引</span></p></li><li><p><span class="proof-text-literal">未解析的引用会保留明显提示</span></p></li></ul>
+    <p><span class="proof-text-literal">有序列表使用 </span><code>+</code><span class="proof-text-literal">，也可以通过 </span><code>n.</code><span class="proof-text-literal"> 强制指定某一项的序号：</span></p>
+    <ol><li><p><span class="proof-text-literal">首先由 Lake 编译 Lean 项目</span></p></li><li><p><span class="proof-text-literal">然后 Proof-Script 写出页面和证明树 JSON</span></p></li><li value="5"><p><span class="proof-text-literal">这一项被强制指定为第五项</span></p></li><li><p><span class="proof-text-literal">下一项自然延续为第六项</span></p></li></ol>
+    <h2 id="heading-rich-blocks"><span class="proof-text-literal">引用、公式与代码</span></h2>
+    <blockquote><p><span class="proof-text-literal">形式化证明不仅应当能够被内核检查，也应当能够被人自然地阅读。
+    Mitar 的目标是让证明结构、数学表达和项目元数据在同一个页面中协同工作。</span></p></blockquote>
+    <div class="display-math">$$\sum_{k=1}^{n} k = \frac{n(n+1)}{2}$$</div>
+    <pre class="page-code code-highlighted" data-language="lean"><code class="language-lean"><span class="code-builtin code-theme-dark">#</span><span class="code-keyword code-theme-dark">theorem</span> demo <span class="code-operator code-theme-dark">(</span>P Q <span class="code-operator code-theme-dark">:</span> <span class="code-type code-theme-dark">Prop</span><span class="code-operator code-theme-dark">)</span> <span class="code-operator code-theme-dark">(</span>h <span class="code-operator code-theme-dark">:</span> P <span class="code-builtin code-theme-dark">∧</span> Q<span class="code-operator code-theme-dark">)</span> <span class="code-operator code-theme-dark">:</span> P <span class="code-operator code-theme-dark">:=</span> script
+     provide h.left</code></pre>
+    <p><span class="proof-text-literal">下面的 theorem component 使用另一个 Lean 文件中声明的定理，因此会自动产生
+    跨文件参考文献记录。</span></p></section>
+
+    <figure class="page-media page-media-latex" id="figure-example-table" data-extra="[]">
+      <div class="page-media-stage">
+        <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPScxLjEnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZycgeG1sbnM6eGxpbms9J2h0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsnIHdpZHRoPSczOC40MzkyNTdwdCcgaGVpZ2h0PSczNS4wMTAyODJwdCcgdmlld0JveD0nLTcwLjAwNzQ3NiAtNzAuMDA3NDc2IDM4LjQzOTI1NyAzNS4wMTAyODInPgo8ZGVmcz4KPHBhdGggaWQ9J2cwLTQ5JyBkPSdNMi45MjkwMTYtNi4zNzYwOUMyLjkyOTAxNi02LjYxNTE5MyAyLjkyOTAxNi02LjYzNTExOCAyLjY5OTg3NS02LjYzNTExOEMyLjA4MjE5Mi01Ljk5NzUwOSAxLjIwNTQ3OS01Ljk5NzUwOSAuODg2Njc1LTUuOTk3NTA5Vi01LjY4ODY2N0MxLjA4NTkyOC01LjY4ODY2NyAxLjY3MzcyNC01LjY4ODY2NyAyLjE5MTc4MS01Ljk0NzY5NlYtLjc4NzA0OUMyLjE5MTc4MS0uNDI4Mzk0IDIuMTYxODkzLS4zMDg4NDIgMS4yNjUyNTUtLjMwODg0MkguOTQ2NDUxVjBDMS4yOTUxNDMtLjAyOTg4OCAyLjE2MTg5My0uMDI5ODg4IDIuNTYwMzk5LS4wMjk4ODhTMy44MjU2NTQtLjAyOTg4OCA0LjE3NDM0NiAwVi0uMzA4ODQySDMuODU1NTQyQzIuOTU4OTA0LS4zMDg4NDIgMi45MjkwMTYtLjQxODQzMSAyLjkyOTAxNi0uNzg3MDQ5Vi02LjM3NjA5WicvPgo8cGF0aCBpZD0nZzAtNTAnIGQ9J00xLjI2NTI1NS0uNzY3MTIzTDIuMzIxMjk1LTEuNzkzMjc1QzMuODc1NDY3LTMuMTY4MTIgNC40NzMyMjUtMy43MDYxMDIgNC40NzMyMjUtNC43MDIzNjZDNC40NzMyMjUtNS44MzgxMDcgMy41NzY1ODgtNi42MzUxMTggMi4zNjExNDYtNi42MzUxMThDMS4yMzUzNjctNi42MzUxMTggLjQ5ODEzMi01LjcxODU1NSAuNDk4MTMyLTQuODMxODhDLjQ5ODEzMi00LjI3Mzk3MyAuOTk2MjY0LTQuMjczOTczIDEuMDI2MTUyLTQuMjczOTczQzEuMTk1NTE3LTQuMjczOTczIDEuNTQ0MjA5LTQuMzkzNTI0IDEuNTQ0MjA5LTQuODAxOTkzQzEuNTQ0MjA5LTUuMDYxMDIxIDEuMzY0ODgyLTUuMzIwMDUgMS4wMTYxODktNS4zMjAwNUMuOTM2NDg4LTUuMzIwMDUgLjkxNjU2My01LjMyMDA1IC44ODY2NzUtNS4zMTAwODdDMS4xMTU4MTYtNS45NTc2NTkgMS42NTM3OTgtNi4zMjYyNzYgMi4yMzE2MzEtNi4zMjYyNzZDMy4xMzgyMzItNi4zMjYyNzYgMy41NjY2MjUtNS41MTkzMDMgMy41NjY2MjUtNC43MDIzNjZDMy41NjY2MjUtMy45MDUzNTUgMy4wNjg0OTMtMy4xMTgzMDYgMi41MjA1NDgtMi41MDA2MjNMLjYwNzcyMS0uMzY4NjE4Qy40OTgxMzItLjI1OTAyOSAuNDk4MTMyLS4yMzkxMDMgLjQ5ODEzMiAwSDQuMTk0MjcxTDQuNDczMjI1LTEuNzMzNDk5SDQuMjI0MTU5QzQuMTc0MzQ2LTEuNDM0NjIgNC4xMDQ2MDgtLjk5NjI2NCA0LjAwNDk4MS0uODQ2ODI0QzMuOTM1MjQzLS43NjcxMjMgMy4yNzc3MDktLjc2NzEyMyAzLjA1ODUzMS0uNzY3MTIzSDEuMjY1MjU1WicvPgo8cGF0aCBpZD0nZzAtNjUnIGQ9J00zLjk2NTEzMS02LjkzMzk5OEMzLjkxNTMxOC03LjA2MzUxMiAzLjg5NTM5Mi03LjEzMzI1IDMuNzM1OTktNy4xMzMyNVMzLjU0NjctNy4wNzM0NzQgMy40OTY4ODctNi45MzM5OThMMS40MzQ2Mi0uOTc2MzM5QzEuMjU1MjkzLS40NjgyNDQgLjg1Njc4Ny0uMzE4ODA0IC4zMTg4MDQtLjMwODg0MlYwQy41NDc5NDUtLjAwOTk2MyAuOTc2MzM5LS4wMjk4ODggMS4zMzQ5OTQtLjAyOTg4OEMxLjY0MzgzNi0uMDI5ODg4IDIuMTYxODkzLS4wMDk5NjMgMi40ODA2OTcgMFYtLjMwODg0MkMxLjk4MjU2NS0uMzA4ODQyIDEuNzMzNDk5LS41NTc5MDggMS43MzM0OTktLjgxNjkzNkMxLjczMzQ5OS0uODQ2ODI0IDEuNzQzNDYyLS45NDY0NTEgMS43NTM0MjUtLjk2NjM3NkwyLjIxMTcwNi0yLjI3MTQ4Mkg0LjY3MjQ3OEw1LjIwMDQ5OC0uNzQ3MTk4QzUuMjEwNDYxLS43MDczNDcgNS4yMzAzODYtLjY0NzU3MiA1LjIzMDM4Ni0uNjA3NzIxQzUuMjMwMzg2LS4zMDg4NDIgNC42NzI0NzgtLjMwODg0MiA0LjQwMzQ4Ny0uMzA4ODQyVjBDNC43NjIxNDItLjAyOTg4OCA1LjQ1OTUyNy0uMDI5ODg4IDUuODM4MTA3LS4wMjk4ODhDNi4yNjY1MDEtLjAyOTg4OCA2LjcyNDc4Mi0uMDE5OTI1IDcuMTQzMjEzIDBWLS4zMDg4NDJINi45NjM4ODVDNi4zNjYxMjctLjMwODg0MiA2LjIyNjY1LS4zNzg1OCA2LjExNzA2MS0uNzA3MzQ3TDMuOTY1MTMxLTYuOTMzOTk4Wk0zLjQzNzExMS01LjgxODE4Mkw0LjU2Mjg4OS0yLjU4MDMyNEgyLjMyMTI5NUwzLjQzNzExMS01LjgxODE4MlonLz4KPHBhdGggaWQ9J2cwLTY2JyBkPSdNMi4yMTE3MDYtMy42NDYzMjZWLTYuMDk3MTM2QzIuMjExNzA2LTYuNDI1OTAzIDIuMjMxNjMxLTYuNDk1NjQxIDIuNjk5ODc1LTYuNDk1NjQxSDMuOTM1MjQzQzQuOTAxNjE5LTYuNDk1NjQxIDUuMjUwMzExLTUuNjQ4ODE3IDUuMjUwMzExLTUuMTIwNzk3QzUuMjUwMzExLTQuNDgzMTg4IDQuNzYyMTQyLTMuNjQ2MzI2IDMuNjU2Mjg5LTMuNjQ2MzI2SDIuMjExNzA2Wk00LjU2Mjg4OS0zLjU1NjY2M0M1LjUyOTI2NS0zLjc0NTk1MyA2LjIxNjY4Ny00LjM4MzU2MiA2LjIxNjY4Ny01LjEyMDc5N0M2LjIxNjY4Ny01Ljk4NzU0NyA1LjMwMDEyNS02LjgwNDQ4MyA0LjAwNDk4MS02LjgwNDQ4M0guMzU4NjU1Vi02LjQ5NTY0MUguNTk3NzU4QzEuMzY0ODgyLTYuNDk1NjQxIDEuMzg0ODA3LTYuMzg2MDUyIDEuMzg0ODA3LTYuMDI3Mzk3Vi0uNzc3MDg2QzEuMzg0ODA3LS40MTg0MzEgMS4zNjQ4ODItLjMwODg0MiAuNTk3NzU4LS4zMDg4NDJILjM1ODY1NVYwSDQuMjY0MDFDNS41ODkwNDEgMCA2LjQ4NTY3OS0uODg2Njc1IDYuNDg1Njc5LTEuODIzMTYzQzYuNDg1Njc5LTIuNjg5OTEzIDUuNjY4NzQyLTMuNDM3MTExIDQuNTYyODg5LTMuNTU2NjYzWk0zLjk0NTIwNS0uMzA4ODQySDIuNjk5ODc1QzIuMjMxNjMxLS4zMDg4NDIgMi4yMTE3MDYtLjM3ODU4IDIuMjExNzA2LS43MDczNDdWLTMuNDI3MTQ4SDQuMDg0NjgyQzUuMDcwOTg0LTMuNDI3MTQ4IDUuNDg5NDE1LTIuNTAwNjIzIDUuNDg5NDE1LTEuODMzMTI2QzUuNDg5NDE1LTEuMTI1Nzc4IDQuOTcxMzU3LS4zMDg4NDIgMy45NDUyMDUtLjMwODg0MlonLz4KPC9kZWZzPgo8ZyBpZD0ncGFnZTEnPgo8cmVjdCB4PSctNzAuMDA3NDc2JyB5PSctNzAuMDA3NDc2JyBoZWlnaHQ9Jy43OTcwMjknIHdpZHRoPSczOC40MzkyNTcnLz4KPHVzZSB4PSctNjQuMDI5ODc3JyB5PSctNTguMDUzNzUyJyB4bGluazpocmVmPScjZzAtNjUnLz4KPHVzZSB4PSctNDQuNjAyNjk4JyB5PSctNTguMDUzNzUyJyB4bGluazpocmVmPScjZzAtNjYnLz4KPHJlY3QgeD0nLTcwLjAwNzQ3NicgeT0nLTUyLjc1MTQxNicgaGVpZ2h0PScuNDk4MTYyJyB3aWR0aD0nMzguNDM5MjU3Jy8+Cjx1c2UgeD0nLTYyLjc4NDU0NycgeT0nLTQxLjA5NjU1OScgeGxpbms6aHJlZj0nI2cwLTQ5Jy8+Cjx1c2UgeD0nLTQzLjU2NDkxOCcgeT0nLTQxLjA5NjU1OScgeGxpbms6aHJlZj0nI2cwLTUwJy8+CjxyZWN0IHg9Jy03MC4wMDc0NzYnIHk9Jy0zNS43OTQyMjMnIGhlaWdodD0nLjc5NzAyOScgd2lkdGg9JzM4LjQzOTI1NycvPgo8L2c+Cjwvc3ZnPg==" alt="LaTeX SVG">
+      </div>
+      <figcaption>示例 LaTeX 表格</figcaption>
+      <span class="page-media-source" title="
+      \begin{tabular}{cc}
+        \toprule
+        A &amp; B \\
+        \midrule
+        1 &amp; 2 \\
+        \bottomrule
+      \end{tabular}
+    ">
+      \begin{tabular}{cc}
+        \toprule
+        A &amp; B \\
+        \midrule
+        1 &amp; 2 \\
+        \bottomrule
+      \end{tabular}
+    </span>
+    </figure>
+
+
+    <figure class="page-media page-media-figure" id="figure-component-preview" data-extra="[[&quot;width&quot;, &quot;wide&quot;]]">
+      <div class="page-media-stage">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3MjAgMjQwIj4KICA8cmVjdCB3aWR0aD0iNzIwIiBoZWlnaHQ9IjI0MCIgcng9IjI0IiBmaWxsPSIjZjhmYWZjIi8+CiAgPGcgZm9udC1mYW1pbHk9InN5c3RlbS11aSwgc2Fucy1zZXJpZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNSA3MCkiPjxyZWN0IHdpZHRoPSIxNzAiIGhlaWdodD0iMTAwIiByeD0iMTQiIGZpbGw9IiNkYmVhZmUiIHN0cm9rZT0iIzYwYTVmYSIgc3Ryb2tlLXdpZHRoPSIyIi8+PHRleHQgeD0iODUiIHk9IjQ2IiBmaWxsPSIjMWUzYThhIiBmb250LXNpemU9IjIwIiBmb250LXdlaWdodD0iNzAwIj5MZWFuIHNvdXJjZTwvdGV4dD48dGV4dCB4PSI4NSIgeT0iNzIiIGZpbGw9IiM0NzU1NjkiIGZvbnQtc2l6ZT0iMTMiPlByb29mLVNjcmlwdDwvdGV4dD48L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNzUgNzApIj48cmVjdCB3aWR0aD0iMTcwIiBoZWlnaHQ9IjEwMCIgcng9IjE0IiBmaWxsPSIjZWRlOWZlIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS13aWR0aD0iMiIvPjx0ZXh0IHg9Ijg1IiB5PSI0NiIgZmlsbD0iIzRjMWQ5NSIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjcwMCI+UGFnZSBKU09OPC90ZXh0Pjx0ZXh0IHg9Ijg1IiB5PSI3MiIgZmlsbD0iIzQ3NTU2OSIgZm9udC1zaXplPSIxMyI+Y29tcG9uZW50cyArIHByb29mczwvdGV4dD48L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MTUgNzApIj48cmVjdCB3aWR0aD0iMTcwIiBoZWlnaHQ9IjEwMCIgcng9IjE0IiBmaWxsPSIjZGNmY2U3IiBzdHJva2U9IiM0YWRlODAiIHN0cm9rZS13aWR0aD0iMiIvPjx0ZXh0IHg9Ijg1IiB5PSI0NiIgZmlsbD0iIzE0NTMyZCIgZm9udC1zaXplPSIyMCIgZm9udC13ZWlnaHQ9IjcwMCI+SFRNTCBzaXRlPC90ZXh0Pjx0ZXh0IHg9Ijg1IiB5PSI3MiIgZmlsbD0iIzQ3NTU2OSIgZm9udC1zaXplPSIxMyI+TWl0YXIgcmVuZGVyZXI8L3RleHQ+PC9nPgogICAgPHBhdGggZD0iTTIxNSAxMjBoNDhtLTE0LTEwIDE0IDEwLTE0IDEwTTQ1NSAxMjBoNDhtLTE0LTEwIDE0IDEwLTE0IDEwIiBmaWxsPSJub25lIiBzdHJva2U9IiM2NDc0OGIiIHN0cm9rZS13aWR0aD0iMyIvPgogIDwvZz4KPC9zdmc+Cg==" alt="component-preview.svg">
+      </div>
+      <figcaption>Proof-Script 到 Mitar 的构建流程</figcaption>
+      <span class="page-media-source" title="assets/component-preview.svg">assets/component-preview.svg</span>
+    </figure>
+
+
+    <section class="theorem-proof" id="theorem-gallery-result">
+      <h2>
+        <span>
+          <sup class="proof-mark pass"><i class="codicon codicon-check-all"></i></sup>
+          跨模块合取投影
+        </span>
+        <label class="proof-indent-control" title="调整当前证明的层级缩进">
+          <span class="proof-indent-value">20</span>
+          <input class="proof-indent-slider" type="range" min="15" max="30" value="20" step="1" aria-label="证明缩进">
+        </label>
+        <button class="flip-btn" type="button" title="查看 Lean 源代码">
+          <i class="codicon codicon-file-code"></i>
+        </button>
+      </h2>
+
+      <div class="proof-flip">
+        <div class="proof-flip-inner">
+          <div class="proof-flip-front">
+            <div class="goal-content">
+
+            <div class="strategy-block remark">
+              <span class="annotation-icon"><i class="codicon codicon-comment-discussion-quote"></i></span>
+              <div class="annotation-content">调用参考定理库中已经形式化的结果</div>
+            </div>
+
+            <div class="step-block ">
+              <span class="step-tag ">构造</span>
+              <span class="step-content">断言 $\operatorname{andLeft}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-86be542ddd4baa0b}{P},\htmlData{l2t-kind=fvar,l2t-ref=f-baacae71c1693193}{Q},\htmlData{l2t-kind=fvar,l2t-ref=f-f205eea9e6abe03f}{h}\right)$ 就是符合条件的对象</span>
+              <span class="final-mark">$\to\,$ 证毕</span>
+            </div>
+
+
+            </div>
+          </div>
+          <div class="proof-flip-back">
+            <div class="code-header">
+              <span>/Users/zhoukexin/Mitar/demo/MitarDemo/Gallery.lean</span>
+              <span>7lines</span>
+            </div>
+            <pre><code>
+
+    <span class="code-builtin code-theme-light">#</span><span class="code-keyword code-theme-light">theorem</span> <span class="code-keyword code-theme-light">@[</span>theorem_info <span class="code-operator code-theme-light">(</span>
+        name <span class="code-operator code-theme-light">:=</span> <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">跨模块合取投影</span><span class="code-string code-theme-light">&quot;</span><span class="code-operator code-theme-light">,</span>
+        label <span class="code-operator code-theme-light">:=</span> <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">gallery-result</span><span class="code-string code-theme-light">&quot;</span><span class="code-operator code-theme-light">,</span>
+        tags <span class="code-operator code-theme-light">:=</span> <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">demo, cross-module</span><span class="code-string code-theme-light">&quot;</span>
+      <span class="code-operator code-theme-light">)</span><span class="code-keyword code-theme-light">]</span> galleryResult <span class="code-operator code-theme-light">(</span>P Q <span class="code-operator code-theme-light">:</span> <span class="code-type code-theme-light">Prop</span><span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">(</span>h <span class="code-operator code-theme-light">:</span> P <span class="code-builtin code-theme-light">∧</span> Q<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:</span> P <span class="code-operator code-theme-light">:=</span> script
+      remark <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">调用参考定理库中已经形式化的结果</span><span class="code-string code-theme-light">&quot;</span>
+      provide <span class="code-operator code-theme-light">(</span>andLeft P Q h<span class="code-operator code-theme-light">)</span>
+
+            </code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="qed">□</div>
+    </section>
+
+
+    <section class="proof-text"><h2 id="heading-large-proof"><span class="proof-text-literal">大型证明树展示</span></h2>
+    <p><span class="proof-text-literal">下面的定理展示一个较大的组合单调性证明。我们从五个自然数之间的递增链出发，
+    依次把这条链送入三个单调函数，并证明原函数、二层复合、三层复合以及任意平移后的
+    结果仍然保持次序。证明以 </span><code>infer</code><span class="proof-text-literal"> 构造可复用的传递闭包，再用 </span><code>calc</code><span class="proof-text-literal"> 展开每一层
+    数学推导；全称量词、函数参数、中间证明和复合应用会在证明树中产生丰富的
+    free variable、bound variable、application argument 与 binder 信息。</span></p></section>
+
+    <section class="theorem-proof" id="theorem-iterated-monotone-chain">
+      <h2>
+        <span>
+          <sup class="proof-mark sorry"><i class="codicon codicon-warning"></i></sup>
+          多层单调映射的链式传递
+        </span>
+        <label class="proof-indent-control" title="调整当前证明的层级缩进">
+          <span class="proof-indent-value">20</span>
+          <input class="proof-indent-slider" type="range" min="15" max="30" value="20" step="1" aria-label="证明缩进">
+        </label>
+        <button class="flip-btn" type="button" title="查看 Lean 源代码">
+          <i class="codicon codicon-file-code"></i>
+        </button>
+      </h2>
+
+      <div class="proof-flip">
+        <div class="proof-flip-inner">
+          <div class="proof-flip-front">
+            <div class="goal-content">
+
+            <div class="strategy-block decompose">
+              <span class="tag decompose">拆分合取</span>
+              <div class="goal-content">
+
+                <div class="step-block ">
+                  <span class="step-tag ">目标拆解</span>
+                  <span class="step-content">将目标拆分为子目标逐一证明</span>
+                </div>
+
+
+                <details class="goal-block" open>
+                  <summary>
+                    <i class="codicon codicon-triangle-right toggle-icon"></i>
+                    <span class="tag default">子目标 I</span>
+                    <span class="content"></span>
+                  </summary>
+                  <div class="goal-content with-line">
+
+                    <div><div class="step-block calc">
+                      <span class="step-tag calc">推导</span>
+                      <span class="step-lhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\right)\leqslant \htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-ded638e5f5f84c1d}{i}\right)\right)$ </span>
+                      <span class="step-rel">$\ \Longrightarrow\ $</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\right)\leqslant \htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-dcddb6224d75e0c2}{j}\right)\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+
+                    <div class="step-block calc">
+                      <span class="step-tag calc"></span>
+                      <span class="step-lhs"></span>
+                      <span class="step-rel">$\ \Longrightarrow\ $</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\right)\leqslant \htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-73c00afd3060e15d}{k}\right)\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+
+                    <div class="step-block calc">
+                      <span class="step-tag calc"></span>
+                      <span class="step-lhs"></span>
+                      <span class="step-rel">$\ \Longrightarrow\ $</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\right)\leqslant \htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-43774975f2a5f1ff}{m}\right)\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+                    </div>
+                    <div><div class="step-block calc">
+                      <span class="step-tag calc">计算</span>
+                      <span class="step-lhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-669d0aa354fc76a9}{Expr1}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\right)\right)$ </span>
+                      <span class="step-rel">$\leqslant$</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-669d0aa354fc76a9}{Expr1}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-ded638e5f5f84c1d}{i}\right)\right)\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+
+                    <div class="step-block calc">
+                      <span class="step-tag calc"></span>
+                      <span class="step-lhs"></span>
+                      <span class="step-rel">$\leqslant$</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-669d0aa354fc76a9}{Expr1}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-dcddb6224d75e0c2}{j}\right)\right)\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+
+                    <div class="step-block calc">
+                      <span class="step-tag calc"></span>
+                      <span class="step-lhs"></span>
+                      <span class="step-rel">$\leqslant$</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-669d0aa354fc76a9}{Expr1}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-73c00afd3060e15d}{k}\right)\right)\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+
+                    <div class="step-block calc">
+                      <span class="step-tag calc"></span>
+                      <span class="step-lhs"></span>
+                      <span class="step-rel">$\leqslant$</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-669d0aa354fc76a9}{Expr1}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-09903e9483ec31eb}{Expr2}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-43774975f2a5f1ff}{m}\right)\right)\right)$ </span>
+                      <span class="step-cal-end"></span>
+                      <span class="final-mark">$\to\,$ 证毕</span>
+                    </div>
+                    </div>
+
+                  </div>
+                </details>
+
+
+                <details class="goal-block" open>
+                  <summary>
+                    <i class="codicon codicon-triangle-right toggle-icon"></i>
+                    <span class="tag default">子目标 II</span>
+                    <span class="content"></span>
+                  </summary>
+                  <div class="goal-content with-line">
+
+                    <div class="step-block unknown">
+                      <span class="step-tag unknown">未知策略</span>
+                      <span class="step-content"></span>
+                    </div>
+
+                    <div><div class="step-block calc">
+                      <span class="step-tag calc">推导</span>
+                      <span class="step-lhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\leqslant \htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-ded638e5f5f84c1d}{i}\right)$ </span>
+                      <span class="step-rel">$\ \Longrightarrow\ $</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\leqslant \htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-dcddb6224d75e0c2}{j}\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+
+                    <div class="step-block calc">
+                      <span class="step-tag calc"></span>
+                      <span class="step-lhs"></span>
+                      <span class="step-rel">$\ \Longrightarrow\ $</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\leqslant \htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-73c00afd3060e15d}{k}\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+
+                    <div class="step-block calc">
+                      <span class="step-tag calc"></span>
+                      <span class="step-lhs"></span>
+                      <span class="step-rel">$\ \Longrightarrow\ $</span>
+                      <span class="step-rhs"> $\htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-bb340f0410670a4c}{n}\right)\leqslant \htmlData{l2t-kind=fvar,l2t-ref=f-7da34758461bf813}{Expr3}\left(\htmlData{l2t-kind=fvar,l2t-ref=f-43774975f2a5f1ff}{m}\right)$ </span>
+                      <span class="step-cal-end"></span>
+                    </div>
+                    </div>
+                    <div class="strategy-block cause">
+                      <span class="annotation-icon"><i class="codicon codicon-workspace-unknown"></i></span>
+                      <div class="annotation-content">简单证明</div>
+                    </div>
+
+
+                  </div>
+                </details>
+
+
+              </div>
+            </div>
+
+            </div>
+          </div>
+          <div class="proof-flip-back">
+            <div class="code-header">
+              <span>/Users/zhoukexin/Mitar/demo/MitarDemo/Gallery.lean</span>
+              <span>28lines</span>
+            </div>
+            <pre><code>
+
+    <span class="code-builtin code-theme-light">#</span><span class="code-keyword code-theme-light">theorem</span> iteratedMonotoneChain
+        <span class="code-operator code-theme-light">(</span>a b c d e <span class="code-operator code-theme-light">:</span> Nat<span class="code-operator code-theme-light">)</span>
+        <span class="code-operator code-theme-light">(</span>F G H <span class="code-operator code-theme-light">:</span> Nat <span class="code-builtin code-theme-light">→</span> Nat<span class="code-operator code-theme-light">)</span>
+        <span class="code-operator code-theme-light">(</span>hab <span class="code-operator code-theme-light">:</span> a <span class="code-builtin code-theme-light">≤</span> b<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">(</span>hbc <span class="code-operator code-theme-light">:</span> b <span class="code-builtin code-theme-light">≤</span> c<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">(</span>hcd <span class="code-operator code-theme-light">:</span> c <span class="code-builtin code-theme-light">≤</span> d<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">(</span>hde <span class="code-operator code-theme-light">:</span> d <span class="code-builtin code-theme-light">≤</span> e<span class="code-operator code-theme-light">)</span>
+        <span class="code-operator code-theme-light">(</span>hF <span class="code-operator code-theme-light">:</span> <span class="code-builtin code-theme-light">∀</span> <span class="code-operator code-theme-light">⦃</span>x y <span class="code-operator code-theme-light">:</span> Nat<span class="code-operator code-theme-light">⦄</span><span class="code-operator code-theme-light">,</span> x <span class="code-builtin code-theme-light">≤</span> y <span class="code-builtin code-theme-light">→</span> F x <span class="code-builtin code-theme-light">≤</span> F y<span class="code-operator code-theme-light">)</span>
+        <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">:</span> <span class="code-builtin code-theme-light">∀</span> <span class="code-operator code-theme-light">⦃</span>x y <span class="code-operator code-theme-light">:</span> Nat<span class="code-operator code-theme-light">⦄</span><span class="code-operator code-theme-light">,</span> x <span class="code-builtin code-theme-light">≤</span> y <span class="code-builtin code-theme-light">→</span> G x <span class="code-builtin code-theme-light">≤</span> G y<span class="code-operator code-theme-light">)</span>
+        <span class="code-operator code-theme-light">(</span>hH <span class="code-operator code-theme-light">:</span> <span class="code-builtin code-theme-light">∀</span> <span class="code-operator code-theme-light">⦃</span>x y <span class="code-operator code-theme-light">:</span> Nat<span class="code-operator code-theme-light">⦄</span><span class="code-operator code-theme-light">,</span> x <span class="code-builtin code-theme-light">≤</span> y <span class="code-builtin code-theme-light">→</span> H x <span class="code-builtin code-theme-light">≤</span> H y<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:</span>
+        H <span class="code-operator code-theme-light">(</span>G <span class="code-operator code-theme-light">(</span>F a<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span> <span class="code-builtin code-theme-light">≤</span> H <span class="code-operator code-theme-light">(</span>G <span class="code-operator code-theme-light">(</span>F e<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span> <span class="code-builtin code-theme-light">∧</span>
+          <span class="code-builtin code-theme-light">∀</span> n <span class="code-operator code-theme-light">:</span> Nat<span class="code-operator code-theme-light">,</span> n <span class="code-builtin code-theme-light">+</span> F a <span class="code-builtin code-theme-light">≤</span> n <span class="code-builtin code-theme-light">+</span> F e <span class="code-operator code-theme-light">:=</span> script
+      split_and
+      <span class="code-builtin code-theme-light">|</span> left <span class="code-builtin code-theme-light">=</span><span class="code-builtin code-theme-light">&gt;</span>
+        infer
+          G <span class="code-operator code-theme-light">(</span>F a<span class="code-operator code-theme-light">)</span> <span class="code-builtin code-theme-light">≤</span> G <span class="code-operator code-theme-light">(</span>F b<span class="code-operator code-theme-light">)</span> <span class="code-builtin code-theme-light">=</span><span class="code-builtin code-theme-light">&gt;</span> G <span class="code-operator code-theme-light">(</span>F a<span class="code-operator code-theme-light">)</span> <span class="code-builtin code-theme-light">≤</span> G <span class="code-operator code-theme-light">(</span>F c<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:=</span>
+            Nat.le_trans <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">(</span>hF hab<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">(</span>hF hbc<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span>
+          _ <span class="code-builtin code-theme-light">=</span><span class="code-builtin code-theme-light">&gt;</span> G <span class="code-operator code-theme-light">(</span>F a<span class="code-operator code-theme-light">)</span> <span class="code-builtin code-theme-light">≤</span> G <span class="code-operator code-theme-light">(</span>F d<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:=</span> Nat.le_trans <span class="code-builtin code-theme-light">?</span>_ <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">(</span>hF hcd<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span>
+          _ <span class="code-builtin code-theme-light">=</span><span class="code-builtin code-theme-light">&gt;</span> G <span class="code-operator code-theme-light">(</span>F a<span class="code-operator code-theme-light">)</span> <span class="code-builtin code-theme-light">≤</span> G <span class="code-operator code-theme-light">(</span>F e<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:=</span> Nat.le_trans <span class="code-builtin code-theme-light">?</span>_ <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">(</span>hF hde<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span>
+        <span class="code-keyword code-theme-light">calc</span>
+          H <span class="code-operator code-theme-light">(</span>G <span class="code-operator code-theme-light">(</span>F a<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span> <span class="code-builtin code-theme-light">≤</span> H <span class="code-operator code-theme-light">(</span>G <span class="code-operator code-theme-light">(</span>F b<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:=</span> hH <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">(</span>hF hab<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span>
+          _ <span class="code-builtin code-theme-light">≤</span> H <span class="code-operator code-theme-light">(</span>G <span class="code-operator code-theme-light">(</span>F c<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:=</span> hH <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">(</span>hF hbc<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span>
+          _ <span class="code-builtin code-theme-light">≤</span> H <span class="code-operator code-theme-light">(</span>G <span class="code-operator code-theme-light">(</span>F d<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:=</span> hH <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">(</span>hF hcd<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span>
+          _ <span class="code-builtin code-theme-light">≤</span> H <span class="code-operator code-theme-light">(</span>G <span class="code-operator code-theme-light">(</span>F e<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:=</span> hH <span class="code-operator code-theme-light">(</span>hG <span class="code-operator code-theme-light">(</span>hF hde<span class="code-operator code-theme-light">)</span><span class="code-operator code-theme-light">)</span>
+      <span class="code-builtin code-theme-light">|</span> right <span class="code-builtin code-theme-light">=</span><span class="code-builtin code-theme-light">&gt;</span>
+        intro_var n
+        infer
+          F a <span class="code-builtin code-theme-light">≤</span> F b <span class="code-builtin code-theme-light">=</span><span class="code-builtin code-theme-light">&gt;</span> F a <span class="code-builtin code-theme-light">≤</span> F c <span class="code-operator code-theme-light">:=</span> Nat.le_trans <span class="code-operator code-theme-light">(</span>hF hab<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">(</span>hF hbc<span class="code-operator code-theme-light">)</span>
+          _ <span class="code-builtin code-theme-light">=</span><span class="code-builtin code-theme-light">&gt;</span> F a <span class="code-builtin code-theme-light">≤</span> F d <span class="code-operator code-theme-light">:=</span> Nat.le_trans <span class="code-builtin code-theme-light">?</span>_ <span class="code-operator code-theme-light">(</span>hF hcd<span class="code-operator code-theme-light">)</span>
+          _ <span class="code-builtin code-theme-light">=</span><span class="code-builtin code-theme-light">&gt;</span> F a <span class="code-builtin code-theme-light">≤</span> F e <span class="code-operator code-theme-light">:=</span> Nat.le_trans <span class="code-builtin code-theme-light">?</span>_ <span class="code-operator code-theme-light">(</span>hF hde<span class="code-operator code-theme-light">)</span>
+        cause <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">简单证明</span><span class="code-string code-theme-light">&quot;</span>
+
+            </code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="qed">□</div>
+    </section>
+
+
+    <section class="proof-text"><p><span class="proof-text-literal">证明完成后，</span><a class="page-reference reference-theorem" href="Gallery.html#theorem-gallery-result">gallery-result</a><span class="proof-text-literal"> 指向当前页面中的 theorem component。
+    大型证明可以通过 </span><a class="page-reference reference-theorem" href="Gallery.html#theorem-iterated-monotone-chain">iterated-monotone-chain</a><span class="proof-text-literal"> 定位。
+    接下来的 references component 会把证明中实际使用的外部定理按项目分组展示。</span></p></section>
+
+    <div class="references">
+      <h2 class="references-title">参考文献</h2>
+      <div class="reference-list">
+
+        <details class="reference-item">
+          <summary>
+            <span class="reference-index">1</span>
+            <span class="reference-main">
+              <span class="reference-label">Mitar 完整组件展示</span>
+              <span class="reference-subtitle">Mitar Contributors · Mitar Demo Collection · 2026</span>
+            </span>
+            <button type="button" class="reference-info">
+              <i class="codicon codicon-info"></i>
+            </button>
+            <span class="reference-toggle">
+              <i class="codicon codicon-chevron-down"></i>
+            </span>
+          </summary>
+          <dialog class="reference-info-dialog">
+            <div class="reference-info-dialog-body">
+              <form method="dialog">
+                <button type="submit" class="reference-info-dialog-close">
+                  <i class="codicon codicon-close"></i>
+                </button>
+              </form>
+              <h3 class="reference-info-dialog-title">文献信息</h3>
+              <div class="reference-info-row">
+                <span class="reference-info-key">标题</span>
+                <span class="reference-info-value">Mitar 完整组件展示</span>
+              </div>
+
+              <div class="reference-info-row">
+                <span class="reference-info-key">作者</span>
+                <span class="reference-info-value">Mitar Contributors</span>
+              </div>
+
+              <div class="reference-info-row">
+                <span class="reference-info-key">摘要</span>
+                <span class="reference-info-value">一个由 Proof-Script 编写并由 Mitar 生成的交互式形式化数学展示项目。</span>
+              </div>
+
+              <div class="reference-info-row">
+                <span class="reference-info-key">关键词</span>
+                <span class="reference-info-value">Lean 4, Proof-Script, Mitar, formal mathematics</span>
+              </div>
+
+              <div class="reference-info-row">
+                <span class="reference-info-key">期刊</span>
+                <span class="reference-info-value">Mitar Demo Collection</span>
+              </div>
+
+              <div class="reference-info-row">
+                <span class="reference-info-key">年份</span>
+                <span class="reference-info-value">2026</span>
+              </div>
+
+              <div class="reference-info-row">
+                <span class="reference-info-key">网址</span>
+                <span class="reference-info-value"><a href="https://github.com/JokerXin2025/Mitar">https://github.com/JokerXin2025/Mitar</a></span>
+              </div>
+
+              <div class="reference-info-row">
+                <span class="reference-info-key">许可</span>
+                <span class="reference-info-value">MIT</span>
+              </div>
+
+              <div class="reference-info-row">
+                <span class="reference-info-key">备注</span>
+                <span class="reference-info-value">此页面同时作为跨模块参考文献的来源。</span>
+              </div>
+
+            </div>
+          </dialog>
+          <div class="reference-theorems">
+            <a class="theorem-link" href="Library.html#theorem-and-left">
+              <span class="theorem-name">合取左投影</span>
+              <span class="theorem-location">Library.lean:29</span>
+              <span class="theorem-go"><i class="codicon codicon-arrow-right"></i></span>
+            </a>
+
+          </div>
+        </details>
+
+
+      </div>
+    </div>
+
+
+    <section class="proof-text"><h2 id="heading-component-order"><span class="proof-text-literal">组件顺序</span></h2>
+    <p><span class="proof-text-literal">参考文献之后仍然可以继续插入 ProofText。这个段落证明 Mitar 严格保持
+    </span><code>components</code><span class="proof-text-literal"> 数组的源文件顺序，而不是把参考文献强制移动到页面末尾。</span></p></section>
+
+        </main>
+    </div>
+
+<script>
+window.addEventListener('load', function(){
+    setTimeout(function(){ window.dispatchEvent(new Event('resize')) }, 500);
+});
+</script>
+
+</body>
+</html>

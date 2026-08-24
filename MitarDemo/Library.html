@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN" overflow-y: scroll;>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MitarDemo.Library</title>
+
+    <link rel="stylesheet" href="/css/codicon.css">
+    <link rel="stylesheet" href="/css/basic.css">
+    <link rel="stylesheet" href="/css/step.css">
+    <link rel="stylesheet" href="/css/goal.css">
+    <link rel="stylesheet" href="/css/strategy.css">
+    <link rel="stylesheet" href="/css/sundry.css">
+    <link rel="stylesheet" href="/css/animation.css">
+    <link rel="stylesheet" href="/css/diagram.css">
+    <link rel="stylesheet" href="/css/references.css">
+    <link rel="stylesheet" href="/css/proof-text.css">
+    <link rel="stylesheet" href="/css/media.css">
+    <link rel="stylesheet" href="/css/code-flip.css">
+    <link rel="stylesheet" href="/css/screen-warning.css">
+    <link rel="stylesheet" href="/css/lean2tex.css">
+
+    <script defer src="/js/katex.js"></script>
+    <script defer src="/js/diagram.js"></script>
+    <script defer src="/js/animation.js"></script>
+    <script defer src="/js/equation_size.js"></script>
+    <script defer src="/js/code-flip.js"></script>
+    <script defer src="/js/references.js"></script>
+    <script defer src="/js/lean2tex.js"></script>
+    <script defer src="/js/proof-indent.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+</head>
+
+<body>
+
+    <div id="device-warning">
+        <div class="warning-content">
+            <div class="warning-icon"><i class="codicon codicon-move"></i></div>
+            <h2 class="warning-title">请使用平板或电脑访问</h2>
+            <p class="warning-desc">
+                为了保证最佳阅读体验<br>
+                本页面暂不支持窄屏浏览
+            </p>
+        </div>
+    </div>
+
+    <div class="page-layout">
+        <aside class="module-sidebar" aria-label="模块目录">
+          <div class="module-sidebar-inner">
+            <div class="module-sidebar-heading">
+              <span class="page-nav-logo" aria-hidden="true">M</span>
+              <span>模块目录</span>
+            </div>
+            <div class="module-absolute-path">
+              <span>当前位置</span>
+              <strong>Mitar / MitarDemo / Library</strong>
+            </div>
+            <nav aria-label="当前模块附近的项目树">
+              <ul class="module-context-tree"><li class="module-tree-root"><a class="module-tree-parent" href="../index.html"><span class="module-tree-node-mark" aria-hidden="true"></span>MitarDemo</a><ul><li><a class="module-tree-node" href="Gallery.html"><span class="module-tree-node-mark" aria-hidden="true"></span>Gallery</a></li><li class="is-current-branch"><a class="module-tree-node is-current" href="Library.html" aria-current="page"><span class="module-tree-node-mark" aria-hidden="true"></span>Library</a></li></ul></li></ul>
+            </nav>
+            <a class="module-sidebar-index" href="../index.html">查看完整项目索引</a>
+          </div>
+        </aside>
+        <main id="main-content" class="proof-container">
+
+    <section class="proof-text"><h1 id="heading-library"><span class="proof-text-literal">参考定理库</span></h1>
+    <p><span class="proof-text-literal">本模块提供主展示页面所引用的基础结果。定理元数据会跨模块保存在环境中，
+    当另一个 </span><code>#theorem</code><span class="proof-text-literal"> 使用这些结果时，Proof-Script 会自动把它们加入参考文献暂存区。</span></p></section>
+
+    <section class="theorem-proof" id="theorem-and-left">
+      <h2>
+        <span>
+          <sup class="proof-mark pass"><i class="codicon codicon-check-all"></i></sup>
+          合取左投影
+        </span>
+        <label class="proof-indent-control" title="调整当前证明的层级缩进">
+          <span class="proof-indent-value">20</span>
+          <input class="proof-indent-slider" type="range" min="15" max="30" value="20" step="1" aria-label="证明缩进">
+        </label>
+        <button class="flip-btn" type="button" title="查看 Lean 源代码">
+          <i class="codicon codicon-file-code"></i>
+        </button>
+      </h2>
+
+      <div class="proof-flip">
+        <div class="proof-flip-inner">
+          <div class="proof-flip-front">
+            <div class="goal-content">
+
+            <div class="step-block ">
+              <span class="step-tag ">构造</span>
+              <span class="step-content">断言 $\htmlData{l2t-kind=fvar,l2t-ref=f-0eb19e471c205583}{h}$ 就是符合条件的对象</span>
+              <span class="final-mark">$\to\,$ 证毕</span>
+            </div>
+
+
+            </div>
+          </div>
+          <div class="proof-flip-back">
+            <div class="code-header">
+              <span>/Users/zhoukexin/Mitar/demo/MitarDemo/Library.lean</span>
+              <span>7lines</span>
+            </div>
+            <pre><code>
+
+    <span class="code-builtin code-theme-light">#</span><span class="code-keyword code-theme-light">theorem</span> <span class="code-keyword code-theme-light">@[</span>theorem_info <span class="code-operator code-theme-light">(</span>
+        name <span class="code-operator code-theme-light">:=</span> <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">合取左投影</span><span class="code-string code-theme-light">&quot;</span><span class="code-operator code-theme-light">,</span>
+        label <span class="code-operator code-theme-light">:=</span> <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">and-left</span><span class="code-string code-theme-light">&quot;</span><span class="code-operator code-theme-light">,</span>
+        tags <span class="code-operator code-theme-light">:=</span> <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">logic, projection</span><span class="code-string code-theme-light">&quot;</span><span class="code-operator code-theme-light">,</span>
+        note <span class="code-operator code-theme-light">:=</span> <span class="code-string code-theme-light">&quot;</span><span class="code-string code-theme-light">从合取命题中取得左侧结论</span><span class="code-string code-theme-light">&quot;</span>
+      <span class="code-operator code-theme-light">)</span><span class="code-keyword code-theme-light">]</span> andLeft <span class="code-operator code-theme-light">(</span>P Q <span class="code-operator code-theme-light">:</span> <span class="code-type code-theme-light">Prop</span><span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">(</span>h <span class="code-operator code-theme-light">:</span> P <span class="code-builtin code-theme-light">∧</span> Q<span class="code-operator code-theme-light">)</span> <span class="code-operator code-theme-light">:</span> P <span class="code-operator code-theme-light">:=</span> script
+      provide h.left
+
+            </code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="qed">□</div>
+    </section>
+
+
+    <section class="proof-text"><p><span class="proof-text-literal">上面的证明展示了一个最小但完整的 theorem component。主页面会引用
+    </span><a class="page-reference reference-theorem" href="Library.html#theorem-and-left">and-left</a><span class="proof-text-literal">，并在参考文献板块中链接回本页。</span></p></section>
+
+        </main>
+    </div>
+
+<script>
+window.addEventListener('load', function(){
+    setTimeout(function(){ window.dispatchEvent(new Event('resize')) }, 500);
+});
+</script>
+
+</body>
+</html>
