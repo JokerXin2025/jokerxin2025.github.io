@@ -9,6 +9,20 @@
     --paper-highlight: #fff0a8;
 }
 
+.proof-text-card {
+    position: relative;
+}
+
+.proof-text-card > .proof-text-flip-button {
+    display: flex;
+    width: fit-content;
+    margin: 0 0 4px auto;
+}
+
+.proof-text-flip-inner {
+    width: 100%;
+}
+
 .proof-text {
     color: var(--paper-ink);
     font-family: Georgia, "Noto Serif SC", "Songti SC", serif;

@@ -2,7 +2,7 @@
 .proof-flip-inner {
     position: relative;
     /* 调整了动画时长和曲线，使扁平翻转更利落 */
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out, height 0.5s ease-in-out;
     transform-style: preserve-3d;
 }
 .proof-flip-inner.flipped { transform: rotateY(180deg); }
@@ -38,6 +38,7 @@
     tab-size: 2;
     white-space: pre;
     counter-reset: line;
+    min-height: 0;
 }
 
 /* Light syntax theme for Lean source shown on the reverse side. */

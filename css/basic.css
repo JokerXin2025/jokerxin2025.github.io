@@ -43,7 +43,7 @@ body {
     font-size: 14px;
     line-height: 1.5;
     color: var(--text-color);
-    width: 1180px;
+    width: 1260px;
     max-width: calc(100% - 48px);
     margin: 0 auto;
 }
@@ -54,25 +54,40 @@ a {
 
 .page-layout {
     display: grid;
-    grid-template-columns: 236px minmax(0, 900px);
+    grid-template-columns: 300px minmax(0, 900px);
     gap: 44px;
     align-items: start;
 }
 
 .module-sidebar {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: max(24px, calc(50vw - 630px));
+    width: 300px;
+    height: 100vh;
     min-width: 0;
+    overflow: hidden;
     font-family: system-ui, -apple-system, sans-serif;
 }
 
 .module-sidebar-inner {
-    position: sticky;
-    top: 20px;
-    max-height: calc(100vh - 40px);
-    overflow: auto;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
     box-sizing: border-box;
-    padding: 18px 14px 16px;
+    padding: 20px 20px 56px;
     border-right: 1px solid var(--border-color-light);
+}
+
+.module-sidebar-inner::after {
+    content: "";
+    position: absolute;
+    right: 1px;
+    bottom: 0;
+    left: 0;
+    height: 72px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 78%);
 }
 
 .module-sidebar-heading {
@@ -81,25 +96,16 @@ a {
     gap: 10px;
     margin-bottom: 18px;
     color: var(--text-color);
-    font-size: 12px;
-    font-weight: 750;
-    letter-spacing: 0.06em;
-}
-
-.page-nav-logo {
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    background: #172b3a;
-    color: #fff;
-    font-family: Georgia, serif;
     font-size: 15px;
-    font-weight: 800;
+    font-weight: 750;
+    letter-spacing: 0.02em;
+    overflow-wrap: anywhere;
 }
 
 .module-absolute-path {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin: 0 0 20px;
     padding: 10px 11px;
     border: 1px solid var(--border-color-light);
@@ -107,15 +113,17 @@ a {
     background: #f8fafc;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 11px;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
 }
 
-.module-absolute-path span,
-.module-absolute-path strong {
-    display: block;
+.module-absolute-path::-webkit-scrollbar {
+    display: none;
 }
 
 .module-absolute-path span {
-    margin-bottom: 4px;
+    flex: 0 0 auto;
     color: var(--text-muted);
     font-family: system-ui, -apple-system, sans-serif;
     font-size: 9px;
@@ -124,7 +132,7 @@ a {
 }
 
 .module-absolute-path strong {
-    overflow-wrap: anywhere;
+    flex: 0 0 auto;
     color: var(--text-color);
     font-size: 11px;
     font-weight: 650;
@@ -240,6 +248,26 @@ a {
 .module-sidebar-index:hover {
     color: var(--ref-color);
 }
+
+.theorem-dependency-navigation { margin: 22px 8px 0; padding-top: 18px; border-top: 1px solid var(--border-color-light); }
+.theorem-dependency-navigation[hidden], .theorem-dependency-panel[hidden] { display: none; }
+.theorem-dependency-navigation h3, .theorem-dependency-current { font-family: system-ui, -apple-system, sans-serif; }
+.theorem-dependency-navigation h3 { margin: 0 0 12px; color: var(--text-muted); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+.theorem-dependency-level { position: relative; margin: 0; padding: 0 0 0 28px; list-style: none; }
+.theorem-dependency-level li { position: relative; padding: 3px 0; }
+.theorem-dependency-node, .theorem-dependency-current { display: flex; align-items: center; gap: 9px; min-height: 32px; box-sizing: border-box; padding: 0 8px; border-radius: 7px; }
+.theorem-dependency-node { overflow: hidden; color: #475569; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
+.theorem-dependency-node:hover { background: #f1f5f9; color: var(--ref-color); }
+.theorem-dependency-current { position: relative; z-index: 1; margin: 8px 0; background: #edf5ff; color: #1d4ed8; font-size: 11.5px; font-weight: 750; }
+.theorem-dependency-current strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.theorem-dependency-mark { position: relative; z-index: 2; flex: 0 0 8px; width: 8px; height: 8px; box-sizing: border-box; border: 2px solid #94a3b8; border-radius: 50%; background: #fff; }
+.theorem-dependency-current .theorem-dependency-mark { border-color: #2563eb; background: #2563eb; box-shadow: 0 0 0 4px #dbeafe; }
+.theorem-dependency-level::before { content: ""; position: absolute; top: 0; bottom: 0; left: 10px; border-left: 1px solid #94a3b8; }
+.theorem-dependency-level li::before { content: ""; position: absolute; top: 19px; left: -18px; width: 18px; border-top: 1px solid #94a3b8; }
+.theorem-dependency-level.incoming { padding-bottom: 5px; }
+.theorem-dependency-level.incoming::after { content: ""; position: absolute; bottom: -4px; left: 7px; border-top: 6px solid #2563eb; border-right: 4px solid transparent; border-left: 4px solid transparent; }
+.theorem-dependency-level.outgoing { padding-top: 5px; }
+.theorem-dependency-level.outgoing li::after { content: ""; position: absolute; top: 16px; left: -3px; border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-left: 6px solid #2563eb; }
 
 .project-header {
     margin-top: 72px;
@@ -360,6 +388,61 @@ a {
     cursor: ns-resize;
 }
 
+.language-switcher {
+    position: relative;
+    display: flex;
+    margin: -6px 0 18px;
+}
+
+.language-button {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 5px 8px;
+    color: var(--text-muted);
+    background: #fff;
+    cursor: pointer;
+}
+
+.language-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 5;
+    display: none;
+    min-width: 100px;
+    padding: 4px;
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14);
+}
+
+.language-switcher:hover .language-menu,
+.language-switcher.is-open .language-menu,
+.language-switcher:focus-within .language-menu {
+    display: grid;
+}
+
+.language-menu button {
+    border: 0;
+    padding: 6px 8px;
+    text-align: left;
+    background: transparent;
+    cursor: pointer;
+}
+
+.language-menu button:hover,
+.language-menu button[aria-checked="true"] {
+    background: #eff6ff;
+}
+
+[data-language-panel][hidden] {
+    display: none;
+}
+
 .page-code {
     overflow-x: auto;
     padding: 16px 18px;
@@ -439,6 +522,7 @@ h2 sup {
 }
 
 .proof-container {
+    grid-column: 2;
     width: 100%;
     min-width: 0;
     margin-top: 10px;
