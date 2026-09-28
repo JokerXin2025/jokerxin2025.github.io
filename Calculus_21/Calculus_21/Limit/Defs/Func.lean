@@ -92,7 +92,7 @@ variable {F G : RFunction} {x₀ L L₁ L₂ : ℝ}
     linarith
 
 /-- Uniqueness of RFunction Limit -/
-@theorem FuncLimit_Unique
+@theorem FuncLimit.unique
     (h₁ : FuncLimit F x₀ L₁) (h₂ : FuncLimit F x₀ L₂)
   : L₁ = L₂
 := by
@@ -140,7 +140,7 @@ variable {F G : RFunction} {x₀ L L₁ L₂ : ℝ}
     linarith [abs_nonneg (F.map x₀)]
 
 /-- Uniqueness of Left Limit -/
-@theorem LeftLimit_Unique
+@theorem LeftLimit.unique
     (h₁ : LeftLimit F x₀ L₁) (h₂ : LeftLimit F x₀ L₂)
   : L₁ = L₂
 := by
@@ -157,7 +157,7 @@ variable {F G : RFunction} {x₀ L L₁ L₂ : ℝ}
   exact ⟨F.map (x₀ - δ / 2), h₁ _ h_x₁, h₂ _ h_x₂⟩
 
 /-- Uniqueness of Right Limit -/
-@theorem RightLimit_Unique
+@theorem RightLimit.unique
     (h₁ : RightLimit F x₀ L₁) (h₂ : RightLimit F x₀ L₂)
   : L₁ = L₂
 := by
@@ -174,7 +174,7 @@ variable {F G : RFunction} {x₀ L L₁ L₂ : ℝ}
   exact ⟨F.map (x₀ + δ / 2), h₁ _ h_x₁, h₂ _ h_x₂⟩
 
 /-- Uniqueness of Limit at Positive Infinity -/
-@theorem PosInftyLimit_Unique
+@theorem PosInftyLimit.unique
     (h₁ : PosInftyLimit F L₁) (h₂ : PosInftyLimit F L₂)
   : L₁ = L₂
 := by
@@ -209,7 +209,7 @@ variable {F G : RFunction} {x₀ L L₁ L₂ : ℝ}
   linarith
 
 /-- Uniqueness of Limit at Negative Infinity -/
-@theorem NegInftyLimit_Unique
+@theorem NegInftyLimit.unique
     (h₁ : NegInftyLimit F L₁) (h₂ : NegInftyLimit F L₂)
   : L₁ = L₂
 := by
@@ -246,7 +246,7 @@ variable {F G : RFunction} {x₀ L L₁ L₂ : ℝ}
   linarith
 
 /-- Uniqueness of Limit at Infinity -/
-@theorem InftyLimit_Unique
+@theorem InftyLimit.unique
     (h₁ : InftyLimit F L₁) (h₂ : InftyLimit F L₂)
   : L₁ = L₂
 := by
@@ -261,6 +261,78 @@ variable {F G : RFunction} {x₀ L L₁ L₂ : ℝ}
   · apply h₂pos
     change M₂ < max M₁ M₂ + 1
     linarith [le_max_right M₁ M₂]
+
+/-- A function converging to a nonzero value is locally nonzero. -/
+theorem FuncLimit.LocallyNeZero
+    (h_lim : FuncLimit F x₀ L) (h_L : L ≠ 0)
+  : ∃ δ > 0, ∀ x ∈ Nbhd x₀ δ, F.map x ≠ 0
+:= by
+  rcases h_lim.2 |L| (abs_pos.mpr h_L) with ⟨δ, hδ, hmap⟩
+  refine ⟨δ, hδ, fun x hx hzero => ?_⟩
+  have hnear := hmap x hx
+  rw [Nbho_abs, hzero, zero_sub, abs_neg] at hnear
+  exact lt_irrefl |L| hnear
+
+/-- A function with a nonzero left limit is locally nonzero from the left. -/
+theorem LeftLimit.LocallyNeZero
+    (h_lim : LeftLimit F x₀ L) (h_L : L ≠ 0)
+  : ∃ δ > 0, ∀ x ∈ Ioo (x₀ - δ) x₀, F.map x ≠ 0
+:= by
+  rcases h_lim.2 |L| (abs_pos.mpr h_L) with ⟨δ, hδ, hmap⟩
+  refine ⟨δ, hδ, fun x hx hzero => ?_⟩
+  have hnear := hmap x hx
+  rw [Nbho_abs, hzero, zero_sub, abs_neg] at hnear
+  exact lt_irrefl |L| hnear
+
+/-- A function with a nonzero right limit is locally nonzero from the right. -/
+theorem RightLimit.LocallyNeZero
+    (h_lim : RightLimit F x₀ L) (h_L : L ≠ 0)
+  : ∃ δ > 0, ∀ x ∈ Ioo x₀ (x₀ + δ), F.map x ≠ 0
+:= by
+  rcases h_lim.2 |L| (abs_pos.mpr h_L) with ⟨δ, hδ, hmap⟩
+  refine ⟨δ, hδ, fun x hx hzero => ?_⟩
+  have hnear := hmap x hx
+  rw [Nbho_abs, hzero, zero_sub, abs_neg] at hnear
+  exact lt_irrefl |L| hnear
+
+/-- A function with a nonzero limit at positive infinity is eventually nonzero. -/
+theorem PosInftyLimit.EventuallyNeZero
+    (h_lim : PosInftyLimit F L) (h_L : L ≠ 0)
+  : ∃ M > 0, ∀ x ∈ Ioi M, F.map x ≠ 0
+:= by
+  rcases h_lim.2 |L| (abs_pos.mpr h_L) with ⟨M, hM, hmap⟩
+  refine ⟨M, hM, fun x hx hzero => ?_⟩
+  have hnear := hmap x hx
+  rw [Nbho_abs, hzero, zero_sub, abs_neg] at hnear
+  exact lt_irrefl |L| hnear
+
+/-- A function with a nonzero limit at negative infinity is eventually nonzero. -/
+theorem NegInftyLimit.EventuallyNeZero
+    (h_lim : NegInftyLimit F L) (h_L : L ≠ 0)
+  : ∃ M > 0, ∀ x ∈ Iio (-M), F.map x ≠ 0
+:= by
+  rcases h_lim.2 |L| (abs_pos.mpr h_L) with ⟨M, hM, hmap⟩
+  refine ⟨M, hM, fun x hx hzero => ?_⟩
+  have hnear := hmap x hx
+  rw [Nbho_abs, hzero, zero_sub, abs_neg] at hnear
+  exact lt_irrefl |L| hnear
+
+/-- A function with a nonzero limit at infinity is eventually nonzero on both tails. -/
+theorem InftyLimit.EventuallyNeZero
+    (h_lim : InftyLimit F L) (h_L : L ≠ 0)
+  : ∃ M > 0, (∀ x ∈ Iio (-M), F.map x ≠ 0) ∧
+      (∀ x ∈ Ioi M, F.map x ≠ 0)
+:= by
+  rcases h_lim.2 |L| (abs_pos.mpr h_L) with ⟨M, hM, hneg, hpos⟩
+  refine ⟨M, hM, ?_, ?_⟩
+  · intro x hx hzero
+    have hnear := hneg x hx
+    rw [Nbho_abs, hzero, zero_sub, abs_neg] at hnear
+    exact lt_irrefl |L| hnear
+  · intro x hx hzero
+    have hnear := hpos x hx
+    rw [Nbho_abs, hzero, zero_sub, abs_neg] at hnear
+    exact lt_irrefl |L| hnear
 
 /-- Congruence of RFunction Limit -/
 @theorem FuncLimit.Congr

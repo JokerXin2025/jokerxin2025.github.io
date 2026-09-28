@@ -5,44 +5,42 @@
 -/
 
 import «Calculus_21».Limit.Expr.Init
-import «Calculus_21».Limit.Elementary
 set_option linter.style.header false
 
-local macro "exists" data:term "with" cond:term : tactic => `(tactic| refine ⟨$data, $cond, ?_⟩)
+local macro "script_exists" data:term "with" cond:term : tactic => `(tactic| refine ⟨$data, $cond, ?_⟩)
 
 
 /-! # Properties of Limit Expression -/
 
-open Classical in
-private lemma generic_congr {C P N U : Prop} {C' P' N' U' : Prop}
-    {evC : C → ℝ} {evC' : C' → ℝ}
-    (hC : C ↔ C') (hP : P ↔ P') (hN : N ↔ N') (hU : U ↔ U')
-    (hevC : ∀ h h', evC h = evC' h')
-  : genericExpr C P N U evC = genericExpr C' P' N' U' evC'
-:= by
-  by_cases hc : C
-  · have hc' := hC.mp hc
-    simp [genericExpr, hc, hc', hevC hc hc']
-  · have hc' : ¬ C' := fun h => hc (hC.mpr h)
-    by_cases hp : P
-    · have hp' := hP.mp hp
-      simp [genericExpr, hc, hc', hp, hp']
-    · have hp' : ¬ P' := fun h => hp (hP.mpr h)
-      by_cases hn : N
-      · have hn' := hN.mp hn
-        simp [genericExpr, hc, hc', hp, hp', hn, hn']
-      · have hn' : ¬ N' := fun h => hn (hN.mpr h)
-        by_cases hu : U
-        · have hu' := hU.mp hu
-          simp [genericExpr, hc, hc', hp, hp', hn, hn', hu, hu']
-        · have hu' : ¬ U' := fun h => hu (hU.mpr h)
-          simp [genericExpr, hc, hc', hp, hp', hn, hn', hu, hu']
-
 open Classical in section
 variable {a b : ℕ → ℝ} {f g : ℝ → ℝ} {x₀ : ℝ}
 
+private lemma generic_congr {C P N U : Prop} {C' P' N' U' : Prop}
+    [laws : GenericExprLaws C P N U] [laws' : GenericExprLaws C' P' N' U']
+    (hC : C ↔ C') (hP : P ↔ P') (hN : N ↔ N') (hU : U ↔ U')
+    (hevC : ∀ h h', laws.evC h = laws'.evC h')
+  : GenericExpr C P N U = GenericExpr C' P' N' U'
+:= by
+  by_cases hc : C
+  · have hc' := hC.mp hc
+    simp [GenericExpr, hc, hc', hevC hc hc']
+  · have hc' : ¬ C' := fun h => hc (hC.mpr h)
+    by_cases hp : P
+    · have hp' := hP.mp hp
+      simp [GenericExpr, hc, hc', hp, hp']
+    · have hp' : ¬ P' := fun h => hp (hP.mpr h)
+      by_cases hn : N
+      · have hn' := hN.mp hn
+        simp [GenericExpr, hc, hc', hp, hp', hn, hn']
+      · have hn' : ¬ N' := fun h => hn (hN.mpr h)
+        by_cases hu : U
+        · have hu' := hU.mp hu
+          simp [GenericExpr, hc, hc', hp, hp', hn, hn', hu, hu']
+        · have hu' : ¬ U' := fun h => hu (hU.mpr h)
+          simp [GenericExpr, hc, hc', hp, hp', hn, hn', hu, hu']
+
 /-- Congruence of RSequence Limit (Expression) -/
-lemma SeqLimitExpr.Congr {a b : ℕ → ℝ}
+theorem SeqLimitExpr.Congr
     (h_congr : ∃ N : ℕ, ∀ n > N, a n = b n)
   : limₙ a = limₙ b
 := by
@@ -67,12 +65,12 @@ lemma SeqLimitExpr.Congr {a b : ℕ → ℝ}
     · exact SeqLimitInfty.Congr h rfl h_congr
     · exact SeqLimitInfty.Congr h rfl h_congr'
   · intro hA hB
-    exact SeqLimit_Unique ((choose_spec hA).Congr rfl h_congr) (choose_spec hB)
+    exact ((choose_spec hA).Congr rfl h_congr).unique (choose_spec hB)
 
 /-- Congruence of RFunction Limit (Expression) -/
-lemma FuncLimitExpr.Congr {f g : ℝ → ℝ} {x₀ : ℝ}
+theorem FuncLimitExpr.Congr
     (h_congr : ∃ δ > 0, ∀ x ∈ Nbhd x₀ δ, f x = g x)
-  : lim f x₀ = lim g x₀
+  : lim x₀ f = lim x₀ g
 := by
   let F : RFunction := ⟨f, Iii⟩
   let G : RFunction := ⟨g, Iii⟩
@@ -94,15 +92,15 @@ lemma FuncLimitExpr.Congr {f g : ℝ → ℝ} {x₀ : ℝ}
     · exact FuncLimitInfty.Congr h ⟨δ, hδ, fun _ _ => trivial, heq⟩
     · exact FuncLimitInfty.Congr h ⟨δ, hδ, fun _ _ => trivial, heq'⟩
   · intro hF hG
-    exact FuncLimit_Unique
+    exact
       (FuncLimit.Congr (F := F) (G := G) (choose_spec hF)
-        ⟨δ, hδ, fun _ _ => trivial, heq⟩)
+        ⟨δ, hδ, fun _ _ => trivial, heq⟩).unique
       (choose_spec hG)
 
 /-- Congruence of Left Limit (Expression) -/
-lemma LeftLimitExpr.Congr {f g : ℝ → ℝ} {x₀ : ℝ}
+theorem LeftLimitExpr.Congr
     (h_congr : ∃ δ > 0, ∀ x ∈ Ioo (x₀ - δ) x₀, f x = g x)
-  : lim₋ f x₀ = lim₋ g x₀
+  : lim₋ x₀ f = lim₋ x₀ g
 := by
   let F : RFunction := ⟨f, Iii⟩
   let G : RFunction := ⟨g, Iii⟩
@@ -124,15 +122,15 @@ lemma LeftLimitExpr.Congr {f g : ℝ → ℝ} {x₀ : ℝ}
     · exact LeftLimitInfty.Congr h ⟨δ, hδ, fun _ _ => trivial, heq⟩
     · exact LeftLimitInfty.Congr h ⟨δ, hδ, fun _ _ => trivial, heq'⟩
   · intro hF hG
-    exact LeftLimit_Unique
+    exact
       (LeftLimit.Congr (F := F) (G := G) (choose_spec hF)
-        ⟨δ, hδ, fun _ _ => trivial, heq⟩)
+        ⟨δ, hδ, fun _ _ => trivial, heq⟩).unique
       (choose_spec hG)
 
 /-- Congruence of Right Limit (Expression) -/
-lemma RightLimitExpr.Congr {f g : ℝ → ℝ} {x₀ : ℝ}
+theorem RightLimitExpr.Congr
     (h_congr : ∃ δ > 0, ∀ x ∈ Ioo x₀ (x₀ + δ), f x = g x)
-  : lim₊ f x₀ = lim₊ g x₀
+  : lim₊ x₀ f = lim₊ x₀ g
 := by
   let F : RFunction := ⟨f, Iii⟩
   let G : RFunction := ⟨g, Iii⟩
@@ -154,13 +152,13 @@ lemma RightLimitExpr.Congr {f g : ℝ → ℝ} {x₀ : ℝ}
     · exact RightLimitInfty.Congr h ⟨δ, hδ, fun _ _ => trivial, heq⟩
     · exact RightLimitInfty.Congr h ⟨δ, hδ, fun _ _ => trivial, heq'⟩
   · intro hF hG
-    exact RightLimit_Unique
+    exact
       (RightLimit.Congr (F := F) (G := G) (choose_spec hF)
-        ⟨δ, hδ, fun _ _ => trivial, heq⟩)
+        ⟨δ, hδ, fun _ _ => trivial, heq⟩).unique
       (choose_spec hG)
 
 /-- Congruence of Limit at Positive Infinity (Expression) -/
-lemma PosInftyLimitExpr.Congr {f g : ℝ → ℝ}
+theorem PosInftyLimitExpr.Congr
     (h_congr : ∃ M > 0, ∀ x ∈ Ioi M, f x = g x)
   : lim pos_infty f = lim pos_infty g
 := by
@@ -184,13 +182,13 @@ lemma PosInftyLimitExpr.Congr {f g : ℝ → ℝ}
     · exact PosInftyLimitInfty.Congr h ⟨M, hM, fun _ _ => trivial, heq⟩
     · exact PosInftyLimitInfty.Congr h ⟨M, hM, fun _ _ => trivial, heq'⟩
   · intro hF hG
-    exact PosInftyLimit_Unique
+    exact
       (PosInftyLimit.Congr (F := F) (G := G) (choose_spec hF)
-        ⟨M, hM, fun _ _ => trivial, heq⟩)
+        ⟨M, hM, fun _ _ => trivial, heq⟩).unique
       (choose_spec hG)
 
 /-- Congruence of Limit at Negative Infinity (Expression) -/
-lemma NegInftyLimitExpr.Congr {f g : ℝ → ℝ}
+theorem NegInftyLimitExpr.Congr
     (h_congr : ∃ M > 0, ∀ x ∈ Iio (-M), f x = g x)
   : lim neg_infty f = lim neg_infty g
 := by
@@ -214,13 +212,13 @@ lemma NegInftyLimitExpr.Congr {f g : ℝ → ℝ}
     · exact NegInftyLimitInfty.Congr h ⟨M, hM, fun _ _ => trivial, heq⟩
     · exact NegInftyLimitInfty.Congr h ⟨M, hM, fun _ _ => trivial, heq'⟩
   · intro hF hG
-    exact NegInftyLimit_Unique
+    exact
       (NegInftyLimit.Congr (F := F) (G := G) (choose_spec hF)
-        ⟨M, hM, fun _ _ => trivial, heq⟩)
+        ⟨M, hM, fun _ _ => trivial, heq⟩).unique
       (choose_spec hG)
 
 /-- Congruence of Limit at Infinity (Expression) -/
-lemma InftyLimitExpr.Congr {f g : ℝ → ℝ}
+theorem InftyLimitExpr.Congr
     (h_congr : ∃ M > 0, (∀ x ∈ Iio (-M), f x = g x) ∧ (∀ x ∈ Ioi M, f x = g x))
   : lim infty f = lim infty g
 := by
@@ -259,9 +257,9 @@ lemma InftyLimitExpr.Congr {f g : ℝ → ℝ}
         ⟨M, hM, fun _ _ => trivial, fun _ _ => trivial,
           fun x h_x => h_x.elim (fun h_x => hpos' x h_x) (fun h_x => hneg' x h_x)⟩
   · intro hF hG
-    exact InftyLimit_Unique
+    exact
       (InftyLimit.Congr (F := F) (G := G) (choose_spec hF)
-        ⟨M, hM, fun _ _ => trivial, fun _ _ => trivial, hneg, hpos⟩)
+        ⟨M, hM, fun _ _ => trivial, fun _ _ => trivial, hneg, hpos⟩).unique
       (choose_spec hG)
 
 end
@@ -279,17 +277,17 @@ theorem SeqLimitExpr.SMul
 
 /-- RFunction Limit of Scalar Multiplication (Expression) -/
 theorem FuncLimitExpr.SMul
-  : lim (k • f) x₀ =. the k * lim f x₀
+  : lim x₀ (k • f) =. the k * lim x₀ f
 := sorry
 
 /-- Left Limit of Scalar Multiplication (Expression) -/
 theorem LeftLimitExpr.SMul
-  : lim₋ (k • f) x₀ =. the k * lim₋ f x₀
+  : lim₋ x₀ (k • f) =. the k * lim₋ x₀ f
 := sorry
 
 /-- Right Limit of Scalar Multiplication (Expression) -/
 theorem RightLimitExpr.SMul
-  : lim₊ (k • f) x₀ =. the k * lim₊ f x₀
+  : lim₊ x₀ (k • f) =. the k * lim₊ x₀ f
 := sorry
 
 /-- RSequence Limit of Scalar Multiplication (Expression) -/
@@ -299,17 +297,17 @@ theorem SeqLimitExpr.SMul'
 
 /-- RFunction Limit of Scalar Multiplication (Expression) -/
 theorem FuncLimitExpr.SMul'
-  : lim (fun x ↦ f x * k) x₀ =. lim f x₀ * the k
+  : (lim x₀ fun x ↦ f x * k) =. lim x₀ f * the k
 := sorry
 
 /-- Left Limit of Scalar Multiplication (Expression) -/
 theorem LeftLimitExpr.SMul'
-  : lim₋ (fun x ↦ f x * k) x₀ =. lim₋ f x₀ * the k
+  : (lim₋ x₀ fun x ↦ f x * k) =. lim₋ x₀ f * the k
 := sorry
 
 /-- Right Limit of Scalar Multiplication (Expression) -/
 theorem RightLimitExpr.SMul'
-  : lim₊ (fun x ↦ f x * k) x₀ =. lim₊ f x₀ * the k
+  : (lim₊ x₀ fun x ↦ f x * k) =. lim₊ x₀ f * the k
 := sorry
 
 /-- RSequence Limit of Additive Inverse (Expression) -/
@@ -319,17 +317,17 @@ theorem SeqLimitExpr.Neg
 
 /-- RFunction Limit of Additive Inverse (Expression) -/
 theorem FuncLimitExpr.Neg
-  : lim (-f) x₀ =. - lim f x₀
+  : lim x₀ (-f) =. - lim x₀ f
 := sorry
 
 /-- Left Limit of Additive Inverse (Expression) -/
 theorem LeftLimitExpr.Neg
-  : lim₋ (-f) x₀ =. - lim₋ f x₀
+  : lim₋ x₀ (-f) =. - lim₋ x₀ f
 := sorry
 
 /-- Right Limit of Additive Inverse (Expression) -/
 theorem RightLimitExpr.Neg
-  : lim₊ (-f) x₀ =. - lim₊ f x₀
+  : lim₊ x₀ (-f) =. - lim₊ x₀ f
 := sorry
 
 /-- RSequence Limit of Multiplicative Scalar Power (Expression) -/
@@ -339,17 +337,17 @@ theorem SeqLimitExpr.MSPow
 
 /-- RFunction Limit of Multiplicative Scalar Power (Expression) -/
 theorem FuncLimitExpr.MSPow
-  : lim (f ^ n) x₀ =. lim f x₀ ^ the n
+  : lim x₀ (f ^ n) =. lim x₀ f ^ the n
 := sorry
 
 /-- Left Limit of Multiplicative Scalar Power (Expression) -/
 theorem LeftLimitExpr.MSPow
-  : lim₋ (f ^ n) x₀ =. lim₋ f x₀ ^ the n
+  : lim₋ x₀ (f ^ n) =. lim₋ x₀ f ^ the n
 := sorry
 
 /-- Right Limit of Multiplicative Scalar Power (Expression) -/
 theorem RightLimitExpr.MSPow
-  : lim₊ (f ^ n) x₀ =. lim₊ f x₀ ^ the n
+  : lim₊ x₀ (f ^ n) =. lim₊ x₀ f ^ the n
 := sorry
 
 /-- RSequence Limit of Multiplicative Inverse (Expression) -/
@@ -359,17 +357,17 @@ theorem SeqLimitExpr.Inv
 
 /-- RFunction Limit of Multiplicative Inverse (Expression) -/
 theorem FuncLimitExpr.Inv
-  : lim f⁻¹ x₀ =. (lim f x₀)⁻¹
+  : lim x₀ f⁻¹ =. (lim x₀ f)⁻¹
 := sorry
 
 /-- Left Limit of Multiplicative Inverse (Expression) -/
 theorem LeftLimitExpr.Inv
-  : lim₋ f⁻¹ x₀ =. (lim₋ f x₀)⁻¹
+  : lim₋ x₀ f⁻¹ =. (lim₋ x₀ f)⁻¹
 := sorry
 
 /-- Right Limit of Multiplicative Inverse (Expression) -/
 theorem RightLimitExpr.Inv
-  : lim₊ f⁻¹ x₀ =. (lim₊ f x₀)⁻¹
+  : lim₊ x₀ f⁻¹ =. (lim₊ x₀ f)⁻¹
 := sorry
 
 /-- RSequence Limit Addition (Expression) -/
@@ -379,17 +377,17 @@ theorem SeqLimitExpr.Add
 
 /-- RFunction Limit Addition (Expression) -/
 theorem FuncLimitExpr.Add
-  : lim (f + g) x₀ =. lim f x₀ + lim g x₀
+  : lim x₀ (f + g) =. lim x₀ f + lim x₀ g
 := sorry
 
 /-- Left Limit Addition (Expression) -/
 theorem LeftLimitExpr.Add
-  : lim₋ (f + g) x₀ =. lim₋ f x₀ + lim₋ g x₀
+  : lim₋ x₀ (f + g) =. lim₋ x₀ f + lim₋ x₀ g
 := sorry
 
 /-- Right Limit Addition (Expression) -/
 theorem RightLimitExpr.Add
-  : lim₊ (f + g) x₀ =. lim₊ f x₀ + lim₊ g x₀
+  : lim₊ x₀ (f + g) =. lim₊ x₀ f + lim₊ x₀ g
 := sorry
 
 /-- RSequence Limit Subtraction (Expression) -/
@@ -399,17 +397,17 @@ theorem SeqLimitExpr.Sub
 
 /-- RFunction Limit Subtraction (Expression) -/
 theorem FuncLimitExpr.Sub
-  : lim (f - g) x₀ =. lim f x₀ - lim g x₀
+  : lim x₀ (f - g) =. lim x₀ f - lim x₀ g
 := sorry
 
 /-- Left Limit Subtraction (Expression) -/
 theorem LeftLimitExpr.Sub
-  : lim₋ (f - g) x₀ =. lim₋ f x₀ - lim₋ g x₀
+  : lim₋ x₀ (f - g) =. lim₋ x₀ f - lim₋ x₀ g
 := sorry
 
 /-- Right Limit Subtraction (Expression) -/
 theorem RightLimitExpr.Sub
-  : lim₊ (f - g) x₀ =. lim₊ f x₀ - lim₊ g x₀
+  : lim₊ x₀ (f - g) =. lim₊ x₀ f - lim₊ x₀ g
 := sorry
 
 /-- RSequence Limit Multiplication (Expression) -/
@@ -419,17 +417,17 @@ theorem SeqLimitExpr.Mul
 
 /-- RFunction Limit Multiplication (Expression) -/
 theorem FuncLimitExpr.Mul
-  : lim (f * g) x₀ =. lim f x₀ * lim g x₀
+  : lim x₀ (f * g) =. lim x₀ f * lim x₀ g
 := sorry
 
 /-- Left Limit Multiplication (Expression) -/
 theorem LeftLimitExpr.Mul
-  : lim₋ (f * g) x₀ =. lim₋ f x₀ * lim₋ g x₀
+  : lim₋ x₀ (f * g) =. lim₋ x₀ f * lim₋ x₀ g
 := sorry
 
 /-- Right Limit Multiplication (Expression) -/
 theorem RightLimitExpr.Mul
-  : lim₊ (f * g) x₀ =. lim₊ f x₀ * lim₊ g x₀
+  : lim₊ x₀ (f * g) =. lim₊ x₀ f * lim₊ x₀ g
 := sorry
 
 /-- RSequence Limit Division (Expression) -/
@@ -439,17 +437,17 @@ theorem SeqLimitExpr.Div
 
 /-- RFunction Limit Division (Expression) -/
 theorem FuncLimitExpr.Div
-  : lim (f / g) x₀ =. lim f x₀ / lim g x₀
+  : lim x₀ (f / g) =. lim x₀ f / lim x₀ g
 := sorry
 
 /-- Left Limit Division (Expression) -/
 theorem LeftLimitExpr.Div
-  : lim₋ (f / g) x₀ =. lim₋ f x₀ / lim₋ g x₀
+  : lim₋ x₀ (f / g) =. lim₋ x₀ f / lim₋ x₀ g
 := sorry
 
 /-- Right Limit Division (Expression) -/
 theorem RightLimitExpr.Div
-  : lim₊ (f / g) x₀ =. lim₊ f x₀ / lim₊ g x₀
+  : lim₊ x₀ (f / g) =. lim₊ x₀ f / lim₊ x₀ g
 := sorry
 
 end
@@ -459,12 +457,12 @@ variable {a b c : ℕ → ℝ} {f g h : ℝ → ℝ} {x₀ : ℝ} {A : LimitValu
 
 /-- RFunction Limit → Left Limit (Expression) -/
 theorem FuncLimitExpr.toLeft
-  : lim f x₀ =. A → lim₋ f x₀ =. A
+  : lim x₀ f =. A → lim₋ x₀ f =. A
 := sorry
 
 /-- RFunction Limit → Right Limit (Expression) -/
 theorem FuncLimitExpr.toRight
-  : lim f x₀ =. A → lim₊ f x₀ =. A
+  : lim x₀ f =. A → lim₊ x₀ f =. A
 := sorry
 
 /-- Limit at Infinity → Limit at Positive Infinity (Expression) -/
@@ -486,7 +484,7 @@ theorem SeqLimitExpr.Squeeze
 /-- Squeeze Theorem for RFunction Limit (Expression) -/
 theorem FuncLimitExpr.Squeeze
     (h_sqz : ∃ δ > 0, ∀ x ∈ Nbhd x₀ δ, f x ≤ g x ∧ g x ≤ h x)
-  : lim f x₀ =. A ∧ lim h x₀ =. A → lim g x₀ =. A
+  : lim x₀ f =. A ∧ lim x₀ h =. A → lim x₀ g =. A
 := sorry
 
 end

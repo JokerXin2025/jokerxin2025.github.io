@@ -41,7 +41,7 @@ private lemma LimitUniqueLemma
     linarith
 
 /-- Uniqueness of RSequence Limit -/
-@theorem SeqLimit_Unique
+@theorem SeqLimit.unique
     (h₁ : SeqLimit A L₁) (h₂ : SeqLimit A L₂)
   : L₁ = L₂
 := by
@@ -53,6 +53,17 @@ private lemma LimitUniqueLemma
   constructor
   · exact hN₁ _ (by omega)
   · exact hN₂ _ (by omega)
+
+/-- A sequence converging to a nonzero value is eventually nonzero. -/
+theorem SeqLimit.EventuallyNeZero
+    (h_lim : SeqLimit A L) (h_L : L ≠ 0)
+  : ∃ N : ℕ, ∀ n > N, A.map n ≠ 0
+:= by
+  rcases h_lim.2 |L| (abs_pos.mpr h_L) with ⟨N, hmap⟩
+  refine ⟨N, fun n hn hzero => ?_⟩
+  have hnear := hmap n hn
+  rw [Nbho_abs, hzero, zero_sub, abs_neg] at hnear
+  exact lt_irrefl |L| hnear
 
 /-- Boundedness of Convergent RSequence -/
 @theorem SeqLimit_Bounded

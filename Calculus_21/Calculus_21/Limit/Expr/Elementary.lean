@@ -8,1035 +8,1033 @@ import «Calculus_21».Limit.Expr.BasicRules
 import «Calculus_21».Limit.Elementary
 set_option linter.style.header false
 
-local macro "exists" data:term "with" cond:term : tactic => `(tactic| refine ⟨$data, $cond, ?_⟩)
-
 
 section
 variable {n : ℤ} {C a x₀ : ℝ}
 
-/-- Constant RFunction's Limit (Expression) -/
+/-- Constant Function's Limit (Expression) -/
 lemma FuncLimitExpr.Constant
-  : lim (const C) x₀ =. the C
+  : lim x₀ (const C) =. the C
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Constant x₀ (mem_univ x₀) |>.right
+  exact Continuity.Constant x₀ (mem_univ _) |>.right
 
-/-- Constant RFunction's Left Limit (Expression) -/
+/-- Constant Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Constant
-  : lim₋ (const C) x₀ =. the C
+  : lim₋ x₀ (const C) =. the C
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Constant
 
-/-- Constant RFunction's Right Limit (Expression) -/
+/-- Constant Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Constant
-  : lim₊ (const C) x₀ =. the C
+  : lim₊ x₀ (const C) =. the C
 := FuncLimitExpr.toRight <| FuncLimitExpr.Constant
 
-/-- Constant RFunction's Limit at Positive Infinity (Expression) -/
+/-- Constant Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Constant
   : lim pos_infty (const C) =. the C
 := sorry
 
-/-- Constant RFunction's Limit at Negative Infinity (Expression) -/
+/-- Constant Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Constant
   : lim neg_infty (const C) =. the C
 := sorry
 
-/-- Constant RFunction's Limit at Infinity (Expression) -/
+/-- Constant Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Constant
   : lim infty (const C) =. the C
 := sorry
 
-/-- Identity RFunction's Limit (Expression) -/
+/-- Identity Function's Limit (Expression) -/
 lemma FuncLimitExpr.Identity
-  : lim id x₀ =. the x₀
+  : lim x₀ id =. the x₀
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Identity x₀ (mem_univ x₀) |>.right
+  exact Continuity.Identity x₀ (mem_univ _) |>.right
 
-/-- Identity RFunction's Left Limit (Expression) -/
+/-- Identity Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Identity
-  : lim₋ id x₀ =. the x₀
+  : lim₋ x₀ id =. the x₀
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Identity
 
-/-- Identity RFunction's Right Limit (Expression) -/
+/-- Identity Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Identity
-  : lim₊ id x₀ =. the x₀
+  : lim₊ x₀ id =. the x₀
 := FuncLimitExpr.toRight <| FuncLimitExpr.Identity
 
-/-- Identity RFunction's Limit at Positive Infinity (Expression) -/
+/-- Identity Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Identity
   : lim pos_infty id = pos_infty
 := sorry
 
-/-- Identity RFunction's Limit at Negative Infinity (Expression) -/
+/-- Identity Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Identity
   : lim neg_infty id = neg_infty
 := sorry
 
-/-- Identity RFunction's Limit at Infinity (Expression) -/
+/-- Identity Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Identity
   : lim infty id = infty
 := sorry
 
-/-- Absolute Value RFunction's Limit (Expression) -/
+/-- Absolute Value Function's Limit (Expression) -/
 lemma FuncLimitExpr.Abs
-  : lim abs x₀ =. the |x₀|
+  : lim x₀ abs =. the |x₀|
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Abs x₀ (mem_univ x₀) |>.right
+  exact Continuity.Abs x₀ (mem_univ _) |>.right
 
-/-- Absolute Value RFunction's Left Limit (Expression) -/
+/-- Absolute Value Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Abs
-  : lim₋ abs x₀ =. the |x₀|
+  : lim₋ x₀ abs =. the |x₀|
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Abs
 
-/-- Absolute Value RFunction's Right Limit (Expression) -/
+/-- Absolute Value Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Abs
-  : lim₊ abs x₀ =. the |x₀|
+  : lim₊ x₀ abs =. the |x₀|
 := FuncLimitExpr.toRight <| FuncLimitExpr.Abs
 
-/-- Absolute Value RFunction's Limit at Positive Infinity (Expression) -/
+/-- Absolute Value Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Abs
   : lim pos_infty abs = pos_infty
 := sorry
 
-/-- Absolute Value RFunction's Limit at Negative Infinity (Expression) -/
+/-- Absolute Value Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Abs
   : lim neg_infty abs = pos_infty
 := sorry
 
-/-- Absolute Value RFunction's Limit at Infinity (Expression) -/
+/-- Absolute Value Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Abs
   : lim infty abs = pos_infty
 := sorry
 
-/-- Square Root RFunction's Limit at `x₀ > 0` (Expression) -/
+/-- Square Root Function's Limit at `x₀ > 0` (Expression) -/
 lemma FuncLimitExpr.Sqrt
     (h_dom : x₀ > 0)
-  : lim sqrt x₀ =. the (√x₀)
+  : lim x₀ sqrt =. the (√x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Sqrt x₀ h_dom |>.right
 
-/-- Square Root RFunction's Limit at `x₀ ≤ 0` (Expression) -/
+/-- Square Root Function's Limit at `x₀ ≤ 0` (Expression) -/
 lemma FuncLimitExpr.Sqrt_diverg
     (h_dom : x₀ ≤ 0)
-  : lim sqrt x₀ = diverg
+  : lim x₀ sqrt = diverg
 := sorry
 
-/-- Square Root RFunction's Left Limit at `x₀ > 0` (Expression) -/
+/-- Square Root Function's Left Limit at `x₀ > 0` (Expression) -/
 lemma LeftLimitExpr.Sqrt
     (h_dom : x₀ > 0)
-  : lim₋ sqrt x₀ =. the (√x₀)
+  : lim₋ x₀ sqrt =. the (√x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Sqrt h_dom
 
-/-- Square Root RFunction's Left Limit at `x₀ ≤ 0` (Expression) -/
+/-- Square Root Function's Left Limit at `x₀ ≤ 0` (Expression) -/
 lemma LeftLimitExpr.Sqrt_diverg
     (h_dom : x₀ ≤ 0)
-  : lim₋ sqrt x₀ = diverg
+  : lim₋ x₀ sqrt = diverg
 := sorry
 
-/-- Square Root RFunction's Right Limit at `x₀ ≥ 0` (Expression) -/
+/-- Square Root Function's Right Limit at `x₀ ≥ 0` (Expression) -/
 lemma RightLimitExpr.Sqrt
     (h_dom : x₀ ≥ 0)
-  : lim₊ sqrt x₀ =. the (√x₀)
+  : lim₊ x₀ sqrt =. the (√x₀)
 := sorry
 
-/-- Square Root RFunction's Right Limit at `x₀ < 0` (Expression) -/
+/-- Square Root Function's Right Limit at `x₀ < 0` (Expression) -/
 lemma RightLimitExpr.Sqrt_diverg
     (h_dom : x₀ < 0)
-  : lim₊ sqrt x₀ = diverg
+  : lim₊ x₀ sqrt = diverg
 := sorry
 
-/-- Square Root RFunction's Limit at Positive Infinity (Expression) -/
+/-- Square Root Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Sqrt
   : lim pos_infty sqrt = pos_infty
 := sorry
 
-/-- Square Root RFunction's Limit at Negative Infinity (Expression) -/
+/-- Square Root Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Sqrt
   : lim neg_infty sqrt = diverg  -- actually not in domine
 := sorry
 
-/-- Square Root RFunction's Limit at Infinity (Expression) -/
+/-- Square Root Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Sqrt
   : lim infty sqrt = diverg  -- actually not in domine
 := sorry
 
-/-- Power RFunction's Limit (Expression) -/
+/-- Power Function's Limit (Expression) -/
 lemma FuncLimitExpr.Power
     (h_dom : x₀ > 0)
-  : lim (pow a) x₀ =. the (x₀ ^ a)
+  : lim x₀ (pow a) =. the (x₀ ^ a)
 := sorry
 
-/-- Power RFunction's Left Limit (Expression) -/
+/-- Power Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Power
     (h_dom : x₀ > 0)
-  : lim₋ (pow a) x₀ =. the (x₀ ^ a)
+  : lim₋ x₀ (pow a) =. the (x₀ ^ a)
 := sorry
 
-/-- Power RFunction's Right Limit (Expression) -/
+/-- Power Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Power
     (h_dom : x₀ > 0 ∨ (a ≥ 0 ∧ x₀ = 0))
-  : lim₊ (pow a) x₀ =. the (x₀ ^ a)
+  : lim₊ x₀ (pow a) =. the (x₀ ^ a)
 := sorry
 
-/-- Power RFunction's Right Limit at `0` when `a < 0` (Expression) -/
+/-- Power Function's Right Limit at `0` when `a < 0` (Expression) -/
 lemma RightLimitExpr.Power_posInfty
     (h_a : a < 0)
-  : lim₊ (pow a) 0 = pos_infty
+  : lim₊ 0 (pow a) = pos_infty
 := sorry
 
-/-- Power RFunction's Limit outside its Domain (Expression) -/
+/-- Power Function's Limit outside its Defs (Expression) -/
 lemma FuncLimitExpr.Power_diverg
     (h_dom : x₀ ≤ 0)
-  : lim (pow a) x₀ = diverg
+  : lim x₀ (pow a) = diverg
 := sorry
 
-/-- Power RFunction's Left Limit outside its Domain (Expression) -/
+/-- Power Function's Left Limit outside its Defs (Expression) -/
 lemma LeftLimitExpr.Power_diverg
     (h_dom : x₀ ≤ 0)
-  : lim₋ (pow a) x₀ = diverg
+  : lim₋ x₀ (pow a) = diverg
 := sorry
 
-/-- Power RFunction's Right Limit outside its Domain (Expression) -/
+/-- Power Function's Right Limit outside its Defs (Expression) -/
 lemma RightLimitExpr.Power_diverg
     (h_dom : x₀ < 0)
-  : lim₊ (pow a) x₀ = diverg
+  : lim₊ x₀ (pow a) = diverg
 := sorry
 
-/-- Power RFunction's Limit at Positive Infinity when `a > 0` (Expression) -/
+/-- Power Function's Limit at Positive Infinity when `a > 0` (Expression) -/
 lemma PosInftyLimitExpr.Power_pos
     (h_a : a > 0)
   : lim pos_infty (pow a) = pos_infty
 := sorry
 
-/-- Power RFunction's Limit at Positive Infinity when `a = 0` (Expression) -/
+/-- Power Function's Limit at Positive Infinity when `a = 0` (Expression) -/
 lemma PosInftyLimitExpr.Power_zero
     (h_a : a = 0)
   : lim pos_infty (pow a) =. the 1
 := sorry
 
-/-- Power RFunction's Limit at Positive Infinity when `a < 0` (Expression) -/
+/-- Power Function's Limit at Positive Infinity when `a < 0` (Expression) -/
 lemma PosInftyLimitExpr.Power_neg
     (h_a : a < 0)
   : lim pos_infty (pow a) =. the 0
 := sorry
 
-/-- Power RFunction's Limit at Negative Infinity (Expression) -/
+/-- Power Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Power
   : lim neg_infty (pow a) = diverg
 := sorry
 
-/-- Power RFunction's Limit at Infinity (Expression) -/
+/-- Power Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Power
   : lim infty (pow a) = diverg
 := sorry
 
-/-- Power RFunction's Limit for `n : ℤ` (Expression) -/
+/-- Power Function's Limit for `n : ℤ` (Expression) -/
 lemma FuncLimitExpr.Power_ℤ
     (h_dom : n ≥ 0 ∨ x₀ ≠ 0)
-  : lim (npow n) x₀ =. the (x₀ ^ n)
+  : lim x₀ (npow n) =. the (x₀ ^ n)
 := sorry
 
-/-- Power RFunction's Left Limit for `n : ℤ` (Expression) -/
+/-- Power Function's Left Limit for `n : ℤ` (Expression) -/
 lemma LeftLimitExpr.Power_ℤ
     (h_dom : n ≥ 0 ∨ x₀ ≠ 0)
-  : lim₋ (npow n) x₀ =. the (x₀ ^ n)
+  : lim₋ x₀ (npow n) =. the (x₀ ^ n)
 := sorry
 
-/-- Power RFunction's Right Limit for `n : ℤ` (Expression) -/
+/-- Power Function's Right Limit for `n : ℤ` (Expression) -/
 lemma RightLimitExpr.Power_ℤ
     (h_dom : n ≥ 0 ∨ x₀ ≠ 0)
-  : lim₊ (npow n) x₀ =. the (x₀ ^ n)
+  : lim₊ x₀ (npow n) =. the (x₀ ^ n)
 := sorry
 
-/-- Integral Power RFunction's Right Limit at `0` when `n < 0` (Expression) -/
+/-- Integral Power Function's Right Limit at `0` when `n < 0` (Expression) -/
 lemma RightLimitExpr.Power_ℤ_posInfty
     (h_n : n < 0)
-  : lim₊ (npow n) 0 = pos_infty
+  : lim₊ 0 (npow n) = pos_infty
 := sorry
 
-/-- Even Integral Power RFunction's Left Limit at `0` when `n < 0` (Expression) -/
+/-- Even Integral Power Function's Left Limit at `0` when `n < 0` (Expression) -/
 lemma LeftLimitExpr.Power_ℤ_posInfty
     (h_n : n < 0) (h_even : Even n)
-  : lim₋ (npow n) 0 = pos_infty
+  : lim₋ 0 (npow n) = pos_infty
 := sorry
 
-/-- Odd Integral Power RFunction's Left Limit at `0` when `n < 0` (Expression) -/
+/-- Odd Integral Power Function's Left Limit at `0` when `n < 0` (Expression) -/
 lemma LeftLimitExpr.Power_ℤ_negInfty
     (h_n : n < 0) (h_odd : Odd n)
-  : lim₋ (npow n) 0 = neg_infty
+  : lim₋ 0 (npow n) = neg_infty
 := sorry
 
-/-- Even Integral Power RFunction's Limit at `0` when `n < 0` (Expression) -/
+/-- Even Integral Power Function's Limit at `0` when `n < 0` (Expression) -/
 lemma FuncLimitExpr.Power_ℤ_posInfty
     (h_n : n < 0) (h_even : Even n)
-  : lim (npow n) 0 = pos_infty
+  : lim 0 (npow n) = pos_infty
 := sorry
 
-/-- Odd Integral Power RFunction's Limit at `0` when `n < 0` (Expression) -/
+/-- Odd Integral Power Function's Limit at `0` when `n < 0` (Expression) -/
 lemma FuncLimitExpr.Power_ℤ_unsignedInfty
     (h_n : n < 0) (h_odd : Odd n)
-  : lim (npow n) 0 = infty
+  : lim 0 (npow n) = infty
 := sorry
 
-/-- Integral Power RFunction's Limit at Positive Infinity when `n > 0` (Expression) -/
+/-- Integral Power Function's Limit at Positive Infinity when `n > 0` (Expression) -/
 lemma PosInftyLimitExpr.Power_ℤ_pos
     (h_n : n > 0)
   : lim pos_infty (npow n) = pos_infty
 := sorry
 
-/-- Integral Power RFunction's Limit at Positive Infinity when `n = 0` (Expression) -/
+/-- Integral Power Function's Limit at Positive Infinity when `n = 0` (Expression) -/
 lemma PosInftyLimitExpr.Power_ℤ_zero
     (h_n : n = 0)
   : lim pos_infty (npow n) =. the 1
 := sorry
 
-/-- Integral Power RFunction's Limit at Positive Infinity when `n < 0` (Expression) -/
+/-- Integral Power Function's Limit at Positive Infinity when `n < 0` (Expression) -/
 lemma PosInftyLimitExpr.Power_ℤ_neg
     (h_n : n < 0)
   : lim pos_infty (npow n) =. the 0
 := sorry
 
-/-- Even Integral Power RFunction's Limit at Negative Infinity when `n > 0` (Expression) -/
+/-- Even Integral Power Function's Limit at Negative Infinity when `n > 0` (Expression) -/
 lemma NegInftyLimitExpr.Power_ℤ_pos_even
     (h_n : n > 0) (h_even : Even n)
   : lim neg_infty (npow n) = pos_infty
 := sorry
 
-/-- Odd Integral Power RFunction's Limit at Negative Infinity when `n > 0` (Expression) -/
+/-- Odd Integral Power Function's Limit at Negative Infinity when `n > 0` (Expression) -/
 lemma NegInftyLimitExpr.Power_ℤ_pos_odd
     (h_n : n > 0) (h_odd : Odd n)
   : lim neg_infty (npow n) = neg_infty
 := sorry
 
-/-- Integral Power RFunction's Limit at Negative Infinity when `n = 0` (Expression) -/
+/-- Integral Power Function's Limit at Negative Infinity when `n = 0` (Expression) -/
 lemma NegInftyLimitExpr.Power_ℤ_zero
     (h_n : n = 0)
   : lim neg_infty (npow n) =. the 1
 := sorry
 
-/-- Integral Power RFunction's Limit at Negative Infinity when `n < 0` (Expression) -/
+/-- Integral Power Function's Limit at Negative Infinity when `n < 0` (Expression) -/
 lemma NegInftyLimitExpr.Power_ℤ_neg
     (h_n : n < 0)
   : lim neg_infty (npow n) =. the 0
 := sorry
 
-/-- Even Integral Power RFunction's Limit at Infinity when `n > 0` (Expression) -/
+/-- Even Integral Power Function's Limit at Infinity when `n > 0` (Expression) -/
 lemma InftyLimitExpr.Power_ℤ_pos_even
     (h_n : n > 0) (h_even : Even n)
   : lim infty (npow n) = pos_infty
 := sorry
 
-/-- Odd Integral Power RFunction's Limit at Infinity when `n > 0` (Expression) -/
+/-- Odd Integral Power Function's Limit at Infinity when `n > 0` (Expression) -/
 lemma InftyLimitExpr.Power_ℤ_pos_odd
     (h_n : n > 0) (h_odd : Odd n)
   : lim infty (npow n) = infty
 := sorry
 
-/-- Integral Power RFunction's Limit at Infinity when `n = 0` (Expression) -/
+/-- Integral Power Function's Limit at Infinity when `n = 0` (Expression) -/
 lemma InftyLimitExpr.Power_ℤ_zero
     (h_n : n = 0)
   : lim infty (npow n) =. the 1
 := sorry
 
-/-- Integral Power RFunction's Limit at Infinity when `n < 0` (Expression) -/
+/-- Integral Power Function's Limit at Infinity when `n < 0` (Expression) -/
 lemma InftyLimitExpr.Power_ℤ_neg
     (h_n : n < 0)
   : lim infty (npow n) =. the 0
 := sorry
 
-/-- Natural Exponential RFunction's Limit (Expression) -/
+/-- Natural Exponential Function's Limit (Expression) -/
 lemma FuncLimitExpr.Exp
-  : lim exp x₀ =. the (exp x₀)
+  : lim x₀ exp =. the (exp x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Exp x₀ (mem_univ x₀) |>.right
+  exact Continuity.Exp x₀ (mem_univ _) |>.right
 
-/-- Natural Exponential RFunction's Left Limit (Expression) -/
+/-- Natural Exponential Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Exp
-  : lim₋ exp x₀ =. the (exp x₀)
+  : lim₋ x₀ exp =. the (exp x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Exp
 
-/-- Natural Exponential RFunction's Right Limit (Expression) -/
+/-- Natural Exponential Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Exp
-  : lim₊ exp x₀ =. the (exp x₀)
+  : lim₊ x₀ exp =. the (exp x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Exp
 
-/-- Natural Exponential RFunction's Limit at Positive Infinity (Expression) -/
+/-- Natural Exponential Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Exp
   : lim pos_infty exp = pos_infty
 := sorry
 
-/-- Natural Exponential RFunction's Limit at Negative Infinity (Expression) -/
+/-- Natural Exponential Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Exp
   : lim neg_infty exp =. the 0
 := sorry
 
-/-- Natural Exponential RFunction's Limit at Infinity (Expression) -/
+/-- Natural Exponential Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Exp
   : lim infty exp =. diverg
 := sorry
 
-/-- Exponential RFunction's Limit (Expression) -/
+/-- Exponential Function's Limit (Expression) -/
 lemma FuncLimitExpr.Expow
     (h_dom : a > 0)
-  : lim (a ^ ·) x₀ =. the (a ^ x₀)
+  : lim x₀ (a ^ ·) =. the (a ^ x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Expow h_dom x₀ (mem_univ x₀) |>.right
+  exact Continuity.Expow h_dom x₀ (mem_univ _) |>.right
 
-/-- Exponential RFunction's Left Limit (Expression) -/
+/-- Exponential Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Expow
     (h_dom : a > 0)
-  : lim₋ (a ^ ·) x₀ =. the (a ^ x₀)
+  : lim₋ x₀ (a ^ ·) =. the (a ^ x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Expow h_dom
 
-/-- Exponential RFunction's Right Limit (Expression) -/
+/-- Exponential Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Expow
     (h_dom : a > 0)
-  : lim₊ (a ^ ·) x₀ =. the (a ^ x₀)
+  : lim₊ x₀ (a ^ ·) =. the (a ^ x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Expow h_dom
 
-/-- Exponential RFunction's Limit at Positive Infinity when `a > 1` (Expression) -/
+/-- Exponential Function's Limit at Positive Infinity when `a > 1` (Expression) -/
 lemma PosInftyLimitExpr.Expow_gt_one
     (h_a : a > 1)
   : lim pos_infty (a ^ ·) = pos_infty
 := sorry
 
-/-- Exponential RFunction's Limit at Negative Infinity when `a > 1` (Expression) -/
+/-- Exponential Function's Limit at Negative Infinity when `a > 1` (Expression) -/
 lemma NegInftyLimitExpr.Expow_gt_one
     (h_a : a > 1)
   : lim neg_infty (a ^ ·) =. the 0
 := sorry
 
-/-- Exponential RFunction's Limit at Positive Infinity when `0 < a < 1` (Expression) -/
+/-- Exponential Function's Limit at Positive Infinity when `0 < a < 1` (Expression) -/
 lemma PosInftyLimitExpr.Expow_lt_one
     (h_a : 0 < a ∧ a < 1)
   : lim pos_infty (a ^ ·) =. the 0
 := sorry
 
-/-- Exponential RFunction's Limit at Negative Infinity when `0 < a < 1` (Expression) -/
+/-- Exponential Function's Limit at Negative Infinity when `0 < a < 1` (Expression) -/
 lemma NegInftyLimitExpr.Expow_lt_one
     (h_a : 0 < a ∧ a < 1)
   : lim neg_infty (a ^ ·) = pos_infty
 := sorry
 
-/-- Natural Logarithm RFunction's Limit at `x₀ > 0` (Expression) -/
+/-- Natural Logarithm Function's Limit at `x₀ > 0` (Expression) -/
 lemma FuncLimitExpr.Ln
     (h_dom : x₀ > 0)
-  : lim ln x₀ =. the (ln x₀)
+  : lim x₀ ln =. the (ln x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Ln x₀ h_dom |>.right
 
-/-- Natural Logarithm RFunction's Left Limit at `x₀ > 0` (Expression) -/
+/-- Natural Logarithm Function's Left Limit at `x₀ > 0` (Expression) -/
 lemma LeftLimitExpr.Ln
     (h_dom : x₀ > 0)
-  : lim₋ ln x₀ =. the (ln x₀)
+  : lim₋ x₀ ln =. the (ln x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Ln h_dom
 
-/-- Natural Logarithm RFunction's Right Limit at `x₀ > 0` (Expression) -/
+/-- Natural Logarithm Function's Right Limit at `x₀ > 0` (Expression) -/
 lemma RightLimitExpr.Ln
     (h_dom : x₀ > 0)
-  : lim₊ ln x₀ =. the (ln x₀)
+  : lim₊ x₀ ln =. the (ln x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Ln h_dom
 
-/-- Natural Logarithm RFunction's Right Limit at `0` (Expression) -/
+/-- Natural Logarithm Function's Right Limit at `0` (Expression) -/
 lemma RightLimitExpr.Ln_zero
-  : lim₊ ln 0 = neg_infty
+  : lim₊ 0 ln = neg_infty
 := sorry
 
-/-- Natural Logarithm RFunction's Limit at Positive Infinity (Expression) -/
+/-- Natural Logarithm Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Ln
   : lim pos_infty ln = pos_infty
 := sorry
 
-/-- Logarithm RFunction's Limit (Expression) -/
+/-- Logarithm Function's Limit (Expression) -/
 lemma FuncLimitExpr.Log
     (h_dom : x₀ > 0 ∧ a > 0 ∧ a ≠ 1)
-  : lim (log a) x₀ =. the (log a x₀)
+  : lim x₀ (log a) =. the (log a x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Log h_dom.right x₀ h_dom.1 |>.right
 
-/-- Logarithm RFunction's Left Limit (Expression) -/
+/-- Logarithm Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Log
     (h_dom : x₀ > 0 ∧ a > 0 ∧ a ≠ 1)
-  : lim₋ (log a) x₀ =. the (log a x₀)
+  : lim₋ x₀ (log a) =. the (log a x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Log h_dom
 
-/-- Logarithm RFunction's Right Limit (Expression) -/
+/-- Logarithm Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Log
     (h_dom : x₀ > 0 ∧ a > 0 ∧ a ≠ 1)
-  : lim₊ (log a) x₀ =. the (log a x₀)
+  : lim₊ x₀ (log a) =. the (log a x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Log h_dom
 
-/-- Logarithm RFunction's Right Limit at `0` when `a > 1` (Expression) -/
+/-- Logarithm Function's Right Limit at `0` when `a > 1` (Expression) -/
 lemma RightLimitExpr.Log_zero_gt_one
     (h_a : a > 1)
-  : lim₊ (log a) 0 = neg_infty
+  : lim₊ 0 (log a) = neg_infty
 := sorry
 
-/-- Logarithm RFunction's Right Limit at `0` when `0 < a < 1` (Expression) -/
+/-- Logarithm Function's Right Limit at `0` when `0 < a < 1` (Expression) -/
 lemma RightLimitExpr.Log_zero_lt_one
     (h_a : 0 < a ∧ a < 1)
-  : lim₊ (log a) 0 = pos_infty
+  : lim₊ 0 (log a) = pos_infty
 := sorry
 
-/-- Logarithm RFunction's Limit at Positive Infinity when `a > 1` (Expression) -/
+/-- Logarithm Function's Limit at Positive Infinity when `a > 1` (Expression) -/
 lemma PosInftyLimitExpr.Log_gt_one
     (h_a : a > 1)
   : lim pos_infty (log a) = pos_infty
 := sorry
 
-/-- Logarithm RFunction's Limit at Positive Infinity when `0 < a < 1` (Expression) -/
+/-- Logarithm Function's Limit at Positive Infinity when `0 < a < 1` (Expression) -/
 lemma PosInftyLimitExpr.Log_lt_one
     (h_a : 0 < a ∧ a < 1)
   : lim pos_infty (log a) = neg_infty
 := sorry
 
-/-- Sine RFunction's Limit (Expression) -/
+/-- Sine Function's Limit (Expression) -/
 lemma FuncLimitExpr.Sin
-  : lim sin x₀ =. the (sin x₀)
+  : lim x₀ sin =. the (sin x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Sin x₀ (mem_univ x₀) |>.right
+  exact Continuity.Sin x₀ (mem_univ _) |>.right
 
-/-- Sine RFunction's Left Limit (Expression) -/
+/-- Sine Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Sin
-  : lim₋ sin x₀ =. the (sin x₀)
+  : lim₋ x₀ sin =. the (sin x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Sin
 
-/-- Sine RFunction's Right Limit (Expression) -/
+/-- Sine Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Sin
-  : lim₊ sin x₀ =. the (sin x₀)
+  : lim₊ x₀ sin =. the (sin x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Sin
 
-/-- Sine RFunction's Limit at Positive Infinity (Expression) -/
+/-- Sine Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Sin
   : lim pos_infty sin = diverg
 := sorry
 
-/-- Sine RFunction's Limit at Negative Infinity (Expression) -/
+/-- Sine Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Sin
   : lim neg_infty sin = diverg
 := sorry
 
-/-- Sine RFunction's Limit at Infinity (Expression) -/
+/-- Sine Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Sin
   : lim infty sin = diverg
 := sorry
 
-/-- Cosine RFunction's Limit (Expression) -/
+/-- Cosine Function's Limit (Expression) -/
 lemma FuncLimitExpr.Cos
-  : lim cos x₀ =. the (cos x₀)
+  : lim x₀ cos =. the (cos x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Cos x₀ (mem_univ x₀) |>.right
+  exact Continuity.Cos x₀ (mem_univ _) |>.right
 
-/-- Cosine RFunction's Left Limit (Expression) -/
+/-- Cosine Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Cos
-  : lim₋ cos x₀ =. the (cos x₀)
+  : lim₋ x₀ cos =. the (cos x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Cos
 
-/-- Cosine RFunction's Right Limit (Expression) -/
+/-- Cosine Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Cos
-  : lim₊ cos x₀ =. the (cos x₀)
+  : lim₊ x₀ cos =. the (cos x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Cos
 
-/-- Cosine RFunction's Limit at Positive Infinity (Expression) -/
+/-- Cosine Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Cos
   : lim pos_infty cos = diverg
 := sorry
 
-/-- Cosine RFunction's Limit at Negative Infinity (Expression) -/
+/-- Cosine Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Cos
   : lim neg_infty cos = diverg
 := sorry
 
-/-- Cosine RFunction's Limit at Infinity (Expression) -/
+/-- Cosine Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Cos
   : lim infty cos = diverg
 := sorry
 
-/-- Tangent RFunction's Limit at `cos x₀ ≠ 0` (Expression) -/
+/-- Tangent Function's Limit at `cos x₀ ≠ 0` (Expression) -/
 lemma FuncLimitExpr.Tan
     (h_dom : cos x₀ ≠ 0)
-  : lim tan x₀ =. the (tan x₀)
+  : lim x₀ tan =. the (tan x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Tan x₀ h_dom |>.right
 
-/-- Tangent RFunction's Limit at `cos x₀ = 0` (Expression) -/
+/-- Tangent Function's Limit at `cos x₀ = 0` (Expression) -/
 lemma FuncLimitExpr.Tan_infty
     (h_pole : cos x₀ = 0)
-  : lim tan x₀ = infty
+  : lim x₀ tan = infty
 := sorry
 
-/-- Tangent RFunction's Left Limit at `cos x₀ ≠ 0` (Expression) -/
+/-- Tangent Function's Left Limit at `cos x₀ ≠ 0` (Expression) -/
 lemma LeftLimitExpr.Tan
     (h_dom : cos x₀ ≠ 0)
-  : lim₋ tan x₀ =. the (tan x₀)
+  : lim₋ x₀ tan =. the (tan x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Tan h_dom
 
-/-- Tangent RFunction's Left Limit at `cos x₀ = 0` (Expression) -/
+/-- Tangent Function's Left Limit at `cos x₀ = 0` (Expression) -/
 lemma LeftLimitExpr.Tan_infty
     (h_pole : cos x₀ = 0)
-  : lim₋ tan x₀ = pos_infty
+  : lim₋ x₀ tan = pos_infty
 := sorry
 
-/-- Tangent RFunction's Right Limit at `cos x₀ ≠ 0` (Expression) -/
+/-- Tangent Function's Right Limit at `cos x₀ ≠ 0` (Expression) -/
 lemma RightLimitExpr.Tan
     (h_dom : cos x₀ ≠ 0)
-  : lim₊ tan x₀ =. the (tan x₀)
+  : lim₊ x₀ tan =. the (tan x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Tan h_dom
 
-/-- Tangent RFunction's Right Limit at `cos x₀ = 0` (Expression) -/
+/-- Tangent Function's Right Limit at `cos x₀ = 0` (Expression) -/
 lemma RightLimitExpr.Tan_infty
     (h_pole : cos x₀ = 0)
-  : lim₊ tan x₀ = neg_infty
+  : lim₊ x₀ tan = neg_infty
 := sorry
 
-/-- Tangent RFunction's Limit at Positive Infinity (Expression) -/
+/-- Tangent Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Tan
   : lim pos_infty tan = diverg
 := sorry
 
-/-- Tangent RFunction's Limit at Negative Infinity (Expression) -/
+/-- Tangent Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Tan
   : lim neg_infty tan = diverg
 := sorry
 
-/-- Tangent RFunction's Limit at Infinity (Expression) -/
+/-- Tangent Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Tan
   : lim infty tan = diverg
 := sorry
 
-/-- Cotangent RFunction's Limit at `sin x₀ ≠ 0` (Expression) -/
+/-- Cotangent Function's Limit at `sin x₀ ≠ 0` (Expression) -/
 lemma FuncLimitExpr.Cot
     (h_dom : sin x₀ ≠ 0)
-  : lim cot x₀ =. the (cot x₀)
+  : lim x₀ cot =. the (cot x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Cot x₀ h_dom |>.right
 
-/-- Cotangent RFunction's Limit at `sin x₀ = 0` (Expression) -/
+/-- Cotangent Function's Limit at `sin x₀ = 0` (Expression) -/
 lemma FuncLimitExpr.Cot_infty
     (h_pole : sin x₀ = 0)
-  : lim cot x₀ = infty
+  : lim x₀ cot = infty
 := sorry
 
-/-- Cotangent RFunction's Left Limit at `sin x₀ ≠ 0` (Expression) -/
+/-- Cotangent Function's Left Limit at `sin x₀ ≠ 0` (Expression) -/
 lemma LeftLimitExpr.Cot
     (h_dom : sin x₀ ≠ 0)
-  : lim₋ cot x₀ =. the (cot x₀)
+  : lim₋ x₀ cot =. the (cot x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Cot h_dom
 
-/-- Cotangent RFunction's Left Limit at `sin x₀ = 0` (Expression) -/
+/-- Cotangent Function's Left Limit at `sin x₀ = 0` (Expression) -/
 lemma LeftLimitExpr.Cot_infty
     (h_pole : sin x₀ = 0)
-  : lim₋ cot x₀ = neg_infty
+  : lim₋ x₀ cot = neg_infty
 := sorry
 
-/-- Cotangent RFunction's Right Limit at `sin x₀ ≠ 0` (Expression) -/
+/-- Cotangent Function's Right Limit at `sin x₀ ≠ 0` (Expression) -/
 lemma RightLimitExpr.Cot
     (h_dom : sin x₀ ≠ 0)
-  : lim₊ cot x₀ =. the (cot x₀)
+  : lim₊ x₀ cot =. the (cot x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Cot h_dom
 
-/-- Cotangent RFunction's Right Limit at `sin x₀ = 0` (Expression) -/
+/-- Cotangent Function's Right Limit at `sin x₀ = 0` (Expression) -/
 lemma RightLimitExpr.Cot_infty
     (h_pole : sin x₀ = 0)
-  : lim₊ cot x₀ = pos_infty
+  : lim₊ x₀ cot = pos_infty
 := sorry
 
-/-- Cotangent RFunction's Limit at Positive Infinity (Expression) -/
+/-- Cotangent Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Cot
   : lim pos_infty cot = diverg
 := sorry
 
-/-- Cotangent RFunction's Limit at Negative Infinity (Expression) -/
+/-- Cotangent Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Cot
   : lim neg_infty cot = diverg
 := sorry
 
-/-- Cotangent RFunction's Limit at Infinity (Expression) -/
+/-- Cotangent Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Cot
   : lim infty cot = diverg
 := sorry
 
-/-- Secant RFunction's Limit at `cos x₀ ≠ 0` (Expression) -/
+/-- Secant Function's Limit at `cos x₀ ≠ 0` (Expression) -/
 lemma FuncLimitExpr.Sec
     (h_dom : cos x₀ ≠ 0)
-  : lim sec x₀ =. the (sec x₀)
+  : lim x₀ sec =. the (sec x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Sec x₀ h_dom |>.right
 
-/-- Secant RFunction's Limit at `cos x₀ = 0` (Expression) -/
+/-- Secant Function's Limit at `cos x₀ = 0` (Expression) -/
 lemma FuncLimitExpr.Sec_infty
     (h_pole : cos x₀ = 0)
-  : lim sec x₀ = infty
+  : lim x₀ sec = infty
 := sorry
 
-/-- Secant RFunction's Left Limit at `cos x₀ ≠ 0` (Expression) -/
+/-- Secant Function's Left Limit at `cos x₀ ≠ 0` (Expression) -/
 lemma LeftLimitExpr.Sec
     (h_dom : cos x₀ ≠ 0)
-  : lim₋ sec x₀ =. the (sec x₀)
+  : lim₋ x₀ sec =. the (sec x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Sec h_dom
 
-/-- Secant RFunction's Left Limit at `cos x₀ = 0 ∧ sin x₀ > 0` (Expression) -/
+/-- Secant Function's Left Limit at `cos x₀ = 0 ∧ sin x₀ > 0` (Expression) -/
 lemma LeftLimitExpr.Sec_pos_infty
     (h_pole : cos x₀ = 0) (h_sign : sin x₀ > 0)
-  : lim₋ sec x₀ = pos_infty
+  : lim₋ x₀ sec = pos_infty
 := sorry
 
-/-- Secant RFunction's Left Limit at `cos x₀ = 0 ∧ sin x₀ < 0` (Expression) -/
+/-- Secant Function's Left Limit at `cos x₀ = 0 ∧ sin x₀ < 0` (Expression) -/
 lemma LeftLimitExpr.Sec_neg_infty
     (h_pole : cos x₀ = 0) (h_sign : sin x₀ < 0)
-  : lim₋ sec x₀ = neg_infty
+  : lim₋ x₀ sec = neg_infty
 := sorry
 
-/-- Secant RFunction's Right Limit at `cos x₀ ≠ 0` (Expression) -/
+/-- Secant Function's Right Limit at `cos x₀ ≠ 0` (Expression) -/
 lemma RightLimitExpr.Sec
     (h_dom : cos x₀ ≠ 0)
-  : lim₊ sec x₀ =. the (sec x₀)
+  : lim₊ x₀ sec =. the (sec x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Sec h_dom
 
-/-- Secant RFunction's Right Limit at `cos x₀ = 0 ∧ sin x₀ < 0` (Expression) -/
+/-- Secant Function's Right Limit at `cos x₀ = 0 ∧ sin x₀ < 0` (Expression) -/
 lemma RightLimitExpr.Sec_pos_infty
     (h_pole : cos x₀ = 0) (h_sign : sin x₀ < 0)
-  : lim₊ sec x₀ = pos_infty
+  : lim₊ x₀ sec = pos_infty
 := sorry
 
-/-- Secant RFunction's Right Limit at `cos x₀ = 0 ∧ sin x₀ > 0` (Expression) -/
+/-- Secant Function's Right Limit at `cos x₀ = 0 ∧ sin x₀ > 0` (Expression) -/
 lemma RightLimitExpr.Sec_neg_infty
     (h_pole : cos x₀ = 0) (h_sign : sin x₀ > 0)
-  : lim₊ sec x₀ = neg_infty
+  : lim₊ x₀ sec = neg_infty
 := sorry
 
-/-- Secant RFunction's Limit at Positive Infinity (Expression) -/
+/-- Secant Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Sec
   : lim pos_infty sec = diverg
 := sorry
 
-/-- Secant RFunction's Limit at Negative Infinity (Expression) -/
+/-- Secant Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Sec
   : lim neg_infty sec = diverg
 := sorry
 
-/-- Secant RFunction's Limit at Infinity (Expression) -/
+/-- Secant Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Sec
   : lim infty sec = diverg
 := sorry
 
-/-- Cosecant RFunction's Limit at `sin x₀ ≠ 0` (Expression) -/
+/-- Cosecant Function's Limit at `sin x₀ ≠ 0` (Expression) -/
 lemma FuncLimitExpr.Csc
     (h_dom : sin x₀ ≠ 0)
-  : lim csc x₀ =. the (csc x₀)
+  : lim x₀ csc =. the (csc x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Csc x₀ h_dom |>.right
 
-/-- Cosecant RFunction's Limit at `sin x₀ = 0` (Expression) -/
+/-- Cosecant Function's Limit at `sin x₀ = 0` (Expression) -/
 lemma FuncLimitExpr.Csc_infty
     (h_pole : sin x₀ = 0)
-  : lim csc x₀ = infty
+  : lim x₀ csc = infty
 := sorry
 
-/-- Cosecant RFunction's Left Limit at `sin x₀ ≠ 0` (Expression) -/
+/-- Cosecant Function's Left Limit at `sin x₀ ≠ 0` (Expression) -/
 lemma LeftLimitExpr.Csc
     (h_dom : sin x₀ ≠ 0)
-  : lim₋ csc x₀ =. the (csc x₀)
+  : lim₋ x₀ csc =. the (csc x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Csc h_dom
 
-/-- Cosecant RFunction's Left Limit at `sin x₀ = 0 ∧ cos x₀ < 0` (Expression) -/
+/-- Cosecant Function's Left Limit at `sin x₀ = 0 ∧ cos x₀ < 0` (Expression) -/
 lemma LeftLimitExpr.Csc_pos_infty
     (h_pole : sin x₀ = 0) (h_sign : cos x₀ < 0)
-  : lim₋ csc x₀ = pos_infty
+  : lim₋ x₀ csc = pos_infty
 := sorry
 
-/-- Cosecant RFunction's Left Limit at `sin x₀ = 0 ∧ cos x₀ > 0` (Expression) -/
+/-- Cosecant Function's Left Limit at `sin x₀ = 0 ∧ cos x₀ > 0` (Expression) -/
 lemma LeftLimitExpr.Csc_neg_infty
     (h_pole : sin x₀ = 0) (h_sign : cos x₀ > 0)
-  : lim₋ csc x₀ = neg_infty
+  : lim₋ x₀ csc = neg_infty
 := sorry
 
-/-- Cosecant RFunction's Right Limit at `sin x₀ ≠ 0` (Expression) -/
+/-- Cosecant Function's Right Limit at `sin x₀ ≠ 0` (Expression) -/
 lemma RightLimitExpr.Csc
     (h_dom : sin x₀ ≠ 0)
-  : lim₊ csc x₀ =. the (csc x₀)
+  : lim₊ x₀ csc =. the (csc x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Csc h_dom
 
-/-- Cosecant RFunction's Right Limit at `sin x₀ = 0 ∧ cos x₀ > 0` (Expression) -/
+/-- Cosecant Function's Right Limit at `sin x₀ = 0 ∧ cos x₀ > 0` (Expression) -/
 lemma RightLimitExpr.Csc_pos_infty
     (h_pole : sin x₀ = 0) (h_sign : cos x₀ > 0)
-  : lim₊ csc x₀ = pos_infty
+  : lim₊ x₀ csc = pos_infty
 := sorry
 
-/-- Cosecant RFunction's Right Limit at `sin x₀ = 0 ∧ cos x₀ < 0` (Expression) -/
+/-- Cosecant Function's Right Limit at `sin x₀ = 0 ∧ cos x₀ < 0` (Expression) -/
 lemma RightLimitExpr.Csc_neg_infty
     (h_pole : sin x₀ = 0) (h_sign : cos x₀ < 0)
-  : lim₊ csc x₀ = neg_infty
+  : lim₊ x₀ csc = neg_infty
 := sorry
 
-/-- Cosecant RFunction's Limit at Positive Infinity (Expression) -/
+/-- Cosecant Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Csc
   : lim pos_infty csc = diverg
 := sorry
 
-/-- Cosecant RFunction's Limit at Negative Infinity (Expression) -/
+/-- Cosecant Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Csc
   : lim neg_infty csc = diverg
 := sorry
 
-/-- Cosecant RFunction's Limit at Infinity (Expression) -/
+/-- Cosecant Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Csc
   : lim infty csc = diverg
 := sorry
 
-/-- Hyp-Sine RFunction's Limit (Expression) -/
+/-- Hyp-Sine Function's Limit (Expression) -/
 lemma FuncLimitExpr.Sinh
-  : lim sinh x₀ =. the (sinh x₀)
+  : lim x₀ sinh =. the (sinh x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Sinh x₀ (mem_univ x₀) |>.right
+  exact Continuity.Sinh x₀ (mem_univ _) |>.right
 
-/-- Hyp-Sine RFunction's Left Limit (Expression) -/
+/-- Hyp-Sine Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Sinh
-  : lim₋ sinh x₀ =. the (sinh x₀)
+  : lim₋ x₀ sinh =. the (sinh x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Sinh
 
-/-- Hyp-Sine RFunction's Right Limit (Expression) -/
+/-- Hyp-Sine Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Sinh
-  : lim₊ sinh x₀ =. the (sinh x₀)
+  : lim₊ x₀ sinh =. the (sinh x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Sinh
 
-/-- Hyp-Sine RFunction's Limit at Positive Infinity (Expression) -/
+/-- Hyp-Sine Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Sinh
   : lim pos_infty sinh = pos_infty
 := sorry
 
-/-- Hyp-Sine RFunction's Limit at Negative Infinity (Expression) -/
+/-- Hyp-Sine Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Sinh
   : lim neg_infty sinh = neg_infty
 := sorry
 
-/-- Hyp-Sine RFunction's Limit at Infinity (Expression) -/
+/-- Hyp-Sine Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Sinh
   : lim infty sinh = infty
 := sorry
 
-/-- Hyp-Cosine RFunction's Limit (Expression) -/
+/-- Hyp-Cosine Function's Limit (Expression) -/
 lemma FuncLimitExpr.Cosh
-  : lim cosh x₀ =. the (cosh x₀)
+  : lim x₀ cosh =. the (cosh x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Cosh x₀ (mem_univ x₀) |>.right
+  exact Continuity.Cosh x₀ (mem_univ _) |>.right
 
-/-- Hyp-Cosine RFunction's Left Limit (Expression) -/
+/-- Hyp-Cosine Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Cosh
-  : lim₋ cosh x₀ =. the (cosh x₀)
+  : lim₋ x₀ cosh =. the (cosh x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Cosh
 
-/-- Hyp-Cosine RFunction's Right Limit (Expression) -/
+/-- Hyp-Cosine Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Cosh
-  : lim₊ cosh x₀ =. the (cosh x₀)
+  : lim₊ x₀ cosh =. the (cosh x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Cosh
 
-/-- Hyp-Cosine RFunction's Limit at Positive Infinity (Expression) -/
+/-- Hyp-Cosine Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Cosh
   : lim pos_infty cosh = pos_infty
 := sorry
 
-/-- Hyp-Cosine RFunction's Limit at Negative Infinity (Expression) -/
+/-- Hyp-Cosine Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Cosh
   : lim neg_infty cosh = pos_infty
 := sorry
 
-/-- Hyp-Cosine RFunction's Limit at Infinity (Expression) -/
+/-- Hyp-Cosine Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Cosh
   : lim infty cosh = pos_infty
 := sorry
 
-/-- Hyp-Tangent RFunction's Limit (Expression) -/
+/-- Hyp-Tangent Function's Limit (Expression) -/
 lemma FuncLimitExpr.Tanh
-  : lim tanh x₀ =. the (tanh x₀)
+  : lim x₀ tanh =. the (tanh x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Tanh x₀ (mem_univ x₀) |>.right
+  exact Continuity.Tanh x₀ (mem_univ _) |>.right
 
-/-- Hyp-Tangent RFunction's Left Limit (Expression) -/
+/-- Hyp-Tangent Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Tanh
-  : lim₋ tanh x₀ =. the (tanh x₀)
+  : lim₋ x₀ tanh =. the (tanh x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Tanh
 
-/-- Hyp-Tangent RFunction's Right Limit (Expression) -/
+/-- Hyp-Tangent Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Tanh
-  : lim₊ tanh x₀ =. the (tanh x₀)
+  : lim₊ x₀ tanh =. the (tanh x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Tanh
 
-/-- Hyp-Tangent RFunction's Limit at Positive Infinity (Expression) -/
+/-- Hyp-Tangent Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Tanh
   : lim pos_infty tanh =. the 1
 := sorry
 
-/-- Hyp-Tangent RFunction's Limit at Negative Infinity (Expression) -/
+/-- Hyp-Tangent Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Tanh
   : lim neg_infty tanh =. the (-1)
 := sorry
 
-/-- Hyp-Tangent RFunction's Limit at Infinity (Expression) -/
+/-- Hyp-Tangent Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Tanh
   : lim infty tanh = diverg
 := sorry
 
-/-- Hyp-Cotangent RFunction's Limit at `x₀ ≠ 0` (Expression) -/
+/-- Hyp-Cotangent Function's Limit at `x₀ ≠ 0` (Expression) -/
 lemma FuncLimitExpr.Coth
     (h_dom : x₀ ≠ 0)
-  : lim coth x₀ =. the (coth x₀)
+  : lim x₀ coth =. the (coth x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Coth x₀ h_dom |>.right
 
-/-- Hyp-Cotangent RFunction's Limit at `0` (Expression) -/
+/-- Hyp-Cotangent Function's Limit at `0` (Expression) -/
 lemma FuncLimitExpr.Coth_zero
-  : lim coth 0 = infty
+  : lim 0 coth = infty
 := sorry
 
-/-- Hyp-Cotangent RFunction's Left Limit at `0` (Expression) -/
+/-- Hyp-Cotangent Function's Left Limit at `0` (Expression) -/
 lemma LeftLimitExpr.Coth_zero
-  : lim₋ coth 0 = neg_infty
+  : lim₋ 0 coth = neg_infty
 := sorry
 
-/-- Hyp-Cotangent RFunction's Left Limit at `x₀ ≠ 0` (Expression) -/
+/-- Hyp-Cotangent Function's Left Limit at `x₀ ≠ 0` (Expression) -/
 lemma LeftLimitExpr.Coth
     (h_dom : x₀ ≠ 0)
-  : lim₋ coth x₀ =. the (coth x₀)
+  : lim₋ x₀ coth =. the (coth x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Coth h_dom
 
-/-- Hyp-Cotangent RFunction's Right Limit at `0` (Expression) -/
+/-- Hyp-Cotangent Function's Right Limit at `0` (Expression) -/
 lemma RightLimitExpr.Coth_zero
-  : lim₊ coth 0 = pos_infty
+  : lim₊ 0 coth = pos_infty
 := sorry
 
-/-- Hyp-Cotangent RFunction's Right Limit at `x₀ ≠ 0` (Expression) -/
+/-- Hyp-Cotangent Function's Right Limit at `x₀ ≠ 0` (Expression) -/
 lemma RightLimitExpr.Coth
     (h_dom : x₀ ≠ 0)
-  : lim₊ coth x₀ =. the (coth x₀)
+  : lim₊ x₀ coth =. the (coth x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Coth h_dom
 
-/-- Hyp-Cotangent RFunction's Limit at Positive Infinity (Expression) -/
+/-- Hyp-Cotangent Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Coth
   : lim pos_infty coth =. the 1
 := sorry
 
-/-- Hyp-Cotangent RFunction's Limit at Negative Infinity (Expression) -/
+/-- Hyp-Cotangent Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Coth
   : lim neg_infty coth =. the (-1)
 := sorry
 
-/-- Hyp-Cotangent RFunction's Limit at Infinity (Expression) -/
+/-- Hyp-Cotangent Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Coth
   : lim infty coth = diverg
 := sorry
 
-/-- Hyp-Secant RFunction's Limit (Expression) -/
+/-- Hyp-Secant Function's Limit (Expression) -/
 lemma FuncLimitExpr.Sech
-  : lim sech x₀ =. the (sech x₀)
+  : lim x₀ sech =. the (sech x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Sech x₀ (mem_univ x₀) |>.right
+  exact Continuity.Sech x₀ (mem_univ _) |>.right
 
-/-- Hyp-Secant RFunction's Left Limit (Expression) -/
+/-- Hyp-Secant Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Sech
-  : lim₋ sech x₀ =. the (sech x₀)
+  : lim₋ x₀ sech =. the (sech x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Sech
 
-/-- Hyp-Secant RFunction's Right Limit (Expression) -/
+/-- Hyp-Secant Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Sech
-  : lim₊ sech x₀ =. the (sech x₀)
+  : lim₊ x₀ sech =. the (sech x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Sech
 
-/-- Hyp-Secant RFunction's Limit at Positive Infinity (Expression) -/
+/-- Hyp-Secant Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Sech
   : lim pos_infty sech =. the 0
 := sorry
 
-/-- Hyp-Secant RFunction's Limit at Negative Infinity (Expression) -/
+/-- Hyp-Secant Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Sech
   : lim neg_infty sech =. the 0
 := sorry
 
-/-- Hyp-Secant RFunction's Limit at Infinity (Expression) -/
+/-- Hyp-Secant Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Sech
   : lim infty sech =. the 0
 := sorry
 
-/-- Hyp-Cosecant RFunction's Limit at `x₀ ≠ 0` (Expression) -/
+/-- Hyp-Cosecant Function's Limit at `x₀ ≠ 0` (Expression) -/
 lemma FuncLimitExpr.Csch
     (h_dom : x₀ ≠ 0)
-  : lim csch x₀ =. the (csch x₀)
+  : lim x₀ csch =. the (csch x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Csch x₀ h_dom |>.right
 
-/-- Hyp-Cosecant RFunction's Limit at `0` (Expression) -/
+/-- Hyp-Cosecant Function's Limit at `0` (Expression) -/
 lemma FuncLimitExpr.Csch_zero
-  : lim csch 0 = infty
+  : lim 0 csch = infty
 := sorry
 
-/-- Hyp-Cosecant RFunction's Left Limit at `x₀ ≠ 0` (Expression) -/
+/-- Hyp-Cosecant Function's Left Limit at `x₀ ≠ 0` (Expression) -/
 lemma LeftLimitExpr.Csch
     (h_dom : x₀ ≠ 0)
-  : lim₋ csch x₀ =. the (csch x₀)
+  : lim₋ x₀ csch =. the (csch x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Csch h_dom
 
-/-- Hyp-Cosecant RFunction's Left Limit at `0` (Expression) -/
+/-- Hyp-Cosecant Function's Left Limit at `0` (Expression) -/
 lemma LeftLimitExpr.Csch_zero
-  : lim₋ csch 0 = neg_infty
+  : lim₋ 0 csch = neg_infty
 := sorry
 
-/-- Hyp-Cosecant RFunction's Right Limit at `x₀ ≠ 0` (Expression) -/
+/-- Hyp-Cosecant Function's Right Limit at `x₀ ≠ 0` (Expression) -/
 lemma RightLimitExpr.Csch
     (h_dom : x₀ ≠ 0)
-  : lim₊ csch x₀ =. the (csch x₀)
+  : lim₊ x₀ csch =. the (csch x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Csch h_dom
 
-/-- Hyp-Cosecant RFunction's Right Limit at `0` (Expression) -/
+/-- Hyp-Cosecant Function's Right Limit at `0` (Expression) -/
 lemma RightLimitExpr.Csch_zero
-  : lim₊ csch 0 = pos_infty
+  : lim₊ 0 csch = pos_infty
 := sorry
 
-/-- Hyp-Cosecant RFunction's Limit at Positive Infinity (Expression) -/
+/-- Hyp-Cosecant Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Csch
   : lim pos_infty csch =. the 0
 := sorry
 
-/-- Hyp-Cosecant RFunction's Limit at Negative Infinity (Expression) -/
+/-- Hyp-Cosecant Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Csch
   : lim neg_infty csch =. the 0
 := sorry
 
-/-- Hyp-Cosecant RFunction's Limit at Infinity (Expression) -/
+/-- Hyp-Cosecant Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Csch
   : lim infty csch =. the 0
 := sorry
 
-/-- Arc-Sine RFunction's Limit at `x₀ > -1 ∧ x₀ < 1` (Expression) -/
+/-- Arc-Sine Function's Limit at `x₀ > -1 ∧ x₀ < 1` (Expression) -/
 lemma FuncLimitExpr.Arcsin
     (h_dom : x₀ > -1 ∧ x₀ < 1)
-  : lim arcsin x₀ =. the (arcsin x₀)
+  : lim x₀ arcsin =. the (arcsin x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Arcsin x₀ h_dom |>.right
 
-/-- Arc-Sine RFunction's Left Limit at `x₀ > -1 ∧ x₀ ≤ 1` (Expression) -/
+/-- Arc-Sine Function's Left Limit at `x₀ > -1 ∧ x₀ ≤ 1` (Expression) -/
 lemma LeftLimitExpr.Arcsin
     (h_dom : x₀ > -1 ∧ x₀ ≤ 1)
-  : lim₋ arcsin x₀ =. the (arcsin x₀)
+  : lim₋ x₀ arcsin =. the (arcsin x₀)
 := by
   by_cases h_1 : x₀ = 1
   · rw [h_1]
@@ -1048,10 +1046,10 @@ lemma LeftLimitExpr.Arcsin
       · exact lt_of_le_of_ne h_dom.right h_1
     sorry
 
-/-- Arc-Sine RFunction's Right Limit at `x₀ ≥ -1 ∧ x₀ < 1` (Expression) -/
+/-- Arc-Sine Function's Right Limit at `x₀ ≥ -1 ∧ x₀ < 1` (Expression) -/
 lemma RightLimitExpr.Arcsin
     (h_dom : x₀ ≥ -1 ∧ x₀ < 1)
-  : lim₊ arcsin x₀ =. the (arcsin x₀)
+  : lim₊ x₀ arcsin =. the (arcsin x₀)
 := by
   by_cases h_neg1 : x₀ = -1
   · rw [h_neg1]
@@ -1063,33 +1061,33 @@ lemma RightLimitExpr.Arcsin
       · exact h_dom.right
     sorry
 
-/-- Arc-Sine RFunction's Limit at Positive Infinity (Expression) -/
+/-- Arc-Sine Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Arcsin
   : lim pos_infty arcsin = diverg
 := sorry
 
-/-- Arc-Sine RFunction's Limit at Negative Infinity (Expression) -/
+/-- Arc-Sine Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Arcsin
   : lim neg_infty arcsin = diverg
 := sorry
 
-/-- Arc-Sine RFunction's Limit at Infinity (Expression) -/
+/-- Arc-Sine Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Arcsin
   : lim infty arcsin = diverg
 := sorry
 
-/-- Arc-Cosine RFunction's Limit at `x₀ > -1 ∧ x₀ < 1` (Expression) -/
+/-- Arc-Cosine Function's Limit at `x₀ > -1 ∧ x₀ < 1` (Expression) -/
 lemma FuncLimitExpr.Arccos
     (h_dom : x₀ > -1 ∧ x₀ < 1)
-  : lim arccos x₀ =. the (arccos x₀)
+  : lim x₀ arccos =. the (arccos x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Arccos x₀ h_dom |>.right
 
-/-- Arc-Cosine RFunction's Left Limit at `x₀ > -1 ∧ x₀ ≤ 1` (Expression) -/
+/-- Arc-Cosine Function's Left Limit at `x₀ > -1 ∧ x₀ ≤ 1` (Expression) -/
 lemma LeftLimitExpr.Arccos
     (h_dom : x₀ > -1 ∧ x₀ ≤ 1)
-  : lim₋ arccos x₀ =. the (arccos x₀)
+  : lim₋ x₀ arccos =. the (arccos x₀)
 := by
   by_cases h_1 : x₀ = 1
   · rw [h_1]
@@ -1101,10 +1099,10 @@ lemma LeftLimitExpr.Arccos
       · exact lt_of_le_of_ne h_dom.right h_1
     sorry
 
-/-- Arc-Cosine RFunction's Right Limit at `x₀ ≥ -1 ∧ x₀ < 1` (Expression) -/
+/-- Arc-Cosine Function's Right Limit at `x₀ ≥ -1 ∧ x₀ < 1` (Expression) -/
 lemma RightLimitExpr.Arccos
     (h_dom : x₀ ≥ -1 ∧ x₀ < 1)
-  : lim₊ arccos x₀ =. the (arccos x₀)
+  : lim₊ x₀ arccos =. the (arccos x₀)
 := by
   by_cases h_neg1 : x₀ = -1
   · rw [h_neg1]
@@ -1116,97 +1114,97 @@ lemma RightLimitExpr.Arccos
       · exact h_dom.right
     sorry
 
-/-- Arc-Cosine RFunction's Limit at Positive Infinity (Expression) -/
+/-- Arc-Cosine Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Arccos
   : lim pos_infty arccos = diverg
 := sorry
 
-/-- Arc-Cosine RFunction's Limit at Negative Infinity (Expression) -/
+/-- Arc-Cosine Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Arccos
   : lim neg_infty arccos = diverg
 := sorry
 
-/-- Arc-Cosine RFunction's Limit at Infinity (Expression) -/
+/-- Arc-Cosine Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Arccos
   : lim infty arccos = diverg
 := sorry
 
-/-- Arc-Tangent RFunction's Limit (Expression) -/
+/-- Arc-Tangent Function's Limit (Expression) -/
 lemma FuncLimitExpr.Arctan
-  : lim arctan x₀ =. the (arctan x₀)
+  : lim x₀ arctan =. the (arctan x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Arctan x₀ (mem_univ x₀) |>.right
+  exact Continuity.Arctan x₀ (mem_univ _) |>.right
 
-/-- Arc-Tangent RFunction's Left Limit (Expression) -/
+/-- Arc-Tangent Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Arctan
-  : lim₋ arctan x₀ =. the (arctan x₀)
+  : lim₋ x₀ arctan =. the (arctan x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Arctan
 
-/-- Arc-Tangent RFunction's Right Limit (Expression) -/
+/-- Arc-Tangent Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Arctan
-  : lim₊ arctan x₀ =. the (arctan x₀)
+  : lim₊ x₀ arctan =. the (arctan x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Arctan
 
-/-- Arc-Tangent RFunction's Limit at Positive Infinity (Expression) -/
+/-- Arc-Tangent Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Arctan
   : lim pos_infty arctan =. the (π / 2)
 := sorry
 
-/-- Arc-Tangent RFunction's Limit at Negative Infinity (Expression) -/
+/-- Arc-Tangent Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Arctan
   : lim neg_infty arctan =. the (-π / 2)
 := sorry
 
-/-- Arc-Tangent RFunction's Limit at Infinity (Expression) -/
+/-- Arc-Tangent Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Arctan
   : lim infty arctan = diverg
 := sorry
 
-/-- Arc-Cotangent RFunction's Limit (Expression) -/
+/-- Arc-Cotangent Function's Limit (Expression) -/
 lemma FuncLimitExpr.Arccot
-  : lim arccot x₀ =. the (arccot x₀)
+  : lim x₀ arccot =. the (arccot x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
-  exact Continuity.Arccot x₀ (mem_univ x₀) |>.right
+  exact Continuity.Arccot x₀ (mem_univ _) |>.right
 
-/-- Arc-Cotangent RFunction's Left Limit (Expression) -/
+/-- Arc-Cotangent Function's Left Limit (Expression) -/
 lemma LeftLimitExpr.Arccot
-  : lim₋ arccot x₀ =. the (arccot x₀)
+  : lim₋ x₀ arccot =. the (arccot x₀)
 := FuncLimitExpr.toLeft <| FuncLimitExpr.Arccot
 
-/-- Arc-Cotangent RFunction's Right Limit (Expression) -/
+/-- Arc-Cotangent Function's Right Limit (Expression) -/
 lemma RightLimitExpr.Arccot
-  : lim₊ arccot x₀ =. the (arccot x₀)
+  : lim₊ x₀ arccot =. the (arccot x₀)
 := FuncLimitExpr.toRight <| FuncLimitExpr.Arccot
 
-/-- Arc-Cotangent RFunction's Limit at Positive Infinity (Expression) -/
+/-- Arc-Cotangent Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Arccot
   : lim pos_infty arccot =. the 0
 := sorry
 
-/-- Arc-Cotangent RFunction's Limit at Negative Infinity (Expression) -/
+/-- Arc-Cotangent Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Arccot
   : lim neg_infty arccot =. the π
 := sorry
 
-/-- Arc-Cotangent RFunction's Limit at Infinity (Expression) -/
+/-- Arc-Cotangent Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Arccot
   : lim infty arccot = diverg
 := sorry
 
-/-- Arc-Secant RFunction's Limit at `x₀ < -1 ∨ x₀ > 1` (Expression) -/
+/-- Arc-Secant Function's Limit at `x₀ < -1 ∨ x₀ > 1` (Expression) -/
 lemma FuncLimitExpr.Arcsec
     (h_dom : x₀ < -1 ∨ x₀ > 1)
-  : lim arcsec x₀ =. the (arcsec x₀)
+  : lim x₀ arcsec =. the (arcsec x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Arcsec x₀ h_dom |>.right
 
-/-- Arc-Secant RFunction's Left Limit at `x₀ ≤ -1 ∨ x₀ > 1` (Expression) -/
+/-- Arc-Secant Function's Left Limit at `x₀ ≤ -1 ∨ x₀ > 1` (Expression) -/
 lemma LeftLimitExpr.Arcsec
     (h_dom : x₀ ≤ -1 ∨ x₀ > 1)
-  : lim₋ arcsec x₀ =. the (arcsec x₀)
+  : lim₋ x₀ arcsec =. the (arcsec x₀)
 := by
   by_cases h_neg1 : x₀ = -1
   · rw [h_neg1]
@@ -1220,10 +1218,10 @@ lemma LeftLimitExpr.Arcsec
         exact RCLike.ofReal_lt_ofReal.mp h_gt
     sorry
 
-/-- Arc-Secant RFunction's Right Limit at `x₀ < -1 ∨ x₀ ≥ 1` (Expression) -/
+/-- Arc-Secant Function's Right Limit at `x₀ < -1 ∨ x₀ ≥ 1` (Expression) -/
 lemma RightLimitExpr.Arcsec
     (h_dom : x₀ < -1 ∨ x₀ ≥ 1)
-  : lim₊ arcsec x₀ =. the (arcsec x₀)
+  : lim₊ x₀ arcsec =. the (arcsec x₀)
 := by
   by_cases h_1 : x₀ = 1
   · rw [h_1]
@@ -1237,33 +1235,33 @@ lemma RightLimitExpr.Arcsec
         exact Std.lt_of_le_of_ne h_gt (fun eq ↦ h_1 (Eq.symm eq))
     sorry
 
-/-- Arc-Secant RFunction's Limit at Positive Infinity (Expression) -/
+/-- Arc-Secant Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Arcsec
   : lim pos_infty arcsec =. the (π / 2)
 := sorry
 
-/-- Arc-Secant RFunction's Limit at Negative Infinity (Expression) -/
+/-- Arc-Secant Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Arcsec
   : lim neg_infty arcsec =. the (π / 2)
 := sorry
 
-/-- Arc-Secant RFunction's Limit at Infinity (Expression) -/
+/-- Arc-Secant Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Arcsec
   : lim infty arcsec =. the (π / 2)
 := sorry
 
-/-- Arc-Cosecant RFunction's Limit at `x₀ < -1 ∨ x₀ > 1` (Expression) -/
+/-- Arc-Cosecant Function's Limit at `x₀ < -1 ∨ x₀ > 1` (Expression) -/
 lemma FuncLimitExpr.Arccsc
     (h_dom : x₀ < -1 ∨ x₀ > 1)
-  : lim arccsc x₀ =. the (arccsc x₀)
+  : lim x₀ arccsc =. the (arccsc x₀)
 := by
   apply FuncLimit.toFuncLimitExpr
   exact Continuity.Arccsc x₀ h_dom |>.right
 
-/-- Arc-Cosecant RFunction's Left Limit `x₀ ≤ -1 ∨ x₀ > 1` (Expression) -/
+/-- Arc-Cosecant Function's Left Limit `x₀ ≤ -1 ∨ x₀ > 1` (Expression) -/
 lemma LeftLimitExpr.Arccsc
     (h_dom : x₀ ≤ -1 ∨ x₀ > 1)
-  : lim₋ arccsc x₀ =. the (arccsc x₀)
+  : lim₋ x₀ arccsc =. the (arccsc x₀)
 := by
   by_cases h_neg1 : x₀ = -1
   · rw [h_neg1]
@@ -1277,10 +1275,10 @@ lemma LeftLimitExpr.Arccsc
         exact RCLike.ofReal_lt_ofReal.mp h_gt
     sorry
 
-/-- Arc-Cosecant RFunction's Right Limit at `x₀ < -1 ∨ x₀ ≥ 1` (Expression) -/
+/-- Arc-Cosecant Function's Right Limit at `x₀ < -1 ∨ x₀ ≥ 1` (Expression) -/
 lemma RightLimitExpr.Arccsc
     (h_dom : x₀ < -1 ∨ x₀ ≥ 1)
-  : lim₊ arccsc x₀ =. the (arccsc x₀)
+  : lim₊ x₀ arccsc =. the (arccsc x₀)
 := by
   by_cases h_1 : x₀ = 1
   · rw [h_1]
@@ -1294,46 +1292,46 @@ lemma RightLimitExpr.Arccsc
         exact Std.lt_of_le_of_ne h_gt (fun eq ↦ h_1 (Eq.symm eq))
     sorry
 
-/-- Arc-Cosecant RFunction's Limit at Positive Infinity (Expression) -/
+/-- Arc-Cosecant Function's Limit at Positive Infinity (Expression) -/
 lemma PosInftyLimitExpr.Arccsc
   : lim pos_infty arccsc =. the 0
 := sorry
 
-/-- Arc-Cosecant RFunction's Limit at Negative Infinity (Expression) -/
+/-- Arc-Cosecant Function's Limit at Negative Infinity (Expression) -/
 lemma NegInftyLimitExpr.Arccsc
   : lim neg_infty arccsc =. the 0
 := sorry
 
-/-- Arc-Cosecant RFunction's Limit at Infinity (Expression) -/
+/-- Arc-Cosecant Function's Limit at Infinity (Expression) -/
 lemma InftyLimitExpr.Arccsc
   : lim infty arccsc =. the 0
 := sorry
 
 end
 
-/-! # Expression Properties of RFunction's Continuity -/
+/-! # Expression Properties of Function's Continuity -/
 
-/-- RFunction Limit Composition (Expression's Special Version)
+/-- Function Limit Composition (Expression's Special Version)
     - This version requires outer function `f` to be continuous at `u₀` -/
 theorem FuncLimitExpr.CompSV {x₀ u₀ : ℝ} {f g : ℝ → ℝ}
-    (h_u₀ : lim g x₀ =. the u₀)
-    (h_f_cont : lim f u₀ =. the (f u₀))
-  : lim (f ∘ g) x₀ =. the (f u₀)
+    (h_u₀ : lim x₀ g =. the u₀)
+    (h_f_cont : lim u₀ f =. the (f u₀))
+  : lim x₀ (f ∘ g) =. the (f u₀)
 := by
   have hg := FuncLimit.fromFuncLimitExpr ⟨1, zero_lt_one, subset_univ _⟩
     h_u₀
   have hf := FuncLimit.fromFuncLimitExpr ⟨1, zero_lt_one, subset_univ _⟩
     h_f_cont
-  have h_f_cont_prop : isContinuousAt ⟨f, Iii⟩ u₀ := ⟨mem_univ _, hf⟩
+  have h_f_cont_prop : RFunction.isContinuousAt ⟨f, Iii⟩ u₀ := ⟨mem_univ _, hf⟩
   have h_comp := FuncLimit.CompSV hg h_f_cont_prop
   exact FuncLimit.toFuncLimitExpr h_comp
 
 /-- Left Limit Composition (Expression's Special Version)
     - This version requires outer function `f` to be left continuous at `u₀` -/
 theorem LeftLimitExpr.CompSV {x₀ u₀ : ℝ} {f g : ℝ → ℝ}
-    (h_u₀ : lim₋ g x₀ =. the u₀)
-    (h_f_cont : lim f u₀ =. the (f u₀))
-  : lim₋ (f ∘ g) x₀ =. the (f u₀)
+    (h_u₀ : lim₋ x₀ g =. the u₀)
+    (h_f_cont : lim u₀ f =. the (f u₀))
+  : lim₋ x₀ (f ∘ g) =. the (f u₀)
 := by
   have hg := LeftLimit.fromLeftLimitExpr ⟨1, zero_lt_one, subset_univ _⟩
     h_u₀
@@ -1341,7 +1339,7 @@ theorem LeftLimitExpr.CompSV {x₀ u₀ : ℝ} {f g : ℝ → ℝ}
     h_f_cont
   have h_comp : LeftLimit ⟨f ∘ g, Iii⟩ x₀ (f u₀) := by
     constructor
-    · exists 1 with zero_lt_one
+    · script_exists 1 with zero_lt_one
       exact subset_univ _
     · intro ε h_ε
       rcases hf.2 ε h_ε with ⟨δ1, hδ1_pos, hδ1⟩
@@ -1360,9 +1358,9 @@ theorem LeftLimitExpr.CompSV {x₀ u₀ : ℝ} {f g : ℝ → ℝ}
 /-- Right Limit Composition (Expression's Special Version)
     - This version requires outer function `f` to be right continuous at `u₀` -/
 theorem RightLimitExpr.CompSV {x₀ u₀ : ℝ} {f g : ℝ → ℝ}
-    (h_u₀ : lim₊ g x₀ =. the u₀)
-    (h_f_cont : lim f u₀ =. the (f u₀))
-  : lim₊ (f ∘ g) x₀ =. the (f u₀)
+    (h_u₀ : lim₊ x₀ g =. the u₀)
+    (h_f_cont : lim u₀ f =. the (f u₀))
+  : lim₊ x₀ (f ∘ g) =. the (f u₀)
 := by
   have hg := RightLimit.fromRightLimitExpr ⟨1, zero_lt_one, subset_univ _⟩
     h_u₀
@@ -1370,7 +1368,7 @@ theorem RightLimitExpr.CompSV {x₀ u₀ : ℝ} {f g : ℝ → ℝ}
     h_f_cont
   have h_comp : RightLimit ⟨f ∘ g, Iii⟩ x₀ (f u₀) := by
     constructor
-    · exists 1 with zero_lt_one
+    · script_exists 1 with zero_lt_one
       exact subset_univ _
     · intro ε h_ε
       rcases hf.2 ε h_ε with ⟨δ1, hδ1_pos, hδ1⟩

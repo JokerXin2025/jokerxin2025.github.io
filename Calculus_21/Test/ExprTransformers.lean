@@ -1,48 +1,72 @@
 import «Calculus_21».Limit.Expr.GCongr
+import «Calculus_21».Limit.Expr.ProperReflect
 
-/-! # Tests for abstract transformers and proper backward reasoning -/
-
-open ProperClass
+/-! # Tests for automatic proper-value reflection -/
 
 section
-variable {A A' B B' target : LimitValue} {b : ℝ}
-variable {x y z : LimitValue.Outcome}
+variable {A B C target : LimitValue} {b : ℝ}
 
-example (hA : A =. A') (hB : B =. B') : A * B =. A' * B' := by
-  gcongr
+example (h : ProperClass.isProper (A + B)) : ProperClass.isProper A := by
+  script_proper_reflect
 
-example (h : isProper (A * B)) : isProper A := by
-  proper_reflect A from h as hA
+example (h : ProperClass.isProper (A + B)) : ProperClass.isProper B := by
+  script_proper_reflect (source := h)
+
+example (h : ProperClass.isProper (A * B)) : ProperClass.isProper A := by
+  script_proper_reflect (source := h)
+
+example (h : ProperClass.isProper (A * B)) : ProperClass.isProper B := by
+  script_proper_reflect
+
+example (h : ProperClass.isProper (-A)) : ProperClass.isProper A := by
+  script_proper_reflect
+
+example (h : ProperClass.isProper (A - B)) : ProperClass.isProper A := by
+  script_proper_reflect
+
+example (h : ProperClass.isProper (A - B)) : ProperClass.isProper B := by
+  script_proper_reflect
+
+example (h : ProperClass.isProper (A / the b)) : ProperClass.isProper A := by
+  script_proper_reflect
+
+example (h : ProperClass.isProper ((A * B + C) / the b)) :
+    ProperClass.isProper B := by
+  script_proper_reflect
+
+example {cond : Prop} [AutoProperReflect A (ProperClass.isProper target) cond]
+    (hcond : cond)
+    (h : ProperClass.isProper ((A * B) / the b)) :
+    ProperClass.isProper target := by
+  script_proper_reflect (discharger := hcond)
+
+example (h : ProperClass.isProper (A + B)) : ∃ a : ℝ, A = the a := by
+  script_proper_reflect
+
+example (h : ProperClass.isProper (A / the b)) : b ≠ 0 := by
+  script_proper_reflect (source := h)
+
+example (h : ProperClass.isProper (A / the (b ^ 2))) : b ≠ 0 := by
+  script_proper_reflect (source := h)
+
+example (h : ProperClass.isProper (A / the (b ^ 2))) : b ^ 2 ≠ 0 := by
+  script_proper_reflect (source := h)
+
+example (_h_other : ProperClass.isProper B)
+    (h : ProperClass.isProper (A / the (b ^ 2))) : b ^ 2 ≠ 0 := by
+  script_proper_reflect
+
+example {cond : Prop} [AutoProperReflect A (ProperClass.isProper target) cond]
+    (hcond : cond) (h : ProperClass.isProper A) : ProperClass.isProper target := by
+  script_proper_reflect (source := h, discharger := hcond)
+
+example {cond : Prop} [AutoProperReflect A (ProperClass.isProper target) cond]
+    (hcond : cond) (h : ProperClass.isProper A) : ProperClass.isProper target := by
+  script_proper_reflect (discharger := hcond, source := h)
+
+example (h : ProperClass.isProper (A + B)) : ProperClass.isProper A := by
+  have hA : ProperClass.isProper A := by
+    script_proper_reflect (source := h)
   exact hA
-
-example (h : isProper (A / the b)) : isProper A ∧ b ≠ 0 :=
-  ProperClass.isProper_div_finite h
-
-example [AutoProperReflect A target] (h : isProper ((A * B) / the b)) :
-    isProper target := by
-  proper_reflect target from h as htarget
-  exact htarget
-
-example (hx : x ∈ LimitValue.gamma A) (hy : y ∈ LimitValue.gamma B)
-    (hxyz : LimitValue.Outcome.Mul x y z) : z ∈ LimitValue.gamma (A * B) := by
-  change x ∈ Expr.Concretization.Gamma A at hx
-  change y ∈ Expr.Concretization.Gamma B at hy
-  change z ∈ Expr.Concretization.Gamma (A * B)
-  exact Expr.Transformer.binary_sound
-    (op := fun X Y : LimitValue => X * Y)
-    (concrete := LimitValue.Outcome.Mul) hx hy hxyz
-
-example (h : isProper (A / the b)) : isProper A ∧ b ≠ 0 := by
-  proper_backward h with (fun X : LimitValue => X / the b) as hpre
-  exact hpre
-
-example (h : isProper A⁻¹) : LimitValue.InvProperPre A :=
-  LimitValue.isProper_inv h
-
-example (h : isProper (A ^ B)) : LimitValue.PowProperPre A B :=
-  LimitValue.isProper_pow h
-
-example (hA : A =. A') (hB : B =. B') : A ^ B =. A' ^ B' := by
-  gcongr
 
 end

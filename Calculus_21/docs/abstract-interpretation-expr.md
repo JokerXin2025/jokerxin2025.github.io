@@ -1,6 +1,6 @@
 # 从抽象解释看表达式计算系统
 
-本文讨论 `Calculus_21/Expr/` 与 `Calculus_21/Limit/Expr/Init.lean` 所展示的表达式计算架构，并尝试回答一个工程问题：如何把这套“不引入垃圾值、不在每一步暴露 side condition、支持多态结果与 `EqualIfProper`”的机制，稳定地推广到极限以外的计算任务，同时减少手写桥接引理、分类引理和 proper 传播引理。
+本文讨论 `Calculus_21/PolyCalc/` 与 `Calculus_21/Limit/Expr/Init.lean` 所展示的表达式计算架构，并尝试回答一个工程问题：如何把这套“不引入垃圾值、不在每一步暴露 side condition、支持多态结果与 `EqualIfProper`”的机制，稳定地推广到极限以外的计算任务，同时减少手写桥接引理、分类引理和 proper 传播引理。
 
 这里的目标不是把库改写成传统程序分析器，也不是强行要求一个完整的 Galois connection。更合适的方向是：把当前隐含的抽象域、精度序、具体化关系和抽象转移函数显式封装，再让通用定理和自动化从这些结构中派生出来。
 
@@ -53,16 +53,16 @@ A =. B
 
 > `A` 至少和 `B` 一样精确；或者，`A` 可以安全退化为 `B`。
 
-若记精度序为 `A ⊑ B`，其中左边更精确、右边更抽象，那么当前 `A =. B` 正对应 `A ⊑ B`。例如：
+若记精度序为 `A =. B`，其中左边更精确、右边更抽象，那么当前 `A =. B` 正对应 `A =. B`。例如：
 
 ```text
-posInfty ⊑ unsignedInfty ⊑ divergence ⊑ unknown
+posInfty =. unsignedInfty =. divergence =. unknown
 ```
 
 这个方向与常见抽象解释文献中“集合包含越大越不精确”的方向一致：若 `γ` 是 concretization，则应有
 
 ```text
-A ⊑ B  →  γ(A) ⊆ γ(B).
+A =. B  →  γ(A) ⊆ γ(B).
 ```
 
 名称 `PolyEqual` 对用户书写 `calc` 很友好，但内核设计中最好同时显式承认它是一个 preorder/precision relation。否则分类、单调性和 proper 传播都只能从 `ReflTransGen` 的路径结构反复手工恢复。
@@ -100,7 +100,7 @@ finite a * posInfty =
 对 `LimitValue`，proper 值就是 `finite a`。`ProperClass.eq_of_proper` 表明：
 
 ```text
-A ⊑ B 且 B proper  →  A = B.
+A =. B 且 B proper  →  A = B.
 ```
 
 这是一个很强的抽象域性质：proper 元素没有比自己更精确但不同的表示。若使用 concretization，可将 proper 理解为 singleton 抽象值，并要求 singleton 表示规范或可分离。
@@ -238,7 +238,7 @@ inductive LimitOutcome where
 ```lean
 def IsSingleton (a : A) : Prop := ∃ c, gamma a = {c}
 
-class ProperDomain (A C) [AbstractDomain A C] where
+class ProperClass (A C) [AbstractDomain A C] where
   isProper : A → Prop
   proper_singleton : isProper a → ∃ c, gamma a = {c}
   proper_rigid : a ≤ b → isProper b → a = b
@@ -249,7 +249,7 @@ class ProperDomain (A C) [AbstractDomain A C] where
 `ProperClass` 可以作为兼容层继续暴露：
 
 ```lean
-instance [ProperDomain A C] : ProperClass A (· ≤ ·) := ...
+instance [ProperClass A C] : ProperClass A (· ≤ ·) := ...
 ```
 
 如此 `EqualIfProper`、现有 `calc` 风格和 `poly_rw` 均可保留。
@@ -337,16 +337,16 @@ def FuncLimitSem (f x₀) : LimitOutcome → Prop
 
 ```lean
 theorem funcLimitExpr_spec :
-  FuncLimitSem f x₀ o ↔ o ∈ gamma (FuncLimitExpr f x₀)
+  FuncLimitSem f x₀ o ↔ o ∈ gamma (FuncLimitExpr x₀ f)
 ```
 
 现有桥可统一派生：
 
 ```lean
-FuncLimit ... L              ↔ finite L ∈ γ (lim f x₀)
-FuncLimitPosInfty ...        ↔ posInfty ∈ γ (lim f x₀)
-FuncLimitInfty ...           ↔ γ (lim f x₀) ⊆ {posInfty, negInfty}
-¬ FuncConvergesAt ...        ↔ γ (lim f x₀) ⊆ nonFinite
+FuncLimit ... L              ↔ finite L ∈ γ (lim x₀ f)
+FuncLimitPosInfty ...        ↔ posInfty ∈ γ (lim x₀ f)
+FuncLimitInfty ...           ↔ γ (lim x₀ f) ⊆ {posInfty, negInfty}
+¬ FuncConvergesAt ...        ↔ γ (lim x₀ f) ⊆ nonFinite
 ```
 
 需要注意：`A =. unsignedInfty` 表示 `A` 比 `unsignedInfty` 精确，语义上对应 `γ(A) ⊆ γ(unsignedInfty)`，而不是某个具体 outcome 属于 `γ(A)`。因此桥接 API 应明确区分两种查询：
@@ -579,7 +579,7 @@ deriving abstract_domain for LimitValue using LimitFallbackCore
 
 建议最终形成四层，而不是让 `Expr` 同时承担所有职责。
 
-### 9.1 Domain 层
+### 9.1 Defs 层
 
 职责：
 
@@ -593,10 +593,10 @@ deriving abstract_domain for LimitValue using LimitFallbackCore
 可能的模块：
 
 ```text
-Expr/Domain/Basic.lean
-Expr/Domain/Proper.lean
-Expr/Domain/Observation.lean
-Expr/Domain/Product.lean
+PolyCalc/Defs/Basic.lean
+PolyCalc/Defs/Proper.lean
+PolyCalc/Defs/Observation.lean
+PolyCalc/Defs/Product.lean
 ```
 
 ### 9.2 Transformer 层
@@ -612,8 +612,8 @@ Expr/Domain/Product.lean
 可能的模块：
 
 ```text
-Expr/Transformer/Basic.lean
-Expr/Transformer/ProperBackward.lean
+PolyCalc/Transformer/Basic.lean
+PolyCalc/Transformer/ProperBackward.lean
 ```
 
 ### 9.3 Computation 层
@@ -665,7 +665,7 @@ Expr/Transformer/ProperBackward.lean
 
 ### 10.3 `ProperClass`
 
-保留兼容接口，但将其实现建立在 `ProperDomain` 上。`eq_of_proper` 不应由每个 domain 对 fallback 路径做低层 case analysis，而应来自通用的 proper rigid 定理。
+保留兼容接口，但将其实现建立在 `ProperClass` 上。`eq_of_proper` 不应由每个 domain 对 fallback 路径做低层 case analysis，而应来自通用的 proper rigid 定理。
 
 `ProperClass.isProper.getEqual` 当前命名和类型较特殊：它从 proper 抽象值提取 `∃ a, A =. finite a`。在新接口中更自然的是返回 singleton witness：
 
@@ -732,23 +732,23 @@ DerivativeTask → LimitTask
 ```lean
 namespace Expr.Experimental
 
-class Precision (A : Type u) where
+class PolyCalc (A : Type u) where
   le : A → A → Prop
   refl : Reflexive le
   trans : Transitive le
 
-class Concretization (A : Type u) (C : outParam (Type v)) [Precision A] where
+class Concretization (A : Type u) (C : outParam (Type v)) [PolyCalc A] where
   gamma : A → Set C
-  mono : ∀ {a b}, Precision.le a b → gamma a ⊆ gamma b
+  mono : ∀ {a b}, PolyCalc.le a b → gamma a ⊆ gamma b
 
-def Proves [Precision A] [Concretization A C]
+def Proves [PolyCalc A] [Concretization A C]
     (a : A) (P : C → Prop) : Prop :=
   ∀ c ∈ Concretization.gamma a, P c
 
 class Proper (A : Type u) (C : outParam (Type v))
-    [Precision A] [Concretization A C] where
+    [PolyCalc A] [Concretization A C] where
   proper : A → Prop
-  rigid : Precision.le a b → proper b → a = b
+  rigid : PolyCalc.le a b → proper b → a = b
 
 end Expr.Experimental
 ```
@@ -768,9 +768,9 @@ end Expr.Experimental
 
 ### 阶段一：显式化而不改用户 API
 
-- 新增 experimental `Precision`、`Concretization`、`Proves`、`Proper`。
+- 新增 experimental `PolyCalc`、`Concretization`、`Proves`、`Proper`。
 - 为 `LimitValue` 实例化。
-- 证明 `A =. B ↔ Precision.le A B`。
+- 证明 `A =. B ↔ PolyCalc.le A B`。
 - 用新接口重写分类引理的证明，但保留原定理名。
 - 保留 `poly_fallback`、`=?` 和现有 tactic。
 
@@ -790,7 +790,7 @@ end Expr.Experimental
 - 为算术运算增加 soundness 和 monotonicity。
 - 将 congruence 自动化接到这些实例上。
 - 引入 structured proper backward 规格。
-- 让 `proper_reflect` 返回所有必要条件。
+- 让 `script_proper_reflect` 返回所有必要条件。
 
 验收标准：新增一个二元运算时，只在定义处证明一次规格，不再为每个参数位置手写传播实例。
 

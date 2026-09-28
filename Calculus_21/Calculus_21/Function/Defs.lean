@@ -10,12 +10,27 @@ set_option linter.style.header false
 
 /-! # Definition of RFunction -/
 
-/-- Real RFunction with Domain
+/-- Real RFunction with Defs
     - `F.map` and `F.domain` refer to `F`'s total map and domain, respectively -/
 @[ext]
 structure RFunction where
   map : ℝ → ℝ
   domain : Set ℝ
+
+/-- Package a real map with domain `Iii`. -/
+def total (f : ℝ → ℝ) : RFunction := ⟨f, Iii⟩
+
+open Lean Parser Term in
+def totalFunBody : Parser := leading_parser basicFun <|> matchAlts
+
+/-- A lambda packaged as an `RFunction` with domain `Iii`. -/
+syntax:max "total_fun" totalFunBody : term
+
+macro_rules
+  | `(total_fun $body) => do
+    let f : Lean.TSyntax `term :=
+      ⟨Lean.Syntax.node .none ``Lean.Parser.Term.fun #[Lean.mkAtom "fun", body.raw[0]]⟩
+    `(total $f)
 
 
 /-! # RFunction Operations -/

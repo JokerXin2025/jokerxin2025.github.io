@@ -5,23 +5,26 @@
 -/
 
 import «Calculus_21».Limit.Infinitesimal.Equivalent
+import «Calculus_21».Limit.Tactics.Congr
 import «Calculus_21».Limit.Tactics.Cont
 set_option linter.style.header false
+
+open LimitValue (finite_iff)
 
 
 /-! # Preparations -/
 
 class AutoEquiv (f : ℝ → ℝ) (f' : outParam (ℝ → ℝ)) (x₀ : ℝ)
     (cond : outParam Prop) where
-  equiv : cond → lim (f / f') x₀ =. the 1
+  equiv : cond → lim x₀ (f / f') = the 1
 
 class AutoLeftEquiv (f : ℝ → ℝ) (f' : outParam (ℝ → ℝ)) (x₀ : ℝ)
     (cond : outParam Prop) where
-  equiv : cond → lim₋ (f / f') x₀ =. the 1
+  equiv : cond → lim₋ x₀ (f / f') = the 1
 
 class AutoRightEquiv (f : ℝ → ℝ) (f' : outParam (ℝ → ℝ)) (x₀ : ℝ)
     (cond : outParam Prop) where
-  equiv : cond → lim₊ (f / f') x₀ =. the 1
+  equiv : cond → lim₊ x₀ (f / f') = the 1
 
 private instance equiv_mul {f f' g g' : ℝ → ℝ} {x₀ : ℝ} {c₁ c₂ : Prop}
     [h_f : AutoEquiv f f' x₀ c₁] [h_g : AutoEquiv g g' x₀ c₂]
@@ -79,7 +82,7 @@ private instance equiv_SqrtEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply SqrtEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_SqrtEquiv
   : AutoLeftEquiv (fun x ↦ √(1 + x) - 1) (· / 2) 0 True where
@@ -92,7 +95,7 @@ private instance leftequiv_SqrtEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop
     intro ⟨h_cond, h_L⟩
     apply SqrtLeftEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_SqrtEquiv
   : AutoRightEquiv (fun x ↦ √(1 + x) - 1) (· / 2) 0 True where
@@ -105,7 +108,7 @@ private instance rightequiv_SqrtEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Pro
     intro ⟨h_cond, h_L⟩
     apply SqrtRightEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_PowerEquiv {a : ℝ}
   : AutoEquiv (fun x ↦ (1 + x) ^ a - 1) (a * ·) 0 (a ≠ 0) where
@@ -123,7 +126,7 @@ private instance equiv_PowerEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : Prop}
     apply PowerEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_PowerEquiv {a : ℝ}
   : AutoLeftEquiv (fun x ↦ (1 + x) ^ a - 1) (a * ·) 0 (a ≠ 0) where
@@ -141,7 +144,7 @@ private instance leftequiv_PowerEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : P
     apply PowerLeftEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_PowerEquiv {a : ℝ}
   : AutoRightEquiv (fun x ↦ (1 + x) ^ a - 1) (a * ·) 0 (a ≠ 0) where
@@ -159,7 +162,7 @@ private instance rightequiv_PowerEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : 
     apply PowerRightEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_NPowerEquiv_ℤ {n : ℤ}
   : AutoEquiv (fun x ↦ (1 + x) ^ n - 1) (n * ·) 0 (n ≠ 0) where
@@ -177,7 +180,7 @@ private instance equiv_NPowerEquiv_ℤ' {f : ℝ → ℝ} {n : ℤ} {x₀ L : �
     apply NPowerEquiv_ℤ
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_NPowerEquiv_ℤ {n : ℤ}
   : AutoLeftEquiv (fun x ↦ (1 + x) ^ n - 1) (n * ·) 0 (n ≠ 0) where
@@ -195,7 +198,7 @@ private instance leftequiv_NPowerEquiv_ℤ' {f : ℝ → ℝ} {n : ℤ} {x₀ L 
     apply NPowerLeftEquiv_ℤ
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_NPowerEquiv_ℤ {n : ℤ}
   : AutoRightEquiv (fun x ↦ (1 + x) ^ n - 1) (n * ·) 0 (n ≠ 0) where
@@ -213,7 +216,7 @@ private instance rightequiv_NPowerEquiv_ℤ' {f : ℝ → ℝ} {n : ℤ} {x₀ L
     apply NPowerRightEquiv_ℤ
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_NPowerEquiv_ℕ {n : ℕ}
   : AutoEquiv (fun x ↦ (1 + x) ^ n - 1) (n * ·) 0 (n ≠ 0) where
@@ -231,7 +234,7 @@ private instance equiv_NPowerEquiv_ℕ' {f : ℝ → ℝ} {n : ℕ} {x₀ L : �
     apply NPowerEquiv_ℕ
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_NPowerEquiv_ℕ {n : ℕ}
   : AutoLeftEquiv (fun x ↦ (1 + x) ^ n - 1) (n * ·) 0 (n ≠ 0) where
@@ -249,7 +252,7 @@ private instance leftequiv_NPowerEquiv_ℕ' {f : ℝ → ℝ} {n : ℕ} {x₀ L 
     apply NPowerLeftEquiv_ℕ
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_NPowerEquiv_ℕ {n : ℕ}
   : AutoRightEquiv (fun x ↦ (1 + x) ^ n - 1) (n * ·) 0 (n ≠ 0) where
@@ -267,7 +270,7 @@ private instance rightequiv_NPowerEquiv_ℕ' {f : ℝ → ℝ} {n : ℕ} {x₀ L
     apply NPowerRightEquiv_ℕ
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_ExpEquiv
   : AutoEquiv (fun x ↦ exp x - 1) (·) 0 True where
@@ -280,7 +283,7 @@ private instance equiv_ExpEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply ExpEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_ExpEquiv
   : AutoLeftEquiv (fun x ↦ exp x - 1) (·) 0 True where
@@ -293,7 +296,7 @@ private instance leftequiv_ExpEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply ExpLeftEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_ExpEquiv
   : AutoRightEquiv (fun x ↦ exp x - 1) (·) 0 True where
@@ -306,7 +309,7 @@ private instance rightequiv_ExpEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop
     intro ⟨h_cond, h_L⟩
     apply ExpRightEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_ExpowEquiv {a : ℝ}
   : AutoEquiv (fun x ↦ a ^ x - 1) (· * ln a) 0 (a > 0 ∧ a ≠ 1) where
@@ -324,7 +327,7 @@ private instance equiv_ExpowEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : Prop}
     apply ExpowEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_ExpowEquiv {a : ℝ}
   : AutoLeftEquiv (fun x ↦ a ^ x - 1) (· * ln a) 0 (a > 0 ∧ a ≠ 1) where
@@ -342,7 +345,7 @@ private instance leftequiv_ExpowEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : P
     apply ExpowLeftEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_ExpowEquiv {a : ℝ}
   : AutoRightEquiv (fun x ↦ a ^ x - 1) (· * ln a) 0 (a > 0 ∧ a ≠ 1) where
@@ -360,7 +363,7 @@ private instance rightequiv_ExpowEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : 
     apply ExpowRightEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_LnEquiv
   : AutoEquiv (fun x ↦ ln (1 + x)) (·) 0 True where
@@ -373,7 +376,7 @@ private instance equiv_LnEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply LnEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_LnEquiv
   : AutoLeftEquiv (fun x ↦ ln (1 + x)) (·) 0 True where
@@ -386,7 +389,7 @@ private instance leftequiv_LnEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply LnLeftEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_LnEquiv
   : AutoRightEquiv (fun x ↦ ln (1 + x)) (·) 0 True where
@@ -399,7 +402,7 @@ private instance rightequiv_LnEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply LnRightEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_LogEquiv {a : ℝ}
   : AutoEquiv (fun x ↦ log a (1 + x)) (· / ln a) 0 (a > 0 ∧ a ≠ 1) where
@@ -418,7 +421,7 @@ private instance equiv_LogEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : Prop}
     apply LogEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_LogEquiv {a : ℝ}
   : AutoLeftEquiv (fun x ↦ log a (1 + x)) (· / ln a) 0 (a > 0 ∧ a ≠ 1) where
@@ -437,7 +440,7 @@ private instance leftequiv_LogEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : Pro
     apply LogLeftEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_LogEquiv {a : ℝ}
   : AutoRightEquiv (fun x ↦ log a (1 + x)) (· / ln a) 0 (a > 0 ∧ a ≠ 1) where
@@ -456,7 +459,7 @@ private instance rightequiv_LogEquiv' {f : ℝ → ℝ} {a x₀ L : ℝ} {c : Pr
     apply LogRightEquiv
     · exact h_dom
     · rewrite [h_L] at h_ifs
-      exact h_ifs.eq h_cond
+      poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_SinEquiv
   : AutoEquiv sin (·) 0 True where
@@ -469,7 +472,7 @@ private instance equiv_SinEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply SinEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_SinEquiv
   : AutoLeftEquiv sin (·) 0 True where
@@ -482,7 +485,7 @@ private instance leftequiv_SinEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply SinLeftEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_SinEquiv
   : AutoRightEquiv sin (·) 0 True where
@@ -495,7 +498,7 @@ private instance rightequiv_SinEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop
     intro ⟨h_cond, h_L⟩
     apply SinRightEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_TanEquiv
   : AutoEquiv tan (·) 0 True where
@@ -508,7 +511,7 @@ private instance equiv_TanEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply TanEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_TanEquiv
   : AutoLeftEquiv tan (·) 0 True where
@@ -521,7 +524,7 @@ private instance leftequiv_TanEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply TanLeftEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_TanEquiv
   : AutoRightEquiv tan (·) 0 True where
@@ -534,7 +537,7 @@ private instance rightequiv_TanEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop
     intro ⟨h_cond, h_L⟩
     apply TanRightEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_ArcsinEquiv
   : AutoEquiv arcsin (·) 0 True where
@@ -547,7 +550,7 @@ private instance equiv_ArcsinEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply ArcsinEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_ArcsinEquiv
   : AutoLeftEquiv arcsin (·) 0 True where
@@ -560,7 +563,7 @@ private instance leftequiv_ArcsinEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Pr
     intro ⟨h_cond, h_L⟩
     apply ArcsinLeftEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_ArcsinEquiv
   : AutoRightEquiv arcsin (·) 0 True where
@@ -573,7 +576,7 @@ private instance rightequiv_ArcsinEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : P
     intro ⟨h_cond, h_L⟩
     apply ArcsinRightEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance equiv_ArctanEquiv
   : AutoEquiv arctan (·) 0 True where
@@ -586,7 +589,7 @@ private instance equiv_ArctanEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Prop}
     intro ⟨h_cond, h_L⟩
     apply ArctanEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance leftequiv_ArctanEquiv
   : AutoLeftEquiv arctan (·) 0 True where
@@ -599,7 +602,7 @@ private instance leftequiv_ArctanEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : Pr
     intro ⟨h_cond, h_L⟩
     apply ArctanLeftEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 private instance rightequiv_ArctanEquiv
   : AutoRightEquiv arctan (·) 0 True where
@@ -612,36 +615,36 @@ private instance rightequiv_ArctanEquiv' {f : ℝ → ℝ} {x₀ L : ℝ} {c : P
     intro ⟨h_cond, h_L⟩
     apply ArctanRightEquiv
     rewrite [h_L] at h_ifs
-    exact h_ifs.eq h_cond
+    poly_rw [h_ifs.eq h_cond]
 
 lemma autoEquiv {f f' g : ℝ → ℝ} {x₀ : ℝ} {cond : Prop}
     [AutoEquiv f f' x₀ cond] (h_cond : cond)
-  : lim (fun x ↦ f x / g x) x₀ = lim (fun x ↦ f' x / g x) x₀
+  : (lim x₀ fun x ↦ f x / g x) = lim x₀ fun x ↦ f' x / g x
 := sorry
 
 lemma autoEquiv' {f g g' : ℝ → ℝ} {x₀ : ℝ} {cond : Prop}
     [AutoEquiv g g' x₀ cond] (h_cond : cond)
-  : lim (fun x ↦ f x / g x) x₀ = lim (fun x ↦ f x / g' x) x₀
+  : (lim x₀ fun x ↦ f x / g x) = lim x₀ fun x ↦ f x / g' x
 := sorry
 
 lemma autoLeftEquiv {f f' g : ℝ → ℝ} {x₀ : ℝ} {cond : Prop}
     [AutoLeftEquiv f f' x₀ cond] (h_cond : cond)
-  : lim₋ (fun x ↦ f x / g x) x₀ = lim₋ (fun x ↦ f' x / g x) x₀
+  : (lim₋ x₀ fun x ↦ f x / g x) = lim₋ x₀ fun x ↦ f' x / g x
 := sorry
 
 lemma autoLeftEquiv' {f g g' : ℝ → ℝ} {x₀ : ℝ} {cond : Prop}
     [AutoLeftEquiv g g' x₀ cond] (h_cond : cond)
-  : lim₋ (fun x ↦ f x / g x) x₀ = lim₋ (fun x ↦ f x / g' x) x₀
+  : (lim₋ x₀ fun x ↦ f x / g x) = lim₋ x₀ fun x ↦ f x / g' x
 := sorry
 
 lemma autoRightEquiv {f f' g : ℝ → ℝ} {x₀ : ℝ} {cond : Prop}
     [AutoRightEquiv f f' x₀ cond] (h_cond : cond)
-  : lim₊ (fun x ↦ f x / g x) x₀ = lim₊ (fun x ↦ f' x / g x) x₀
+  : (lim₊ x₀ fun x ↦ f x / g x) = lim₊ x₀ fun x ↦ f' x / g x
 := sorry
 
 lemma autoRightEquiv' {f g g' : ℝ → ℝ} {x₀ : ℝ} {cond : Prop}
     [AutoRightEquiv g g' x₀ cond] (h_cond : cond)
-  : lim₊ (fun x ↦ f x / g x) x₀ = lim₊ (fun x ↦ f x / g' x) x₀
+  : (lim₊ x₀ fun x ↦ f x / g x) = lim₊ x₀ fun x ↦ f x / g' x
 := sorry
 
 
@@ -685,46 +688,49 @@ lemma autoRightEquiv' {f g g' : ℝ → ℝ} {x₀ : ℝ} {cond : Prop}
     __Examples__
     ```lean
     example
-      : lim (fun x ↦ sin x / x) 0 =? lim (fun x ↦ x / x) 0
+      : (lim 0 fun x ↦ sin x / x) = lim 0 fun x ↦ x / x
     := by lim_equiv
     example
-      : lim (fun x ↦ (ln (1 + (x - π)) * arcsin (x - π)) / (sin (x - π) * cos x)) π
-        =? lim (fun x ↦ ((x - π) * (x - π)) / ((x - π) * cos x)) π
+      : (lim π fun x ↦ (ln (1 + (x - π)) * arcsin (x - π)) / (sin (x - π) * cos x))
+        = lim π fun x ↦ ((x - π) * (x - π)) / ((x - π) * cos x)
     := by lim_equiv
     example
-      : lim (fun x ↦  (arctan (exp x - 1) * sin (tan x))
-                      / (sin x * arcsin (x ^ 2) * (exp (arcsin x) - 1))) 0
-        =? lim (fun x ↦ 1 / x ^ 2) 0
+      : (lim 0 fun x ↦  (arctan (exp x - 1) * sin (tan x))
+                      / (sin x * arcsin (x ^ 2) * (exp (arcsin x) - 1)))
+        =? lim 0 fun x ↦ 1 / x ^ 2
     := by lim_equiv
     ```
 -/
 macro "lim_equiv" : tactic => `(tactic| (
   intros
-  simp (
-    discharger := auto_side_condition
-  ) only [
+  simp (discharger := auto_side_condition) only [
     autoEquiv,
     autoEquiv',
     autoLeftEquiv,
     autoLeftEquiv',
     autoRightEquiv,
-    autoRightEquiv',
+    autoRightEquiv'
   ]
-  try focus auto_eq
-  try focus lim_congr_by auto_eq within 1
+  try · lim_congr 1; auto_side_condition
 ))
 
-example
-  : lim (fun x ↦ sin x / x) 0 =? lim (fun x ↦ x / x) 0
-:= by lim_equiv
-example
-  : lim (fun x ↦ (ln (1 + (x - π)) * arcsin (x - π)) / (sin (x - π) * cos x)) π
-    =? lim (fun x ↦ ((x - π) * (x - π)) / ((x - π) * cos x)) π
-:= by lim_equiv
-example
-  : lim (fun x ↦  (arctan (exp x - 1) * sin (tan x))
-                  / (sin x * arcsin (x ^ 2) * (exp (arcsin x) - 1))) 0
-    =? lim (fun x ↦ 1 / x ^ 2) 0
-:= by lim_equiv
 
 page_end
+
+
+section
+
+example
+  : lim 0 (fun x ↦ sin x / x) = lim 0 fun x ↦ x / x
+:= by lim_equiv
+example
+  : lim π (fun x ↦ (ln (1 + (x - π)) * arcsin (x - π)) / (sin (x - π) * cos x))
+      = lim π fun x ↦ ((x - π) * (x - π)) / ((x - π) * cos x)
+:= by lim_equiv
+example
+  : lim 0 (fun x ↦ (arctan (exp x - 1) * sin (tan x))
+        / (sin x * arcsin (x ^ 2) * (exp (arcsin x) - 1)))
+      = lim 0 fun x ↦ 1 / x ^ 2
+:= by lim_equiv
+
+end

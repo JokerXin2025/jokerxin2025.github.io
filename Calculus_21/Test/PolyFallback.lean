@@ -1,45 +1,32 @@
 import «Calculus_21».Limit.Expr.Init
 
-/-! # Tests for automatic `PolyEqual` fallback-path search -/
+/-! # Tests for precision fallback relations -/
 
 open LimitValue
 
 example (a : ℝ) : the a =. unknown := by
-  poly_fallback
+  exact Expr.PolyCalc.le_unknown _
 
 example : pos_infty =. infty := by
-  poly_fallback
+  exact Expr.PolyCalc.le_of_fallbackCore LimitFallbackCore.pos_infty_infty
 
 example : pos_infty =. diverg := by
-  poly_fallback
+  exact Expr.PolyCalc.le_trans
+    (Expr.PolyCalc.le_of_fallbackCore LimitFallbackCore.pos_infty_infty)
+    (Expr.PolyCalc.le_of_fallbackCore LimitFallbackCore.infty_divergence)
 
 example : pos_infty =. unknown := by
-  poly_fallback
+  exact Expr.PolyCalc.le_unknown _
 
 example : neg_infty =. unknown := by
-  poly_fallback
+  exact Expr.PolyCalc.le_unknown _
 
 example : infty =. unknown := by
-  poly_fallback
+  exact Expr.PolyCalc.le_unknown _
 
 example : unknown =. unknown := by
-  poly_fallback
+  rfl
 
 example : True := by
-  fail_if_success exact (by poly_fallback : unknown =. diverg)
+  fail_if_success exact (by trivial : unknown =. diverg)
   trivial
-
-inductive TestValue where
-| atom : ℕ → TestValue
-| middle
-| top
-
-inductive TestFallbackCore : TestValue → TestValue → Prop where
-| atom_middle (n : ℕ) : TestFallbackCore (.atom n) .middle
-| middle_top : TestFallbackCore .middle .top
-
-instance : PolyExpr TestValue where
-  fallbackCore := TestFallbackCore
-
-example (n : ℕ) : TestValue.atom n =. TestValue.top := by
-  poly_fallback

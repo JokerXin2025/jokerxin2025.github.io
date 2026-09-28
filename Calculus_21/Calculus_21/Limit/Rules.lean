@@ -7,7 +7,7 @@
 import «Calculus_21».Limit.Defs
 set_option linter.style.header false
 
-local macro "exists" data:term "with" cond:term : tactic => `(tactic| refine ⟨$data, $cond, ?_⟩)
+local macro "script_exists" data:term "with" cond:term : tactic => `(tactic| refine ⟨$data, $cond, ?_⟩)
 
 
 /-! # Lemmas -/
@@ -21,11 +21,11 @@ private lemma smul_near
 := by
   by_cases h_k : k = 0
   · subst k
-    exists 1 with by norm_num
+    script_exists 1 with by norm_num
     intro x h_x
     rw [Nbho_abs]
     simpa using h_ε
-  · exists ε / |k| with div_pos h_ε (abs_pos.mpr h_k)
+  · script_exists ε / |k| with div_pos h_ε (abs_pos.mpr h_k)
     intro x h_x
     rw [Nbho_abs] at h_x ⊢
     rw [← mul_sub, abs_mul]
@@ -60,7 +60,7 @@ private lemma mul_near
 := by
   let C := |L₁| + |L₂| + 2
   have h_C : 0 < C := by dsimp [C]; positivity
-  exists min 1 (ε / C) with lt_min (by norm_num) (div_pos h_ε h_C)
+  script_exists min 1 (ε / C) with lt_min (by norm_num) (div_pos h_ε h_C)
   intro x h_x y h_y
   rw [Nbho_abs] at h_x h_y ⊢
   have h_η1 : |x - L₁| < 1 := lt_of_lt_of_le h_x (min_le_left _ _)
@@ -102,7 +102,7 @@ private lemma inv_near
   have h_Labs : 0 < |L₁| := abs_pos.mpr h_L₁
   let η := min (|L₁| / 2) (ε * |L₁| ^ 2 / 2)
   have h_η : 0 < η := lt_min (by positivity) (by positivity)
-  exists η with h_η
+  script_exists η with h_η
   intro x h_x
   rw [Nbho_abs] at h_x
   have h_xclose : |x - L₁| < |L₁| / 2 := lt_of_lt_of_le h_x (min_le_left _ _)
@@ -139,14 +139,14 @@ private lemma pow_near
 := by
   induction n generalizing ε with
   | zero =>
-      exists 1 with by norm_num
+      script_exists 1 with by norm_num
       intro x h_x
       rw [Nbho_abs]
       simpa using h_ε
   | succ n h_ih =>
       obtain ⟨η, h_η, h_mul⟩ := mul_near (L₁ := L₁ ^ n) (L₂ := L₁) h_ε
       obtain ⟨δ, h_δ, h_pow⟩ := h_ih h_η
-      exists min δ η with lt_min h_δ h_η
+      script_exists min δ η with lt_min h_δ h_η
       intro x h_x
       have h_xδ : x ∈ Nbho L₁ δ := by
         rw [Nbho_abs] at h_x ⊢
@@ -187,7 +187,7 @@ theorem FuncLimit.SMul
   intro ε h_ε
   obtain ⟨η, h_η, h_smul⟩ := smul_near h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   exact h_smul _ (h_map x h_x)
 
@@ -200,7 +200,7 @@ theorem LeftLimit.SMul
   intro ε h_ε
   obtain ⟨η, h_η, h_smul⟩ := smul_near h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   exact h_smul _ (h_map x h_x)
 
@@ -213,7 +213,7 @@ theorem RightLimit.SMul
   intro ε h_ε
   obtain ⟨η, h_η, h_smul⟩ := smul_near h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change k * F.map x ∈ Nbho (k * L₁) ε
   exact h_smul _ (h_map x h_x)
@@ -227,7 +227,7 @@ theorem PosInftyLimit.SMul
   intro ε h_ε
   obtain ⟨η, h_η, h_smul⟩ := smul_near h_ε
   obtain ⟨M, h_M, h_map⟩ := h_lim η h_η
-  exists M with h_M
+  script_exists M with h_M
   intro x h_x
   change k * F.map x ∈ Nbho (k * L₁) ε
   exact h_smul _ (h_map x h_x)
@@ -241,7 +241,7 @@ theorem NegInftyLimit.SMul
   intro ε h_ε
   obtain ⟨η, h_η, h_smul⟩ := smul_near h_ε
   obtain ⟨M, h_M, h_map⟩ := h_lim η h_η
-  exists M with h_M
+  script_exists M with h_M
   intro x h_x
   change k * F.map x ∈ Nbho (k * L₁) ε
   exact h_smul _ (h_map x h_x)
@@ -255,7 +255,7 @@ theorem InftyLimit.SMul
   intro ε h_ε
   obtain ⟨η, h_η, h_smul⟩ := smul_near h_ε
   obtain ⟨M, h_M, h_neg, h_pos⟩ := h_lim η h_η
-  exists M with h_M
+  script_exists M with h_M
   constructor
   · intro x h_x
     change k * F.map x ∈ Nbho (k * L₁) ε
@@ -285,7 +285,7 @@ theorem FuncLimit.Neg
   refine ⟨h_dom, ?_⟩
   intro ε h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim ε h_ε
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change -F.map x ∈ Nbho (-L₁) ε
   exact neg_near (h_map x h_x)
@@ -298,7 +298,7 @@ theorem LeftLimit.Neg
   refine ⟨h_dom, ?_⟩
   intro ε h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim ε h_ε
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change -F.map x ∈ Nbho (-L₁) ε
   exact neg_near (h_map x h_x)
@@ -311,7 +311,7 @@ theorem RightLimit.Neg
   refine ⟨h_dom, ?_⟩
   intro ε h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim ε h_ε
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change -F.map x ∈ Nbho (-L₁) ε
   exact neg_near (h_map x h_x)
@@ -324,7 +324,7 @@ theorem PosInftyLimit.Neg
   refine ⟨h_dom, ?_⟩
   intro ε h_ε
   obtain ⟨M, h_M, h_map⟩ := h_lim ε h_ε
-  exists M with h_M
+  script_exists M with h_M
   intro x h_x
   change -F.map x ∈ Nbho (-L₁) ε
   exact neg_near (h_map x h_x)
@@ -337,7 +337,7 @@ theorem NegInftyLimit.Neg
   refine ⟨h_dom, ?_⟩
   intro ε h_ε
   obtain ⟨M, h_M, h_map⟩ := h_lim ε h_ε
-  exists M with h_M
+  script_exists M with h_M
   intro x h_x
   change -F.map x ∈ Nbho (-L₁) ε
   exact neg_near (h_map x h_x)
@@ -350,7 +350,7 @@ theorem InftyLimit.Neg
   refine ⟨h_dom, ?_⟩
   intro ε h_ε
   obtain ⟨M, h_M, h_neg, h_pos⟩ := h_lim ε h_ε
-  exists M with h_M
+  script_exists M with h_M
   constructor
   · intro x h_x
     change -F.map x ∈ Nbho (-L₁) ε
@@ -382,7 +382,7 @@ theorem FuncLimit.MSPow
   intro ε h_ε
   obtain ⟨η, h_η, h_pow⟩ := pow_near h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change F.map x ^ n ∈ Nbho (L₁ ^ n) ε
   exact h_pow _ (h_map x h_x)
@@ -397,7 +397,7 @@ theorem LeftLimit.MSPow
   intro ε h_ε
   obtain ⟨η, h_η, h_pow⟩ := pow_near h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change F.map x ^ n ∈ Nbho (L₁ ^ n) ε
   exact h_pow _ (h_map x h_x)
@@ -412,7 +412,7 @@ theorem RightLimit.MSPow
   intro ε h_ε
   obtain ⟨η, h_η, h_pow⟩ := pow_near h_ε
   obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change F.map x ^ n ∈ Nbho (L₁ ^ n) ε
   exact h_pow _ (h_map x h_x)
@@ -426,7 +426,7 @@ theorem PosInftyLimit.MSPow
   intro ε h_ε
   obtain ⟨η, h_η, h_pow⟩ := pow_near h_ε
   obtain ⟨M, h_M, h_map⟩ := h_lim η h_η
-  exists M with h_M
+  script_exists M with h_M
   intro x h_x
   change F.map x ^ n ∈ Nbho (L₁ ^ n) ε
   exact h_pow _ (h_map x h_x)
@@ -440,7 +440,7 @@ theorem NegInftyLimit.MSPow
   intro ε h_ε
   obtain ⟨η, h_η, h_pow⟩ := pow_near h_ε
   obtain ⟨M, h_M, h_map⟩ := h_lim η h_η
-  exists M with h_M
+  script_exists M with h_M
   intro x h_x
   change F.map x ^ n ∈ Nbho (L₁ ^ n) ε
   exact h_pow _ (h_map x h_x)
@@ -454,7 +454,7 @@ theorem InftyLimit.MSPow
   intro ε h_ε
   obtain ⟨η, h_η, h_pow⟩ := pow_near h_ε
   obtain ⟨M, h_M, h_neg, h_pos⟩ := h_lim η h_η
-  exists M with h_M
+  script_exists M with h_M
   constructor
   · intro x h_x
     change F.map x ^ n ∈ Nbho (L₁ ^ n) ε
@@ -480,7 +480,7 @@ theorem FuncLimit.Inv
   obtain ⟨η₀, h_η₀, h_nonzero⟩ := inv_near h_L₁_ne0 (by norm_num : (0 : ℝ) < 1)
   obtain ⟨δ₀, h_δ₀, h_map₀⟩ := h_lim η₀ h_η₀
   constructor
-  · exists min δd δ₀ with lt_min h_δd h_δ₀
+  · script_exists min δd δ₀ with lt_min h_δd h_δ₀
     intro x h_x
     have h_xd : x ∈ Nbhd x₀ δd := by
       obtain ⟨h_xl, h_xr, h_xne⟩ := h_x
@@ -494,7 +494,7 @@ theorem FuncLimit.Inv
   · intro ε h_ε
     obtain ⟨η, h_η, h_inv⟩ := inv_near h_L₁_ne0 h_ε
     obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-    exists δ with h_δ
+    script_exists δ with h_δ
     intro x h_x
     change (F.map x)⁻¹ ∈ Nbho L₁⁻¹ ε
     exact (h_inv _ (h_map x h_x)).2
@@ -508,7 +508,7 @@ theorem LeftLimit.Inv
   obtain ⟨η₀, h_η₀, h_nonzero⟩ := inv_near h_L₁_ne0 (by norm_num : (0 : ℝ) < 1)
   obtain ⟨δ₀, h_δ₀, h_map₀⟩ := h_lim η₀ h_η₀
   constructor
-  · exists min δd δ₀ with lt_min h_δd h_δ₀
+  · script_exists min δd δ₀ with lt_min h_δd h_δ₀
     intro x h_x
     have h_xd : x ∈ Ioo (x₀ - δd) x₀ := by
       constructor <;> linarith [h_x.1, h_x.2, min_le_left δd δ₀]
@@ -518,7 +518,7 @@ theorem LeftLimit.Inv
   · intro ε h_ε
     obtain ⟨η, h_η, h_inv⟩ := inv_near h_L₁_ne0 h_ε
     obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-    exists δ with h_δ
+    script_exists δ with h_δ
     intro x h_x
     change (F.map x)⁻¹ ∈ Nbho L₁⁻¹ ε
     exact (h_inv _ (h_map x h_x)).2
@@ -532,7 +532,7 @@ theorem RightLimit.Inv
   obtain ⟨η₀, h_η₀, h_nonzero⟩ := inv_near h_L₁_ne0 (by norm_num : (0 : ℝ) < 1)
   obtain ⟨δ₀, h_δ₀, h_map₀⟩ := h_lim η₀ h_η₀
   constructor
-  · exists min δd δ₀ with lt_min h_δd h_δ₀
+  · script_exists min δd δ₀ with lt_min h_δd h_δ₀
     intro x h_x
     have h_xd : x ∈ Ioo x₀ (x₀ + δd) := by
       constructor <;> linarith [h_x.1, h_x.2, min_le_left δd δ₀]
@@ -542,7 +542,7 @@ theorem RightLimit.Inv
   · intro ε h_ε
     obtain ⟨η, h_η, h_inv⟩ := inv_near h_L₁_ne0 h_ε
     obtain ⟨δ, h_δ, h_map⟩ := h_lim η h_η
-    exists δ with h_δ
+    script_exists δ with h_δ
     intro x h_x
     change (F.map x)⁻¹ ∈ Nbho L₁⁻¹ ε
     exact (h_inv _ (h_map x h_x)).2
@@ -556,14 +556,14 @@ theorem PosInftyLimit.Inv
   obtain ⟨η₀, h_η₀, h_nonzero⟩ := inv_near h_L₁_ne0 (by norm_num : (0 : ℝ) < 1)
   obtain ⟨M₀, h_M₀, h_map₀⟩ := h_lim η₀ h_η₀
   constructor
-  · exists max Md M₀ with by positivity
+  · script_exists max Md M₀ with by positivity
     intro x h_x
     exact ⟨h_dom (mem_Ioi_max_left h_x),
       (h_nonzero _ (h_map₀ x (mem_Ioi_max_right h_x))).1⟩
   · intro ε h_ε
     obtain ⟨η, h_η, h_inv⟩ := inv_near h_L₁_ne0 h_ε
     obtain ⟨M, h_M, h_map⟩ := h_lim η h_η
-    exists M with h_M
+    script_exists M with h_M
     intro x h_x
     change (F.map x)⁻¹ ∈ Nbho L₁⁻¹ ε
     exact (h_inv _ (h_map x h_x)).2
@@ -577,14 +577,14 @@ theorem NegInftyLimit.Inv
   obtain ⟨η₀, h_η₀, h_nonzero⟩ := inv_near h_L₁_ne0 (by norm_num : (0 : ℝ) < 1)
   obtain ⟨M₀, h_M₀, h_map₀⟩ := h_lim η₀ h_η₀
   constructor
-  · exists max Md M₀ with by positivity
+  · script_exists max Md M₀ with by positivity
     intro x h_x
     exact ⟨h_dom (mem_Iio_neg_max_left h_x),
       (h_nonzero _ (h_map₀ x (mem_Iio_neg_max_right h_x))).1⟩
   · intro ε h_ε
     obtain ⟨η, h_η, h_inv⟩ := inv_near h_L₁_ne0 h_ε
     obtain ⟨M, h_M, h_map⟩ := h_lim η h_η
-    exists M with h_M
+    script_exists M with h_M
     intro x h_x
     change (F.map x)⁻¹ ∈ Nbho L₁⁻¹ ε
     exact (h_inv _ (h_map x h_x)).2
@@ -598,7 +598,7 @@ theorem InftyLimit.Inv
   obtain ⟨η₀, h_η₀, h_nonzero⟩ := inv_near h_L₁_ne0 (by norm_num : (0 : ℝ) < 1)
   obtain ⟨M₀, h_M₀, h_mapneg₀, h_mappos₀⟩ := h_lim η₀ h_η₀
   constructor
-  · exists max Md M₀ with by positivity
+  · script_exists max Md M₀ with by positivity
     constructor
     · intro x h_x
       exact ⟨h_domneg (mem_Iio_neg_max_left h_x),
@@ -609,7 +609,7 @@ theorem InftyLimit.Inv
   · intro ε h_ε
     obtain ⟨η, h_η, h_inv⟩ := inv_near h_L₁_ne0 h_ε
     obtain ⟨M, h_M, h_mapneg, h_mappos⟩ := h_lim η h_η
-    exists M with h_M
+    script_exists M with h_M
     constructor
     · intro x h_x
       change (F.map x)⁻¹ ∈ Nbho L₁⁻¹ ε
@@ -644,7 +644,7 @@ theorem FuncLimit.Add
 := by
   intro ⟨⟨δF, h_δF, h_Fdom⟩, h_Flim⟩ ⟨⟨δG, h_δG, h_Gdom⟩, h_Glim⟩
   constructor
-  · exists min δF δG with lt_min h_δF h_δG
+  · script_exists min δF δG with lt_min h_δF h_δG
     intro x h_x
     exact ⟨h_Fdom ⟨by linarith [h_x.1, min_le_left δF δG],
       by linarith [h_x.2.1, min_le_left δF δG], h_x.2.2⟩,
@@ -654,7 +654,7 @@ theorem FuncLimit.Add
     have h_half : 0 < ε / 2 := by linarith
     obtain ⟨δ₁, h_δ₁, h_F⟩ := h_Flim (ε / 2) h_half
     obtain ⟨δ₂, h_δ₂, h_G⟩ := h_Glim (ε / 2) h_half
-    exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
+    script_exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
     intro x h_x
     change F.map x + G.map x ∈ Nbho (L₁ + L₂) ε
     exact add_near
@@ -669,7 +669,7 @@ theorem LeftLimit.Add
 := by
   intro ⟨⟨δF, h_δF, h_Fdom⟩, h_Flim⟩ ⟨⟨δG, h_δG, h_Gdom⟩, h_Glim⟩
   constructor
-  · exists min δF δG with lt_min h_δF h_δG
+  · script_exists min δF δG with lt_min h_δF h_δG
     intro x h_x
     exact ⟨h_Fdom ⟨by linarith [h_x.1, min_le_left δF δG], h_x.2⟩,
       h_Gdom ⟨by linarith [h_x.1, min_le_right δF δG], h_x.2⟩⟩
@@ -677,7 +677,7 @@ theorem LeftLimit.Add
     have h_half : 0 < ε / 2 := by linarith
     obtain ⟨δ₁, h_δ₁, h_F⟩ := h_Flim (ε / 2) h_half
     obtain ⟨δ₂, h_δ₂, h_G⟩ := h_Glim (ε / 2) h_half
-    exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
+    script_exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
     intro x h_x
     change F.map x + G.map x ∈ Nbho (L₁ + L₂) ε
     exact add_near
@@ -690,7 +690,7 @@ theorem RightLimit.Add
 := by
   intro ⟨⟨δF, h_δF, h_Fdom⟩, h_Flim⟩ ⟨⟨δG, h_δG, h_Gdom⟩, h_Glim⟩
   constructor
-  · exists min δF δG with lt_min h_δF h_δG
+  · script_exists min δF δG with lt_min h_δF h_δG
     intro x h_x
     exact ⟨h_Fdom ⟨h_x.1, by linarith [h_x.2, min_le_left δF δG]⟩,
       h_Gdom ⟨h_x.1, by linarith [h_x.2, min_le_right δF δG]⟩⟩
@@ -698,7 +698,7 @@ theorem RightLimit.Add
     have h_half : 0 < ε / 2 := by linarith
     obtain ⟨δ₁, h_δ₁, h_F⟩ := h_Flim (ε / 2) h_half
     obtain ⟨δ₂, h_δ₂, h_G⟩ := h_Glim (ε / 2) h_half
-    exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
+    script_exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
     intro x h_x
     change F.map x + G.map x ∈ Nbho (L₁ + L₂) ε
     exact add_near
@@ -711,14 +711,14 @@ theorem PosInftyLimit.Add
 := by
   intro ⟨⟨MF, h_MF, h_Fdom⟩, h_Flim⟩ ⟨⟨MG, h_MG, h_Gdom⟩, h_Glim⟩
   constructor
-  · exists max MF MG with by positivity
+  · script_exists max MF MG with by positivity
     intro x h_x
     exact ⟨h_Fdom (mem_Ioi_max_left h_x), h_Gdom (mem_Ioi_max_right h_x)⟩
   · intro ε h_ε
     have h_half : 0 < ε / 2 := by linarith
     obtain ⟨M₁, h_M₁, h_F⟩ := h_Flim (ε / 2) h_half
     obtain ⟨M₂, h_M₂, h_G⟩ := h_Glim (ε / 2) h_half
-    exists max M₁ M₂ with by positivity
+    script_exists max M₁ M₂ with by positivity
     intro x h_x
     change F.map x + G.map x ∈ Nbho (L₁ + L₂) ε
     exact add_near ⟨h_F x (mem_Ioi_max_left h_x), h_G x (mem_Ioi_max_right h_x)⟩
@@ -729,14 +729,14 @@ theorem NegInftyLimit.Add
 := by
   intro ⟨⟨MF, h_MF, h_Fdom⟩, h_Flim⟩ ⟨⟨MG, h_MG, h_Gdom⟩, h_Glim⟩
   constructor
-  · exists max MF MG with by positivity
+  · script_exists max MF MG with by positivity
     intro x h_x
     exact ⟨h_Fdom (mem_Iio_neg_max_left h_x), h_Gdom (mem_Iio_neg_max_right h_x)⟩
   · intro ε h_ε
     have h_half : 0 < ε / 2 := by linarith
     obtain ⟨M₁, h_M₁, h_F⟩ := h_Flim (ε / 2) h_half
     obtain ⟨M₂, h_M₂, h_G⟩ := h_Glim (ε / 2) h_half
-    exists max M₁ M₂ with by positivity
+    script_exists max M₁ M₂ with by positivity
     intro x h_x
     change F.map x + G.map x ∈ Nbho (L₁ + L₂) ε
     exact add_near
@@ -748,7 +748,7 @@ theorem InftyLimit.Add
 := by
   intro ⟨⟨MF, h_MF, h_Fdomneg, h_Fdompos⟩, h_Flim⟩ ⟨⟨MG, h_MG, h_Gdomneg, h_Gdompos⟩, h_Glim⟩
   constructor
-  · exists max MF MG with by positivity
+  · script_exists max MF MG with by positivity
     constructor
     · intro x h_x
       exact ⟨h_Fdomneg (mem_Iio_neg_max_left h_x),
@@ -759,7 +759,7 @@ theorem InftyLimit.Add
     have h_half : 0 < ε / 2 := by linarith
     obtain ⟨M₁, h_M₁, h_Fneg, h_Fpos⟩ := h_Flim (ε / 2) h_half
     obtain ⟨M₂, h_M₂, h_Gneg, h_Gpos⟩ := h_Glim (ε / 2) h_half
-    exists max M₁ M₂ with by positivity
+    script_exists max M₁ M₂ with by positivity
     constructor
     · intro x h_x
       change F.map x + G.map x ∈ Nbho (L₁ + L₂) ε
@@ -910,7 +910,7 @@ theorem FuncLimit.Mul
 := by
   intro ⟨⟨δF, h_δF, h_Fdom⟩, h_Flim⟩ ⟨⟨δG, h_δG, h_Gdom⟩, h_Glim⟩
   constructor
-  · exists min δF δG with lt_min h_δF h_δG
+  · script_exists min δF δG with lt_min h_δF h_δG
     intro x h_x
     exact ⟨h_Fdom ⟨by linarith [h_x.1, min_le_left δF δG],
       by linarith [h_x.2.1, min_le_left δF δG], h_x.2.2⟩,
@@ -920,7 +920,7 @@ theorem FuncLimit.Mul
     obtain ⟨η, h_η, h_mul⟩ := mul_near h_ε
     obtain ⟨δ₁, h_δ₁, h_F⟩ := h_Flim η h_η
     obtain ⟨δ₂, h_δ₂, h_G⟩ := h_Glim η h_η
-    exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
+    script_exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
     intro x h_x
     change F.map x * G.map x ∈ Nbho (L₁ * L₂) ε
     exact h_mul _ (h_F x ⟨by linarith [h_x.1, min_le_left δ₁ δ₂],
@@ -934,7 +934,7 @@ theorem LeftLimit.Mul
 := by
   intro ⟨⟨⟨δF, h_δF, h_Fdom⟩, h_Flim⟩, ⟨⟨δG, h_δG, h_Gdom⟩, h_Glim⟩⟩
   constructor
-  · exists min δF δG with lt_min h_δF h_δG
+  · script_exists min δF δG with lt_min h_δF h_δG
     intro x h_x
     exact ⟨h_Fdom ⟨by linarith [h_x.1, min_le_left δF δG], h_x.2⟩,
       h_Gdom ⟨by linarith [h_x.1, min_le_right δF δG], h_x.2⟩⟩
@@ -942,7 +942,7 @@ theorem LeftLimit.Mul
     obtain ⟨η, h_η, h_mul⟩ := mul_near h_ε
     obtain ⟨δ₁, h_δ₁, h_F⟩ := h_Flim η h_η
     obtain ⟨δ₂, h_δ₂, h_G⟩ := h_Glim η h_η
-    exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
+    script_exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
     intro x h_x
     change F.map x * G.map x ∈ Nbho (L₁ * L₂) ε
     exact h_mul _ (h_F x ⟨by linarith [h_x.1, min_le_left δ₁ δ₂], h_x.2⟩)
@@ -954,7 +954,7 @@ theorem RightLimit.Mul
 := by
   intro ⟨⟨⟨δF, h_δF, h_Fdom⟩, h_Flim⟩, ⟨⟨δG, h_δG, h_Gdom⟩, h_Glim⟩⟩
   constructor
-  · exists min δF δG with lt_min h_δF h_δG
+  · script_exists min δF δG with lt_min h_δF h_δG
     intro x h_x
     exact ⟨h_Fdom ⟨h_x.1, by linarith [h_x.2, min_le_left δF δG]⟩,
       h_Gdom ⟨h_x.1, by linarith [h_x.2, min_le_right δF δG]⟩⟩
@@ -962,7 +962,7 @@ theorem RightLimit.Mul
     obtain ⟨η, h_η, h_mul⟩ := mul_near h_ε
     obtain ⟨δ₁, h_δ₁, h_F⟩ := h_Flim η h_η
     obtain ⟨δ₂, h_δ₂, h_G⟩ := h_Glim η h_η
-    exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
+    script_exists min δ₁ δ₂ with lt_min h_δ₁ h_δ₂
     intro x h_x
     change F.map x * G.map x ∈ Nbho (L₁ * L₂) ε
     exact h_mul _ (h_F x ⟨h_x.1, by linarith [h_x.2, min_le_left δ₁ δ₂]⟩)
@@ -974,14 +974,14 @@ theorem PosInftyLimit.Mul
 := by
   intro ⟨⟨⟨MF, h_MF, h_Fdom⟩, h_Flim⟩, ⟨⟨MG, h_MG, h_Gdom⟩, h_Glim⟩⟩
   constructor
-  · exists max MF MG with by positivity
+  · script_exists max MF MG with by positivity
     intro x h_x
     exact ⟨h_Fdom (mem_Ioi_max_left h_x), h_Gdom (mem_Ioi_max_right h_x)⟩
   · intro ε h_ε
     obtain ⟨η, h_η, h_mul⟩ := mul_near h_ε
     obtain ⟨M₁, h_M₁, h_F⟩ := h_Flim η h_η
     obtain ⟨M₂, h_M₂, h_G⟩ := h_Glim η h_η
-    exists max M₁ M₂ with by positivity
+    script_exists max M₁ M₂ with by positivity
     intro x h_x
     change F.map x * G.map x ∈ Nbho (L₁ * L₂) ε
     exact h_mul _ (h_F x (mem_Ioi_max_left h_x)) _ (h_G x (mem_Ioi_max_right h_x))
@@ -992,14 +992,14 @@ theorem NegInftyLimit.Mul
 := by
   intro ⟨⟨⟨MF, h_MF, h_Fdom⟩, h_Flim⟩, ⟨⟨MG, h_MG, h_Gdom⟩, h_Glim⟩⟩
   constructor
-  · exists max MF MG with by positivity
+  · script_exists max MF MG with by positivity
     intro x h_x
     exact ⟨h_Fdom (mem_Iio_neg_max_left h_x), h_Gdom (mem_Iio_neg_max_right h_x)⟩
   · intro ε h_ε
     obtain ⟨η, h_η, h_mul⟩ := mul_near h_ε
     obtain ⟨M₁, h_M₁, h_F⟩ := h_Flim η h_η
     obtain ⟨M₂, h_M₂, h_G⟩ := h_Glim η h_η
-    exists max M₁ M₂ with by positivity
+    script_exists max M₁ M₂ with by positivity
     intro x h_x
     change F.map x * G.map x ∈ Nbho (L₁ * L₂) ε
     exact h_mul _ (h_F x (mem_Iio_neg_max_left h_x))
@@ -1011,7 +1011,7 @@ theorem InftyLimit.Mul
 := by
   intro ⟨⟨⟨MF, h_MF, h_Fdomneg, h_Fdompos⟩, h_Flim⟩, ⟨⟨MG, h_MG, h_Gdomneg, h_Gdompos⟩, h_Glim⟩⟩
   constructor
-  · exists max MF MG with by positivity
+  · script_exists max MF MG with by positivity
     constructor
     · intro x h_x
       exact ⟨h_Fdomneg (mem_Iio_neg_max_left h_x),
@@ -1022,7 +1022,7 @@ theorem InftyLimit.Mul
     obtain ⟨η, h_η, h_mul⟩ := mul_near h_ε
     obtain ⟨M₁, h_M₁, h_Fneg, h_Fpos⟩ := h_Flim η h_η
     obtain ⟨M₂, h_M₂, h_Gneg, h_Gpos⟩ := h_Glim η h_η
-    exists max M₁ M₂ with by positivity
+    script_exists max M₁ M₂ with by positivity
     constructor
     · intro x h_x
       change F.map x * G.map x ∈ Nbho (L₁ * L₂) ε
@@ -1206,7 +1206,7 @@ private theorem EventuallyAt.and {α ρ : Type} {S : ρ → Set α} {good : ρ �
   obtain ⟨r, h_r, h_Pr⟩ := h_P
   obtain ⟨s, h_s, h_Qs⟩ := h_Q
   obtain ⟨t, h_t, h_sub⟩ := h_sh_rink h_r h_s
-  exists t with h_t
+  script_exists t with h_t
   intro x h_x
   exact ⟨h_Pr x (h_sub h_x).1, h_Qs x (h_sub h_x).2⟩
 
@@ -1215,7 +1215,7 @@ private theorem finiteEventuallyBounded {α ρ : Type} {S : ρ → Set α}
     (h_result : ∀ ε > 0, EventuallyAt S good fun x => f x ∈ Nbho L ε) :
     EventuallyAt S good fun x => |f x| < |L| + 1 := by
   obtain ⟨r, h_r, h_near⟩ := h_result 1 (by norm_num)
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_xnear := h_near x h_x
   change f x ∈ Nbho L 1 at h_xnear
@@ -1238,7 +1238,7 @@ private theorem eventuallyFiniteAddPos {α ρ : Type} {S : ρ → Set α}
   have h_T : 0 < M + |L| + 1 := by positivity
   have h_gLarge := h_g (M + |L| + 1) h_T
   obtain ⟨r, h_r, h_both⟩ := h_fBound.and h_sh_rink h_gLarge
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   have h_fLower : -(|L| + 1) < f x := by
@@ -1257,7 +1257,7 @@ private theorem eventuallyFiniteAddNeg {α ρ : Type} {S : ρ → Set α}
   have h_T : 0 < M + |L| + 1 := by positivity
   have h_gLarge := h_g (M + |L| + 1) h_T
   obtain ⟨r, h_r, h_both⟩ := h_fBound.and h_sh_rink h_gLarge
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   have h_fUpper : f x < |L| + 1 :=
@@ -1276,7 +1276,7 @@ private theorem eventuallyFiniteAddInfty {α ρ : Type} {S : ρ → Set α}
   have h_T : 0 < M + |L| + 1 := by positivity
   have h_gLarge := h_g (M + |L| + 1) h_T
   obtain ⟨r, h_r, h_both⟩ := h_fBound.and h_sh_rink h_gLarge
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   have h_tri : |g x| ≤ |f x + g x| + |f x| := by
@@ -1295,7 +1295,7 @@ private theorem eventuallyPosAddPos {α ρ : Type} {S : ρ → Set α}
     ∀ M > 0, EventuallyAt S good fun x => f x + g x > M := by
   intro M h_M
   obtain ⟨r, h_r, h_both⟩ := (h_f M h_M).and h_sh_rink (h_g M h_M)
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   linarith [h_result.1, h_result.2]
@@ -1309,7 +1309,7 @@ private theorem eventuallyNegAddNeg {α ρ : Type} {S : ρ → Set α}
     ∀ M > 0, EventuallyAt S good fun x => f x + g x < -M := by
   intro M h_M
   obtain ⟨r, h_r, h_both⟩ := (h_f M h_M).and h_sh_rink (h_g M h_M)
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   linarith [h_result.1, h_result.2]
@@ -1320,7 +1320,7 @@ private theorem eventuallyInvZero {α ρ : Type} {S : ρ → Set α}
     ∀ ε > 0, EventuallyAt S good fun x => f x ≠ 0 ∧ (f x)⁻¹ ∈ Nbho 0 ε := by
   intro ε h_ε
   obtain ⟨r, h_r, h_large⟩ := h_f ε⁻¹ (inv_pos.mpr h_ε)
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_fx : ε⁻¹ < |f x| := h_large x h_x
   have h_fx0 : f x ≠ 0 := by
@@ -1340,14 +1340,14 @@ private theorem eventuallyInvZero {α ρ : Type} {S : ρ → Set α}
 
 private theorem natTailSh_rink {r s : ℕ} :
     ∃ t, True ∧ {n : ℕ | n > t} ⊆ {n : ℕ | n > r} ∩ {n : ℕ | n > s} := by
-  exists max r s with trivial
+  script_exists max r s with trivial
   intro n h_n
   exact ⟨lt_of_le_of_lt (Nat.le_max_left _ _) h_n,
     lt_of_le_of_lt (Nat.le_max_right _ _) h_n⟩
 
 private theorem nbhdTailSh_rink {x₀ r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
     ∃ t, t > 0 ∧ Nbhd x₀ t ⊆ Nbhd x₀ r ∩ Nbhd x₀ s := by
-  exists min r s with lt_min h_r h_s
+  script_exists min r s with lt_min h_r h_s
   intro x h_x
   exact ⟨⟨by linarith [h_x.1, min_le_left r s],
       by linarith [h_x.2.1, min_le_left r s], h_x.2.2⟩,
@@ -1357,7 +1357,7 @@ private theorem nbhdTailSh_rink {x₀ r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
 private theorem leftTailSh_rink {x₀ r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
     ∃ t, t > 0 ∧ Ioo (x₀ - t) x₀ ⊆
       Ioo (x₀ - r) x₀ ∩ Ioo (x₀ - s) x₀ := by
-  exists min r s with lt_min h_r h_s
+  script_exists min r s with lt_min h_r h_s
   intro x h_x
   exact ⟨⟨by linarith [h_x.1, min_le_left r s], h_x.2⟩,
     ⟨by linarith [h_x.1, min_le_right r s], h_x.2⟩⟩
@@ -1365,14 +1365,14 @@ private theorem leftTailSh_rink {x₀ r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
 private theorem rightTailSh_rink {x₀ r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
     ∃ t, t > 0 ∧ Ioo x₀ (x₀ + t) ⊆
       Ioo x₀ (x₀ + r) ∩ Ioo x₀ (x₀ + s) := by
-  exists min r s with lt_min h_r h_s
+  script_exists min r s with lt_min h_r h_s
   intro x h_x
   exact ⟨⟨h_x.1, by linarith [h_x.2, min_le_left r s]⟩,
     ⟨h_x.1, by linarith [h_x.2, min_le_right r s]⟩⟩
 
 private theorem posInftyTailSh_rink {r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
     ∃ t, t > 0 ∧ Ioi t ⊆ Ioi r ∩ Ioi s := by
-  exists max r s with lt_of_lt_of_le (lt_min h_r h_s)
+  script_exists max r s with lt_of_lt_of_le (lt_min h_r h_s)
     (le_trans (min_le_left r s) (le_max_left r s))
   intro x h_x
   change max r s < x at h_x
@@ -1381,7 +1381,7 @@ private theorem posInftyTailSh_rink {r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
 
 private theorem negInftyTailSh_rink {r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
     ∃ t, t > 0 ∧ Iio (-t) ⊆ Iio (-r) ∩ Iio (-s) := by
-  exists max r s with lt_of_lt_of_le (lt_min h_r h_s)
+  script_exists max r s with lt_of_lt_of_le (lt_min h_r h_s)
     (le_trans (min_le_left r s) (le_max_left r s))
   intro x h_x
   change x < -max r s at h_x
@@ -1391,7 +1391,7 @@ private theorem negInftyTailSh_rink {r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
 private theorem inftyTailSh_rink {r s : ℝ} (h_r : r > 0) (h_s : s > 0) :
     ∃ t, t > 0 ∧ Ioi t ∪ Iio (-t) ⊆
       (Ioi r ∪ Iio (-r)) ∩ (Ioi s ∪ Iio (-s)) := by
-  exists max r s with lt_of_lt_of_le (lt_min h_r h_s)
+  script_exists max r s with lt_of_lt_of_le (lt_min h_r h_s)
     (le_trans (min_le_left r s) (le_max_left r s))
   intro x h_x
   obtain h_x | h_x := h_x
@@ -1433,7 +1433,7 @@ theorem FuncLimitInfty.Neg (h_result : FuncLimitInfty F x₀) : FuncLimitInfty (
   refine ⟨h_result.1, ?_⟩
   intro M h_M
   obtain ⟨δ, h_δ, h_map⟩ := h_result.2 M h_M
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change |-F.map x| > M
   simpa only [abs_neg] using h_map x h_x
@@ -1443,7 +1443,7 @@ theorem LeftLimitInfty.Neg (h_result : LeftLimitInfty F x₀) : LeftLimitInfty (
   refine ⟨h_result.1, ?_⟩
   intro M h_M
   obtain ⟨δ, h_δ, h_map⟩ := h_result.2 M h_M
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change |-F.map x| > M
   simpa only [abs_neg] using h_map x h_x
@@ -1453,7 +1453,7 @@ theorem RightLimitInfty.Neg (h_result : RightLimitInfty F x₀) : RightLimitInft
   refine ⟨h_result.1, ?_⟩
   intro M h_M
   obtain ⟨δ, h_δ, h_map⟩ := h_result.2 M h_M
-  exists δ with h_δ
+  script_exists δ with h_δ
   intro x h_x
   change |-F.map x| > M
   simpa only [abs_neg] using h_map x h_x
@@ -1466,7 +1466,7 @@ theorem PosInftyLimitInfty.Neg
   refine ⟨h_result.1, ?_⟩
   intro M h_M
   obtain ⟨X, h_X, h_map⟩ := h_result.2 M h_M
-  exists X with h_X
+  script_exists X with h_X
   intro x h_x
   change |-F.map x| > M
   simpa only [abs_neg] using h_map x h_x
@@ -1479,7 +1479,7 @@ theorem NegInftyLimitInfty.Neg
   refine ⟨h_result.1, ?_⟩
   intro M h_M
   obtain ⟨X, h_X, h_map⟩ := h_result.2 M h_M
-  exists X with h_X
+  script_exists X with h_X
   intro x h_x
   change |-F.map x| > M
   simpa only [abs_neg] using h_map x h_x
@@ -1492,7 +1492,7 @@ theorem InftyLimitInfty.Neg
   refine ⟨h_result.1, ?_⟩
   intro M h_M
   obtain ⟨X, h_X, h_map⟩ := h_result.2 M h_M
-  exists X with h_X
+  script_exists X with h_X
   intro x h_x
   change |-F.map x| > M
   simpa only [abs_neg] using h_map x h_x
@@ -1613,12 +1613,12 @@ theorem FuncLimit.AddPosInfty (h_F : FuncLimit F x₀ L)
   · obtain ⟨r, h_r, h_Fr⟩ := h_F.1
     obtain ⟨s, h_s, h_Gs⟩ := h_G.1
     obtain ⟨t, h_t, h_sub⟩ := nbhdTailSh_rink h_r h_s
-    exists t with h_t
+    script_exists t with h_t
     intro x h_x
     exact ⟨h_Fr (h_sub h_x).1, h_Gs (h_sub h_x).2⟩
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyFiniteAddPos nbhdTailSh_rink h_F.2 h_G.2 M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     change F.map x + G.map x > M
     exact h_map x h_x
@@ -1629,12 +1629,12 @@ theorem FuncLimit.AddNegInfty (h_F : FuncLimit F x₀ L)
   · obtain ⟨r, h_r, h_Fr⟩ := h_F.1
     obtain ⟨s, h_s, h_Gs⟩ := h_G.1
     obtain ⟨t, h_t, h_sub⟩ := nbhdTailSh_rink h_r h_s
-    exists t with h_t
+    script_exists t with h_t
     intro x h_x
     exact ⟨h_Fr (h_sub h_x).1, h_Gs (h_sub h_x).2⟩
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyFiniteAddNeg nbhdTailSh_rink h_F.2 h_G.2 M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     change F.map x + G.map x < -M
     exact h_map x h_x
@@ -1645,12 +1645,12 @@ theorem FuncLimit.AddInfty (h_F : FuncLimit F x₀ L)
   · obtain ⟨r, h_r, h_Fr⟩ := h_F.1
     obtain ⟨s, h_s, h_Gs⟩ := h_G.1
     obtain ⟨t, h_t, h_sub⟩ := nbhdTailSh_rink h_r h_s
-    exists t with h_t
+    script_exists t with h_t
     intro x h_x
     exact ⟨h_Fr (h_sub h_x).1, h_Gs (h_sub h_x).2⟩
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyFiniteAddInfty nbhdTailSh_rink h_F.2 h_G.2 M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     change |F.map x + G.map x| > M
     exact h_map x h_x
@@ -1676,12 +1676,12 @@ theorem FuncLimitPosInfty.Add (h_F : FuncLimitPosInfty F x₀)
   · obtain ⟨r, h_r, h_Fr⟩ := h_F.1
     obtain ⟨s, h_s, h_Gs⟩ := h_G.1
     obtain ⟨t, h_t, h_sub⟩ := nbhdTailSh_rink h_r h_s
-    exists t with h_t
+    script_exists t with h_t
     intro x h_x
     exact ⟨h_Fr (h_sub h_x).1, h_Gs (h_sub h_x).2⟩
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyPosAddPos nbhdTailSh_rink h_F.2 h_G.2 M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     change F.map x + G.map x > M
     exact h_map x h_x
@@ -1692,12 +1692,12 @@ theorem FuncLimitNegInfty.Add (h_F : FuncLimitNegInfty F x₀)
   · obtain ⟨r, h_r, h_Fr⟩ := h_F.1
     obtain ⟨s, h_s, h_Gs⟩ := h_G.1
     obtain ⟨t, h_t, h_sub⟩ := nbhdTailSh_rink h_r h_s
-    exists t with h_t
+    script_exists t with h_t
     intro x h_x
     exact ⟨h_Fr (h_sub h_x).1, h_Gs (h_sub h_x).2⟩
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyNegAddNeg nbhdTailSh_rink h_F.2 h_G.2 M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     change F.map x + G.map x < -M
     exact h_map x h_x
@@ -1713,12 +1713,12 @@ private theorem genericAddPos {ρ : Type} {S : ρ → Set ℝ} {good : ρ → Pr
       ∀ M > 0, EventuallyAt S good fun x => (F + G).map x > M := by
   constructor
   · obtain ⟨r, h_r, h_dom⟩ := h_Fdom.and h_sh_rink h_Gdom
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_dom x h_x
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyFiniteAddPos h_sh_rink h_F h_G M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_map x h_x
 
@@ -1733,12 +1733,12 @@ private theorem genericAddNeg {ρ : Type} {S : ρ → Set ℝ} {good : ρ → Pr
       ∀ M > 0, EventuallyAt S good fun x => (F + G).map x < -M := by
   constructor
   · obtain ⟨r, h_r, h_dom⟩ := h_Fdom.and h_sh_rink h_Gdom
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_dom x h_x
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyFiniteAddNeg h_sh_rink h_F h_G M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_map x h_x
 
@@ -1753,12 +1753,12 @@ private theorem genericAddInfty {ρ : Type} {S : ρ → Set ℝ} {good : ρ → 
       ∀ M > 0, EventuallyAt S good fun x => |(F + G).map x| > M := by
   constructor
   · obtain ⟨r, h_r, h_dom⟩ := h_Fdom.and h_sh_rink h_Gdom
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_dom x h_x
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyFiniteAddInfty h_sh_rink h_F h_G M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_map x h_x
 
@@ -1773,12 +1773,12 @@ private theorem genericPosAddPos {ρ : Type} {S : ρ → Set ℝ} {good : ρ →
       ∀ M > 0, EventuallyAt S good fun x => (F + G).map x > M := by
   constructor
   · obtain ⟨r, h_r, h_dom⟩ := h_Fdom.and h_sh_rink h_Gdom
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_dom x h_x
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyPosAddPos h_sh_rink h_F h_G M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_map x h_x
 
@@ -1793,12 +1793,12 @@ private theorem genericNegAddNeg {ρ : Type} {S : ρ → Set ℝ} {good : ρ →
       ∀ M > 0, EventuallyAt S good fun x => (F + G).map x < -M := by
   constructor
   · obtain ⟨r, h_r, h_dom⟩ := h_Fdom.and h_sh_rink h_Gdom
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_dom x h_x
   · intro M h_M
     obtain ⟨r, h_r, h_map⟩ := eventuallyNegAddNeg h_sh_rink h_F h_G M h_M
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_map x h_x
 
@@ -1926,14 +1926,14 @@ private theorem inftyFiniteAsUnion (h_result : InftyLimit F L) :
         fun x => F.map x ∈ Nbho L ε := by
   constructor
   · obtain ⟨r, h_r, h_neg, h_pos⟩ := h_result.1
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     obtain h_x | h_x := h_x
     · exact h_pos h_x
     · exact h_neg h_x
   · intro ε h_ε
     obtain ⟨r, h_r, h_neg, h_pos⟩ := h_result.2 ε h_ε
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     obtain h_x | h_x := h_x
     · exact h_pos x h_x
@@ -1944,7 +1944,7 @@ private theorem inftyDomainAsUnion
     EventuallyAt (fun r => Ioi r ∪ Iio (-r)) (fun r => r > 0)
       fun x => x ∈ F.domain := by
   obtain ⟨r, h_r, h_pos, h_neg⟩ := h_result
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   obtain h_x | h_x := h_x
   · exact h_pos h_x
@@ -1955,7 +1955,7 @@ private theorem unionDomainToInfty {K : RFunction}
       fun x => x ∈ K.domain) :
     ∃ X > 0, Ioi X ⊆ K.domain ∧ Iio (-X) ⊆ K.domain := by
   obtain ⟨r, h_r, h_dom⟩ := h_result
-  exists r with h_r
+  script_exists r with h_r
   constructor
   · intro x h_x
     exact h_dom x (Or.inl h_x)
@@ -2261,12 +2261,12 @@ private theorem genericInvZero {ρ : Type} {S : ρ → Set ℝ} {good : ρ → P
   have h_one := eventuallyInvZero h_inf 1 (by norm_num)
   constructor
   · obtain ⟨r, h_r, h_both⟩ := h_dom.and h_sh_rink h_one
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact ⟨(h_both x h_x).1, (h_both x h_x).2.1⟩
   · intro ε h_ε
     obtain ⟨r, h_r, h_map⟩ := eventuallyInvZero h_inf ε h_ε
-    exists r with h_r
+    script_exists r with h_r
     intro x h_x
     exact h_map x h_x |>.2
 
@@ -2300,7 +2300,7 @@ theorem InftyLimitInfty.Inv (h_result : InftyLimitInfty F) : InftyLimit F⁻¹ 0
   refine ⟨⟨r, h_r, h_neg, h_pos⟩, ?_⟩
   intro ε h_ε
   obtain ⟨r, h_r, h_map⟩ := h_u.2 ε h_ε
-  exists r with h_r
+  script_exists r with h_r
   constructor
   · intro x h_x
     exact h_map x (Or.inr h_x)
@@ -2339,7 +2339,7 @@ private theorem finiteEventuallyPos {α ρ : Type} {S : ρ → Set α}
     (h_f : ∀ ε > 0, EventuallyAt S good fun x => f x ∈ Nbho L ε)
     (h_L : 0 < L) : EventuallyAt S good fun x => L / 2 < f x := by
   obtain ⟨r, h_r, h_map⟩ := h_f (L / 2) (by positivity)
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_map x h_x
   change f x ∈ Nbho L (L / 2) at h_result
@@ -2351,7 +2351,7 @@ private theorem finiteEventuallyNeg {α ρ : Type} {S : ρ → Set α}
     (h_f : ∀ ε > 0, EventuallyAt S good fun x => f x ∈ Nbho L ε)
     (h_L : L < 0) : EventuallyAt S good fun x => f x < L / 2 := by
   obtain ⟨r, h_r, h_map⟩ := h_f (-L / 2) (by linarith)
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_map x h_x
   change f x ∈ Nbho L (-L / 2) at h_result
@@ -2363,7 +2363,7 @@ private theorem finiteEventuallyAbsPos {α ρ : Type} {S : ρ → Set α}
     (h_f : ∀ ε > 0, EventuallyAt S good fun x => f x ∈ Nbho L ε)
     (h_L : L ≠ 0) : EventuallyAt S good fun x => |L| / 2 < |f x| := by
   obtain ⟨r, h_r, h_map⟩ := h_f (|L| / 2) (by positivity)
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_map x h_x
   change f x ∈ Nbho L (|L| / 2) at h_result
@@ -2384,7 +2384,7 @@ private theorem eventuallyPosMulPos {α ρ : Type} {S : ρ → Set α}
     ∀ M > 0, EventuallyAt S good fun x => f x * g x > M := by
   intro M h_M
   obtain ⟨r, h_r, h_both⟩ := h_f.and h_sh_rink (h_g (M / c) (div_pos h_M h_c))
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   have h_fx : 0 < f x := lt_trans h_c h_result.1
@@ -2403,7 +2403,7 @@ private theorem eventuallyPosMulNeg {α ρ : Type} {S : ρ → Set α}
     ∀ M > 0, EventuallyAt S good fun x => f x * g x < -M := by
   intro M h_M
   obtain ⟨r, h_r, h_both⟩ := h_f.and h_sh_rink (h_g (M / c) (div_pos h_M h_c))
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   have h_fx : 0 < f x := lt_trans h_c h_result.1
@@ -2423,7 +2423,7 @@ private theorem eventuallyNegMulPos {α ρ : Type} {S : ρ → Set α}
   intro M h_M
   have h_cpos : 0 < -c := neg_pos.mpr h_c
   obtain ⟨r, h_r, h_both⟩ := h_f.and h_sh_rink (h_g (M / (-c)) (div_pos h_M h_cpos))
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   have h_neg : f x < 0 := lt_trans h_result.1 h_c
@@ -2442,7 +2442,7 @@ private theorem eventuallyNegMulNeg {α ρ : Type} {S : ρ → Set α}
   intro M h_M
   have h_cpos : 0 < -c := neg_pos.mpr h_c
   obtain ⟨r, h_r, h_both⟩ := h_f.and h_sh_rink (h_g (M / (-c)) (div_pos h_M h_cpos))
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   have h_result := h_both x h_x
   have h_fneg : f x < 0 := lt_trans h_result.1 h_c
@@ -2461,7 +2461,7 @@ private theorem eventuallyAbsMulInfty {α ρ : Type} {S : ρ → Set α}
     ∀ M > 0, EventuallyAt S good fun x => |f x * g x| > M := by
   intro M h_M
   obtain ⟨r, h_r, h_both⟩ := h_f.and h_sh_rink (h_g (M / c) (div_pos h_M h_c))
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   rw [abs_mul]
   have h_result := h_both x h_x
@@ -2487,7 +2487,7 @@ private theorem genericMulDomain {ρ : Type} {S : ρ → Set ℝ} {good : ρ →
     (h_G : EventuallyAt S good fun x => x ∈ G.domain) :
     EventuallyAt S good fun x => x ∈ (F * G).domain := by
   obtain ⟨r, h_r, h_dom⟩ := h_F.and h_sh_rink h_G
-  exists r with h_r
+  script_exists r with h_r
   intro x h_x
   exact h_dom x h_x
 

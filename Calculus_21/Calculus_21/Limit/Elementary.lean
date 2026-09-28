@@ -5,12 +5,11 @@
 -/
 
 import «Calculus_21».Limit.Rules
-import «Calculus_21».Continuity.Rules
+import «Calculus_21».Limit.Continuity
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
 set_option linter.style.header false
 
-open Real  -- TEMPORARY!
-local macro "exists" data:term "with" cond:term : tactic => `(tactic| refine ⟨$data, $cond, ?_⟩)
+open Real RFunction  -- TEMPORARY!
 local macro "infer" steps:inferSteps : tactic => `(tactic| exact infer $steps)
 
 
@@ -27,12 +26,12 @@ private lemma isContinuousAt_abs_lemma
 := by
   obtain ⟨δ, hδ, h_dom⟩ := h_dom
   refine ⟨h_dom ⟨by linarith, by linarith⟩, ?_, ?_⟩
-  · exists δ with hδ
+  · script_exists δ with hδ
     intro _ h_x
     exact h_dom (Nbhd_subset_Nbho h_x)
   · intro ε h_ε
     rcases h_bound ε h_ε with ⟨δ, hδ, h⟩
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     rw [Nbho_abs]
     exact h x h_x
@@ -45,12 +44,12 @@ private lemma isLeftContinuousAt_abs_lemma
 := by
   obtain ⟨δ, hδ, h_dom⟩ := h_dom
   refine ⟨h_dom ⟨by linarith, le_rfl⟩, ?_, ?_⟩
-  · exists δ with hδ
+  · script_exists δ with hδ
     intro _ h_x
     exact h_dom ⟨h_x.1, h_x.2.le⟩
   · intro ε h_ε
     rcases h_bound ε h_ε with ⟨δ, hδ, h⟩
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     rw [Nbho_abs]
     exact h x h_x
@@ -63,12 +62,12 @@ private lemma isRightContinuousAt_abs_lemma
 := by
   obtain ⟨δ, hδ, h_dom⟩ := h_dom
   refine ⟨h_dom ⟨le_rfl, by linarith⟩, ?_, ?_⟩
-  · exists δ with hδ
+  · script_exists δ with hδ
     intro _ h_x
     exact h_dom ⟨h_x.1.le, h_x.2⟩
   · intro ε h_ε
     rcases h_bound ε h_ε with ⟨δ, hδ, h⟩
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     rw [Nbho_abs]
     exact h x h_x
@@ -112,7 +111,8 @@ private lemma abs_log_one_add_le {t : ℝ} (ht : |t| ≤ 1 / 2) :
     rw [abs_of_nonneg hlog_nonneg, abs_of_nonneg htn]
     have h_log_upper : ln (1 + t) ≤ (1 + t) - 1 :=
       log_le_sub_one_of_pos hpos
-    auto_side_condition
+    recover_form
+    sorry
   · have htneg : t < 0 := lt_of_not_ge htn
     have hlog_nonpos : ln (1 + t) ≤ 0 := by
       rw [← log_one]
@@ -138,10 +138,10 @@ protected lemma Continuity.Constant {C : ℝ}
   unfold isContinuousAt FuncLimit
   refine ⟨h_x₀, ?_⟩
   constructor
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     exact subset_univ _
   · intro ε _
-    exists 1 with zero_lt_one
+    script_exists 1 with zero_lt_one
     intro _ _
     change C ∈ Nbho C ε
     constructor <;> linarith
@@ -154,10 +154,10 @@ protected lemma Continuity.Identity
   unfold isContinuousAt FuncLimit
   refine ⟨h_x₀, ?_⟩
   constructor
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     exact subset_univ _
   · intro ε h_ε
-    exists ε with h_ε
+    script_exists ε with h_ε
     intro x h_x
     change x ∈ Nbho x₀ ε
     exact Nbhd_subset_Nbho h_x
@@ -168,10 +168,10 @@ protected lemma Continuity.Abs
 := by
   intro x₀ _
   prove_continuity
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     exact subset_univ _
   · intro ε h_ε
-    exists ε with h_ε
+    script_exists ε with h_ε
     intro x h_x
     calc
       |(|x| - |x₀|)|  ≤ |x - x₀|
@@ -185,7 +185,7 @@ protected lemma Continuity.Sqrt
 := by
   intro x₀ h_x₀
   prove_continuity
-  · exists x₀ / 2 with half_pos h_x₀
+  · script_exists x₀ / 2 with half_pos h_x₀
     intro x h_x
     change 0 ≤ x
     linarith [h_x.1]
@@ -193,12 +193,12 @@ protected lemma Continuity.Sqrt
     let δ := min (x₀ / 2) (ε * √x₀)
     have hsqrt : √x₀ > 0 := by positivity
     have hδ : 0 < δ := lt_min (half_pos h_x₀) (mul_pos h_ε hsqrt)
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_dist_δ : |x - x₀| < δ := infer
       x ∈ Nbhd x₀ δ ⇒ x ∈ Nbho x₀ δ
                       := Nbhd_subset_Nbho h_x
-      _             ⇒ |x - x₀| < δ
+                    ⇒ |x - x₀| < δ
                       := (Nbho_abs x).mp ?_
     have h_dist_half : |x - x₀| < x₀ / 2 := calc
       |x - x₀| < δ      := h_dist_δ
@@ -232,11 +232,11 @@ protected lemma RightContinuity.Sqrt_0
   : Sqrt.isRightContinuousAt 0
 := by
   prove_continuity
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     intro x h_x
     exact h_x.1
   · intro ε h_ε
-    exists ε ^ 2 with sq_pos_of_pos h_ε
+    script_exists ε ^ 2 with sq_pos_of_pos h_ε
     intro x h_x
     simp only [Sqrt, sqrt_zero, sub_zero, abs_of_nonneg (sqrt_nonneg x)]
     exact (sqrt_lt' h_ε).2 (by simpa using h_x.2)
@@ -247,14 +247,14 @@ protected lemma RightContinuity.Power_0 {a : ℝ}
   : (Power a).isRightContinuousAt 0
 := by
   prove_continuity
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     simp only [zero_add, Power, gt_iff_lt, h_a, ↓reduceIte]
     intro x h_x
     exact h_x.1
   · intro ε h_ε
     let δ := ε ^ a⁻¹
     have hδ : 0 < δ := rpow_pos_of_pos h_ε _
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     simp only [Power, if_pos h_a]
     change |x ^ a - 0 ^ a| < ε
@@ -277,7 +277,7 @@ protected lemma Continuity.Power_ℤ {n : ℤ}
       have hc : (Constant 1).isContinuousAt x₀ :=
         Continuity.Constant _ (mem_univ _)
       apply Continuity.Congr hc
-      exists |x₀| with abs_pos.mpr h_x₀_ne
+      script_exists |x₀| with abs_pos.mpr h_x₀_ne
       constructor
       · intro x h_x
         have h_xne : x ≠ 0 := by
@@ -296,7 +296,7 @@ protected lemma Continuity.Power_ℤ {n : ℤ}
       have hmpos : (0 : ℤ) < Int.ofNat (m + 1) :=
         Int.ofNat_lt.mpr (Nat.zero_lt_succ m)
       apply Continuity.Congr hp
-      exists 1 with zero_lt_one
+      script_exists 1 with zero_lt_one
       constructor
       · simp [NPower]
       · intro x _
@@ -315,11 +315,11 @@ protected lemma Continuity.Power_ℤ {n : ℤ}
          => (Identity ^ (m + 1)).isContinuousAt x₀
             := ⟨(Continuity.Identity x₀ (mem_univ _)).1,
           FuncLimit.MSPow (n := m + 1) (Continuity.Identity x₀ (mem_univ _)).2⟩
-      _  => (Identity ^ (m + 1))⁻¹.isContinuousAt x₀
+         => (Identity ^ (m + 1))⁻¹.isContinuousAt x₀
             := (fun ⟨hdom, hlim⟩ =>
           ⟨⟨hdom, hp_ne⟩, FuncLimit.Inv hp_ne hlim⟩) ?_
     apply Continuity.Congr hinv
-    exists |x₀| with abs_pos.mpr h_x₀_ne
+    script_exists |x₀| with abs_pos.mpr h_x₀_ne
     constructor
     · intro x h_x h
       subst x
@@ -336,16 +336,16 @@ protected lemma Continuity.Exp
 := by
   intro x₀ _
   prove_continuity
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     exact subset_univ _
   · intro ε h_ε
     let δ := min 1 (ε / (2 * exp x₀))
-    exists δ with by positivity
+    script_exists δ with by positivity
     intro x h_x
     have h_dist_δ : |x - x₀| < δ := infer
       x ∈ Nbhd x₀ δ  => x ∈ Nbho x₀ δ
                         := Nbhd_subset_Nbho h_x
-      _              => |x - x₀| < δ
+                     => |x - x₀| < δ
                         := (Nbho_abs x).mp ?_
     have h_dist_1 : |x - x₀| < 1 := calc
         |x - x₀|  < δ := h_dist_δ
@@ -380,7 +380,7 @@ protected lemma Continuity.Expow {a : ℝ}
        => isContinuousAt (Constant (ln a) * Identity) x₀
           := Mul (Continuity.Constant x₀ (mem_univ _))
             (Continuity.Identity x₀ (mem_univ x₀))
-    _  => isContinuousAt (Exp ⊙ (Constant (ln a) * Identity)) x₀
+       => isContinuousAt (Exp ⊙ (Constant (ln a) * Identity)) x₀
           := Comp (Continuity.Exp (ln a * x₀) (mem_univ _)) ?_
 
 /-- Natural Logarithm RFunction's Continuity -/
@@ -390,19 +390,19 @@ protected lemma Continuity.Ln
   intro x₀ h_x₀
   change 0 < x₀ at h_x₀
   prove_continuity
-  · exists x₀ / 2 with half_pos h_x₀
+  · script_exists x₀ / 2 with half_pos h_x₀
     intro x h_x
     change x > 0
     linarith [h_x.1]
   · intro ε h_ε
     let δ := min (x₀ / 2) (ε * x₀ / 2)
     have hδ : 0 < δ := by positivity
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_dist_δ : |x - x₀| < δ := infer
       x ∈ Nbhd x₀ δ  => x ∈ Nbho x₀ δ
                         := Nbhd_subset_Nbho h_x
-      _              => |x - x₀| < δ
+                     => |x - x₀| < δ
                         := (Nbho_abs x).mp ?_
     have h_dist_half : |x - x₀| < x₀ / 2 := calc
       |x - x₀| < δ       := h_dist_δ
@@ -461,10 +461,10 @@ protected lemma Continuity.Power {a : ℝ}
          => (Ln * Constant a).isContinuousAt x₀
             := Mul (Continuity.Ln _ h_x₀)
               (Continuity.Constant x₀ (mem_univ _))
-      _  => (Exp ⊙ (Ln * Constant a)).isContinuousAt x₀
+         => (Exp ⊙ (Ln * Constant a)).isContinuousAt x₀
             := Comp (Continuity.Exp (ln x₀ * a) (mem_univ _)) ?_
   apply Continuity.Congr hcomp
-  exists x₀ / 2 with half_pos h_x₀
+  script_exists x₀ / 2 with half_pos h_x₀
   constructor
   · intro x h_x
     have h_xpos : 0 < x := by
@@ -487,10 +487,10 @@ protected lemma Continuity.Sin
 := by
   intro x₀ _
   prove_continuity
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     exact subset_univ _
   · intro ε h_ε
-    exists ε with h_ε
+    script_exists ε with h_ε
     intro x h_x
     calc
       |sin x - sin x₀|  ≤ |x - x₀|
@@ -504,10 +504,10 @@ protected lemma Continuity.Cos
 := by
   intro x₀ _
   prove_continuity
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     exact subset_univ _
   · intro ε h_ε
-    exists ε with h_ε
+    script_exists ε with h_ε
     intro x h_x
     calc
       |cos x - cos x₀|  ≤ |x - x₀|
@@ -569,11 +569,11 @@ protected lemma Continuity.Sinh
           Identity.isContinuousAt x₀
        => (-Identity).isContinuousAt x₀
           := Neg (Continuity.Identity x₀ (mem_univ _))
-    _  => (Exp ⊙ (-Identity)).isContinuousAt x₀
+       => (Exp ⊙ (-Identity)).isContinuousAt x₀
           := Comp (Continuity.Exp (-x₀) (mem_univ _)) ?_
-    _  => (Exp - Exp ⊙ (-Identity)).isContinuousAt x₀
+       => (Exp - Exp ⊙ (-Identity)).isContinuousAt x₀
           := Sub (Continuity.Exp x₀ (mem_univ _)) ?_
-    _  => ((2 : ℝ)⁻¹ • (Exp - Exp ⊙ (-Identity))).isContinuousAt x₀
+       => ((2 : ℝ)⁻¹ • (Exp - Exp ⊙ (-Identity))).isContinuousAt x₀
           := SMul ?_
 
 /-- Hyp-Cosine RFunction's Continuity -/
@@ -586,11 +586,11 @@ protected lemma Continuity.Cosh
           Identity.isContinuousAt x₀
        => (-Identity).isContinuousAt x₀
           := Neg (Continuity.Identity x₀ (mem_univ _))
-    _  => (Exp ⊙ (-Identity)).isContinuousAt x₀
+       => (Exp ⊙ (-Identity)).isContinuousAt x₀
           := Comp (Continuity.Exp (-x₀) (mem_univ _)) ?_
-    _  => (Exp + Exp ⊙ (-Identity)).isContinuousAt x₀
+       => (Exp + Exp ⊙ (-Identity)).isContinuousAt x₀
           := Add (Continuity.Exp x₀ (mem_univ _)) ?_
-    _  => ((2 : ℝ)⁻¹ • (Exp + Exp ⊙ (-Identity))).isContinuousAt x₀
+       => ((2 : ℝ)⁻¹ • (Exp + Exp ⊙ (-Identity))).isContinuousAt x₀
           := SMul ?_
 
 /-- Hyp-Tangent RFunction's Continuity -/
@@ -648,7 +648,7 @@ protected lemma Continuity.Arcsin
   prove_continuity
   · let δ := min ((x₀ + 1) / 2) ((1 - x₀) / 2)
     have hδ : 0 < δ := lt_min (by linarith [h_x₀.1]) (by linarith [h_x₀.2])
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_dist : |x - x₀| < δ := (Nbho_abs x).mp h_x
     rw [abs_lt] at h_dist
@@ -680,12 +680,12 @@ protected lemma Continuity.Arcsin
       exact strictMonoOn_sin (arcsin_mem_Icc x₀) hhi_mem (by linarith)
     let δ := min (x₀ - sin (α - η)) (sin (α + η) - x₀)
     have hδ : 0 < δ := lt_min (sub_pos.mpr hlo) (sub_pos.mpr hhi)
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_dist_δ : |x - x₀| < δ := infer
       x ∈ Nbhd x₀ δ ⇒ x ∈ Nbho x₀ δ
                       := Nbhd_subset_Nbho h_x
-      _             ⇒ |x - x₀| < δ
+                    ⇒ |x - x₀| < δ
                       := (Nbho_abs x).mp ?_
     rw [abs_lt] at h_dist_δ
     have h_xlo : sin (α - η) < x := by
@@ -709,7 +709,7 @@ protected lemma RightContinuity.Arcsin_neg1
   : Arcsin.isRightContinuousAt (-1)
 := by
   prove_continuity
-  · exists 2 with by norm_num
+  · script_exists 2 with by norm_num
     intro x h_x
     change -1 ≤ x ∧ x ≤ 1
     constructor <;> norm_num at h_x ⊢ <;> linarith
@@ -730,7 +730,7 @@ protected lemma RightContinuity.Arcsin_neg1
         ⟨le_rfl, by linarith [pi_pos]⟩ hangle (by linarith)
       rw [sin_neg, sin_pi_div_two] at hmono
       linarith
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_xhi : x < sin (-(π / 2) + η) := by
       norm_num at h_x ⊢
@@ -750,7 +750,7 @@ protected lemma LeftContinuity.Arcsin_1
   : Arcsin.isLeftContinuousAt 1
 := by
   prove_continuity
-  · exists 2 with zero_lt_two
+  · script_exists 2 with zero_lt_two
     intro x h_x
     change -1 ≤ x ∧ x ≤ 1
     constructor <;> norm_num at h_x ⊢ <;> linarith
@@ -772,7 +772,7 @@ protected lemma LeftContinuity.Arcsin_1
       rw [← sin_pi_div_two]
       exact sub_pos.mpr (strictMonoOn_sin hangle
         ⟨by linarith [pi_pos], le_rfl⟩ (by linarith))
-    exists δ with h_δ
+    script_exists δ with h_δ
     intro x h_x
     have h_xhi : x < 1 := h_x.2
     have harclo : π / 2 - η < arcsin x := by
@@ -808,7 +808,7 @@ protected lemma RightContinuity.Arccos_neg1
   refine ⟨h_arcsin_right.1, ?_⟩
   intro ε h_ε
   rcases h_arcsin_right.2 ε h_ε with ⟨δ, hδ, hlim⟩
-  exists δ with hδ
+  script_exists δ with hδ
   intro x h_x
   have h_arcsin_nbho := hlim x h_x
   rw [Nbho_abs] at h_arcsin_nbho ⊢
@@ -830,7 +830,7 @@ protected lemma LeftContinuity.Arccos_1
   refine ⟨h_arcsin_left.1, ?_⟩
   intro ε h_ε
   rcases h_arcsin_left.2 ε h_ε with ⟨δ, hδ, hlim⟩
-  exists δ with hδ
+  script_exists δ with hδ
   intro x h_x
   have h_arcsin_nbho := hlim x h_x
   rw [Nbho_abs] at h_arcsin_nbho ⊢
@@ -852,7 +852,7 @@ protected lemma Continuity.Arctan
   have hα : α ∈ Ioo (-(π / 2)) (π / 2) := by
     simpa [α] using arctan_mem_Ioo x₀
   prove_continuity
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     exact subset_univ _
   · intro ε h_ε
     let η := min (ε / 2)
@@ -875,12 +875,12 @@ protected lemma Continuity.Arctan
       exact tan_lt_tan_of_lt_of_lt_pi_div_two hα.1 hhi (by linarith)
     let δ := min (x₀ - tan (α - η)) (tan (α + η) - x₀)
     have hδ : 0 < δ := lt_min (sub_pos.mpr htanlo) (sub_pos.mpr htanhi)
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_dist_δ : |x - x₀| < δ := infer
       x ∈ Nbhd x₀ δ ⇒ x ∈ Nbho x₀ δ
                       := Nbhd_subset_Nbho h_x
-      _             ⇒ |x - x₀| < δ
+                    ⇒ |x - x₀| < δ
                       := (Nbho_abs x).mp ?_
     rw [abs_lt] at h_dist_δ
     have h_xlo : tan (α - η) < x := by
@@ -926,7 +926,7 @@ protected lemma Continuity.Arcsec
            => Identity⁻¹.isContinuousAt x₀
               := ⟨⟨(Continuity.Identity x₀ (mem_univ _)).1, h_x₀_ne⟩,
             FuncLimit.Inv h_x₀_ne (Continuity.Identity x₀ (mem_univ _)).2⟩
-        _  => (Arccos ⊙ Identity⁻¹).isContinuousAt x₀
+           => (Arccos ⊙ Identity⁻¹).isContinuousAt x₀
               := Comp (Continuity.Arccos x₀⁻¹ (inv_mem_Ioo_of_lt_neg_one h_x₀)) ?_
     rw [← Arcsec_eq]
     exact hcomp
@@ -938,7 +938,7 @@ protected lemma Continuity.Arcsec
            => Identity⁻¹.isContinuousAt x₀
               := ⟨⟨(Continuity.Identity x₀ (mem_univ _)).1, h_x₀_ne⟩,
               FuncLimit.Inv h_x₀_ne (Continuity.Identity x₀ (mem_univ _)).2⟩
-        _  => (Arccos ⊙ Identity⁻¹).isContinuousAt x₀
+           => (Arccos ⊙ Identity⁻¹).isContinuousAt x₀
               := Comp (Continuity.Arccos x₀⁻¹ (inv_mem_Ioo_of_one_lt h_x₀)) ?_
     rw [← Arcsec_eq]
     exact hcomp
@@ -950,7 +950,7 @@ protected lemma LeftContinuity.Arcsec_neg1
   refine ⟨by norm_num [Arcsec], ?_⟩
   have h_arccos_right := RightContinuity.Arccos_neg1.2
   constructor
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     intro x h_x
     left
     exact h_x.2.le
@@ -958,7 +958,7 @@ protected lemma LeftContinuity.Arcsec_neg1
     rcases h_arccos_right.2 ε h_ε with ⟨η, hη, hlim⟩
     let δ := min 1 η
     have hδ : 0 < δ := lt_min zero_lt_one hη
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_xneg : x < 0 := by linarith [h_x.2]
     have h_xinv_lo : -1 < x⁻¹ := by
@@ -981,7 +981,7 @@ protected lemma RightContinuity.Arcsec_1
   refine ⟨by norm_num [Arcsec], ?_⟩
   have h_arccos_left := LeftContinuity.Arccos_1.2
   constructor
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     intro x h_x
     right
     exact h_x.1.le
@@ -989,7 +989,7 @@ protected lemma RightContinuity.Arcsec_1
     rcases h_arccos_left.2 ε h_ε with ⟨η, hη, hlim⟩
     let δ := min 1 η
     have hδ : δ > 0 := by positivity
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_xpos : x > 0 := by linarith [h_x.1]
     have hinvpos : 0 < x⁻¹ := inv_pos.mpr h_xpos
@@ -1016,7 +1016,7 @@ protected lemma Continuity.Arccsc
            => Identity⁻¹.isContinuousAt x₀
               := ⟨⟨(Continuity.Identity x₀ (mem_univ _)).1, h_x₀_ne⟩,
             FuncLimit.Inv h_x₀_ne (Continuity.Identity x₀ (mem_univ _)).2⟩
-        _  => (Arcsin ⊙ Identity⁻¹).isContinuousAt x₀
+           => (Arcsin ⊙ Identity⁻¹).isContinuousAt x₀
               := Comp (Continuity.Arcsin x₀⁻¹ (inv_mem_Ioo_of_lt_neg_one h_x₀)) ?_
     rw [← Arccsc_eq]
     exact hcomp
@@ -1028,7 +1028,7 @@ protected lemma Continuity.Arccsc
            => Identity⁻¹.isContinuousAt x₀
               := ⟨⟨(Continuity.Identity x₀ (mem_univ _)).1, h_x₀_ne⟩,
             FuncLimit.Inv h_x₀_ne (Continuity.Identity x₀ (mem_univ _)).2⟩
-        _  => (Arcsin ⊙ Identity⁻¹).isContinuousAt x₀
+           => (Arcsin ⊙ Identity⁻¹).isContinuousAt x₀
               := Comp (Continuity.Arcsin x₀⁻¹ (inv_mem_Ioo_of_one_lt h_x₀)) ?_
     rw [← Arccsc_eq]
     exact hcomp
@@ -1040,7 +1040,7 @@ protected lemma LeftContinuity.Arccsc_neg1
   refine ⟨by norm_num [Arccsc], ?_⟩
   have h_arcsin_right := RightContinuity.Arcsin_neg1.2
   constructor
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     intro x h_x
     change x ≤ -1 ∨ 1 ≤ x
     left
@@ -1049,7 +1049,7 @@ protected lemma LeftContinuity.Arccsc_neg1
     rcases h_arcsin_right.2 ε h_ε with ⟨η, hη, hlim⟩
     let δ := min 1 η
     have hδ : 0 < δ := lt_min zero_lt_one hη
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_xneg : x < 0 := by linarith [h_x.2]
     have h_xinv_lo : -1 < x⁻¹ := by
@@ -1072,7 +1072,7 @@ protected lemma RightContinuity.Arccsc_1
   refine ⟨by norm_num [Arccsc], ?_⟩
   have h_arcsin_left := LeftContinuity.Arcsin_1.2
   constructor
-  · exists 1 with zero_lt_one
+  · script_exists 1 with zero_lt_one
     intro x h_x
     right
     exact h_x.1.le
@@ -1080,7 +1080,7 @@ protected lemma RightContinuity.Arccsc_1
     rcases h_arcsin_left.2 ε h_ε with ⟨η, hη, hlim⟩
     let δ := min 1 η
     have hδ : 0 < δ := lt_min zero_lt_one hη
-    exists δ with hδ
+    script_exists δ with hδ
     intro x h_x
     have h_xpos : 0 < x := by linarith [h_x.1]
     have hinvpos : 0 < x⁻¹ := inv_pos.mpr h_xpos

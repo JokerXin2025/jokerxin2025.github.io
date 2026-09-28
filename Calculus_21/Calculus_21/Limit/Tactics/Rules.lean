@@ -1,12 +1,41 @@
 /-
-    «Calculus_21».Limit.Tactics.Calc
+    «Calculus_21».Limit.Tactics.Rules
     Released under MIT license as described in the file LICENSE.
     Authors: JokerXin
 -/
 
-import «Calculus_21».Limit.Tactics.Cont
+import «Calculus_21».Limit.Expr.BasicRules
+import «Calculus_21».Limit.Expr.GCongr
 set_option linter.style.header false
 
+
+macro "lim_neg" : tactic => `(tactic|
+  first
+  | exact SeqLimitExpr.Neg
+  | exact FuncLimitExpr.Neg
+  | exact LeftLimitExpr.Neg
+  | exact RightLimitExpr.Neg
+  | gcongr
+    all_goals first
+    | exact SeqLimitExpr.Neg
+    | exact FuncLimitExpr.Neg
+    | exact LeftLimitExpr.Neg
+    | exact RightLimitExpr.Neg
+)
+
+macro "lim_inv" : tactic => `(tactic|
+  first
+  | exact SeqLimitExpr.Inv
+  | exact FuncLimitExpr.Inv
+  | exact LeftLimitExpr.Inv
+  | exact RightLimitExpr.Inv
+  | gcongr
+    all_goals first
+    | exact SeqLimitExpr.Inv
+    | exact FuncLimitExpr.Inv
+    | exact LeftLimitExpr.Inv
+    | exact RightLimitExpr.Inv
+)
 
 macro "lim_smul" : tactic => `(tactic|
   first
@@ -51,7 +80,7 @@ macro "lim_add" : tactic => `(tactic|
   | exact PosInftyLimitExpr.Add
   | exact NegInftyLimitExpr.Add
   | exact InftyLimitExpr.Add
-  | gcongr
+  | try gcongr
     all_goals first
     | exact SeqLimitExpr.Add
     | exact FuncLimitExpr.Add
@@ -60,6 +89,7 @@ macro "lim_add" : tactic => `(tactic|
     | exact PosInftyLimitExpr.Add
     | exact NegInftyLimitExpr.Add
     | exact InftyLimitExpr.Add
+  | fail "`lim_add` failed"
 )
 
 macro "lim_sub" : tactic => `(tactic|
@@ -129,16 +159,17 @@ theorem PosInftyLimitExpr.Sub {f g : ℝ → ℝ}
   : lim pos_infty (f - g) =. lim pos_infty f - lim pos_infty g
 := sorry
 
+/-
 open LimitValue
-macro "use_expr" : tactic => `(tactic| apply finite_iff.mp)
-macro "expr_calc" : tactic => `(tactic| rw [finite_div_zero (by norm_num)])
+local macro "use_expr" : tactic => `(tactic| apply finite_iff.mp)
+local macro "expr_calc" : tactic => `(tactic| rw [finite_div_zero (by norm_num)])
 
 
 
 example
-  : lim₊ (fun x ↦ 1 / ln x ^ 2) 1 =. infty
+  : (lim₊ 1 fun x ↦ 1 / ln x ^ 2) =. infty
 := calc
-  _  =. lim₊ (fun _ ↦ 1) 1 / lim₊ (fun x ↦ ln x ^ 2) 1
+  _  =. (lim₊ 1 fun _ ↦ 1) / lim₊ 1 fun x ↦ ln x ^ 2
         := by lim_div
   _  =  the 1 / the 0
         := by lim_cont
@@ -146,9 +177,9 @@ example
         := by expr_calc
 
 example
-  : lim₊ (fun x ↦ ln x - ln x) 0 =. unknown
+  : (lim₊ 0 fun x ↦ ln x - ln x) =. unknown
 := calc
-  _  =. lim₊ (fun x ↦ ln x) 0 - lim₊ (fun x ↦ ln x) 0
+  _  =. (lim₊ 0 fun x ↦ ln x) - lim₊ 0 fun x ↦ ln x
         := by lim_sub
   _  =  neg_infty - neg_infty
         := by rw [RightLimitExpr.Ln_zero]
@@ -156,11 +187,12 @@ example
         := by rfl
 
 example
-  : lim₊ (fun x ↦ ln x - ln x) 0 = the 0
+  : (lim₊ 0 fun x ↦ ln x - ln x) = the 0
 := by
   use_expr
   calc
-  _  =  lim₊ (fun _ ↦ 0) 0
-        := by lim_congr_by ring within 1
+  _  =  lim₊ 0 fun _ ↦ 0
+        := by lim_congr 1; ring
   _  =. the 0
         := by lim_cont
+-/

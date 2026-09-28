@@ -10,7 +10,7 @@ set_option linter.style.header false
 
 /-! # Definition of RSequence -/
 
-/-- Real Number RSequence with Domain
+/-- Real Number RSequence with Defs
     - `A.map`, `A.init` and `A.final` refer to `A`'s total map, initial item's
     index and final item's index (but incremented by 1), respectively
     - for infinite sequence `A`, the value of `A.final` is `none` -/

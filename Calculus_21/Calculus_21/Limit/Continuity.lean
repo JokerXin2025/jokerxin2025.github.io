@@ -9,7 +9,7 @@ import «Calculus_21».Limit.Rules
 set_option linter.style.header false
 
 
-/-! # Definitions of RFunction's Continuity -/
+/-! # Definitions of Function's Continuity -/
 
 namespace RFunction
 
@@ -18,10 +18,12 @@ def isContinuousAt (F : RFunction) (x₀ : ℝ) : Prop :=
   x₀ ∈ F.domain ∧ FuncLimit F x₀ (F.map x₀)
 
 /-- Continuous Everywhere -/
+@[aesop norm unfold (rule_sets := [AutoContinuity])]
 def isContinuous (F : RFunction) : Prop :=
   ∀ x ∈ F.domain, isContinuousAt F x
 
 /-- Continuous on the Interval -/
+@[aesop norm unfold (rule_sets := [AutoContinuity])]
 def isContinuousIn (F : RFunction) (I : Set ℝ) : Prop :=
   ∀ x ∈ I, isContinuousAt F x
 
@@ -46,7 +48,7 @@ end RFunction
 open RFunction
 
 
-/-! # Core Properties of RFunction's Continuity -/
+/-! # Core Properties of Function's Continuity -/
 
 /-- RFunction Limit Composition (Special Version)
     - This version requires outer function `F` to be continuous at `u₀` -/
@@ -90,7 +92,22 @@ theorem FuncLimit.CompSV {x₀ u₀ : ℝ} {F G : RFunction}
     · have hGx_nbhd : G.map x ∈ Nbhd u₀ δ1 := ⟨hGx_nbho.1, hGx_nbho.2, h_eq⟩
       exact hδ1 (G.map x) hGx_nbhd
 
-theorem Continuity.Congr {F G : RFunction} {x₀ : ℝ}
+namespace Continuity
+variable {F G : RFunction} {k x₀ : ℝ}
+
+/-- Enlarging the domain to `Iii` preserves continuity of the same map. -/
+lemma total (h : F.isContinuousAt x₀)
+    : (_root_.total F.map).isContinuousAt x₀ := by
+  script_infer
+    F.isContinuousAt x₀ => FuncLimit F x₀ (F.map x₀)
+                          := h.2
+                       => FuncLimit (_root_.total F.map) x₀ (F.map x₀)
+                          := FuncLimit.Congr ?_
+                            ⟨1, zero_lt_one, subset_univ _, fun _ _ => rfl⟩
+                       => (_root_.total F.map).isContinuousAt x₀
+                          := ⟨trivial, ?_⟩
+
+theorem Congr
     (h_F : F.isContinuousAt x₀)
     (h_congr : ∃ δ > 0, Nbho x₀ δ ⊆ G.domain ∧
       ∀ x ∈ Nbho x₀ δ, F.map x = G.map x)
@@ -108,66 +125,67 @@ theorem Continuity.Congr {F G : RFunction} {x₀ : ℝ}
     exact heq _ (Nbhd_subset_Nbho h_x)
 
 /-- Additive Inverse of Continuity -/
-theorem Continuity.Neg {F : RFunction} {x₀ : ℝ}
+theorem Neg
     (h_F : F.isContinuousAt x₀)
   : (-F).isContinuousAt x₀
 := ⟨h_F.1, FuncLimit.Neg h_F.2⟩
 
 /-- Scalar Multiplication of Continuity -/
-theorem Continuity.SMul {F : RFunction} {x₀ k : ℝ}
+theorem SMul
     (h_F : F.isContinuousAt x₀)
   : (k • F).isContinuousAt x₀
 := ⟨h_F.1, FuncLimit.SMul h_F.2⟩
 
 /-- Addition of Continuity -/
-theorem Continuity.Add {F G : RFunction} {x₀ : ℝ}
+theorem Add
     (h_F : F.isContinuousAt x₀) (h_G : G.isContinuousAt x₀)
   : (F + G).isContinuousAt x₀
 := ⟨⟨h_F.1, h_G.1⟩, FuncLimit.Add h_F.2 h_G.2⟩
 
 /-- Subtraction of Continuity -/
-theorem Continuity.Sub {F G : RFunction} {x₀ : ℝ}
+theorem Sub
     (h_F : F.isContinuousAt x₀) (h_G : G.isContinuousAt x₀)
   : (F - G).isContinuousAt x₀
 := ⟨⟨h_F.1, h_G.1⟩, FuncLimit.Sub h_F.2 h_G.2⟩
 
 /-- Multiplication of Continuity -/
-theorem Continuity.Mul {F G : RFunction} {x₀ : ℝ}
+theorem Mul
     (h_F : F.isContinuousAt x₀) (h_G : G.isContinuousAt x₀)
   : (F * G).isContinuousAt x₀
 := ⟨⟨h_F.1, h_G.1⟩, FuncLimit.Mul h_F.2 h_G.2⟩
 
 /-- Division of Continuity -/
-theorem Continuity.Div {F G : RFunction} {x₀ : ℝ}
+theorem Div
     (h_F : F.isContinuousAt x₀) (h_G : G.isContinuousAt x₀)
     (h_Gx₀_ne_0 : G.map x₀ ≠ 0)
   : (F / G).isContinuousAt x₀
 := ⟨⟨⟨h_F.1, h_G.1⟩, h_Gx₀_ne_0⟩, FuncLimit.Div h_F.2 h_G.2 h_Gx₀_ne_0⟩
 
+/-- Multiplicative Inverse of Continuity -/
+theorem Inv
+    (h_F : F.isContinuousAt x₀) (h_ne : F.map x₀ ≠ 0)
+  : F⁻¹.isContinuousAt x₀
+:= ⟨⟨h_F.1, h_ne⟩, FuncLimit.Inv h_ne h_F.2⟩
+
+/-- Natural Power of Continuity -/
+theorem MSPow {n : ℕ}
+    (h_F : F.isContinuousAt x₀)
+  : (F ^ n).isContinuousAt x₀
+:= ⟨h_F.1, FuncLimit.MSPow h_F.2⟩
+
 /-- Composition of Continuity -/
-theorem Continuity.Comp {F G : RFunction} {x₀ : ℝ}
+theorem Comp
     (h_F : F.isContinuousAt (G.map x₀))
     (h_G : G.isContinuousAt x₀)
   : (F ⊙ G).isContinuousAt x₀
 := ⟨⟨h_G.1, h_F.1⟩, FuncLimit.CompSV h_G.2 h_F⟩
 
+end Continuity
 
-/-! # Lemmas on RFunction's Continuity -/
+
+/-! # Lemmas on Function's Continuity -/
 
 variable {F : RFunction} {l r C : ℝ}
-
-/-- Continuous at Some Point ⇒ Left Continuous at Some Point -/
-lemma isContinuousAt_implies_LeftAt {F : RFunction} {x₀ : ℝ}
-    (h_cont : F.isContinuousAt x₀)
-  : F.isLeftContinuousAt x₀
-:= ⟨h_cont.1, FuncLimit.toLeft h_cont.2⟩
-
-/-- Continuous at Some Point ⇒ Right Continuous at Some Point -/
-lemma isContinuousAt_implies_RightAt {F : RFunction} {x₀ : ℝ}
-    (h_cont : F.isContinuousAt x₀)
-  : F.isRightContinuousAt x₀
-:= ⟨h_cont.1, FuncLimit.toRight h_cont.2⟩
-
 
 /-- Minimum Values Theorem -/
 theorem Min_Existence
